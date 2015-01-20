@@ -7,11 +7,11 @@ require "thin_man/version"
 Gem::Specification.new do |s|
   s.name        = "thin_man"
   s.version     = ThinMan::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of ThinMan."
-  s.description = "TODO: Description of ThinMan."
+  s.authors     = ["Eric Draut, Adam Bialek"]
+  s.email       = ["edraut@gmail.com, abialek@gmail.com"]
+  s.homepage    = "https://github.com/edraut/thin-man"
+  s.summary     = "A Rails library that makes web apps lively while keeping all the logic on the server. "
+  s.description = "A Rails library that makes web apps lively while keeping all the logic on the server. "
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
