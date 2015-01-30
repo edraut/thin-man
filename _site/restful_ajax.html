@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Thin-man by edraut</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="/thin-man">Thin-man</a></h1>
+        <p>A Rails restful-ajax library that makes web apps lively while keeping all the logic on the server.</p>
+        <p class="view"><a href="https://github.com/edraut/thin-man">View the Project on GitHub <small>edraut/thin-man</small></a></p>
+        <ul>
+          <li><a href="https://github.com/edraut/thin-man/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/edraut/thin-man/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/edraut/thin-man">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+      <h3>Restful AJAX apps</h3>
+
+<p>Let&#39;s take the example of Comments on a Post. Say we have a page that displays a Post with all its comments. We&#39;ll have a list of Comments and a button/link to create a new comment. If you&#39;re the moderator, you might have delete buttons/links for each comment as well.</p>
+
+<p>To keep things manageable, you&#39;ll want a container for the list:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">&lt;div id=&quot;post_#{post.id}_comments&quot;&gt;
+  &lt;% post.comments.each do |comment| %&gt;
+    &lt;%= render partial: &#39;comments/show&#39;, locals: {comment: comment} %&gt;
+  &lt;% end %&gt;
+&lt;/div&gt;
+</code></pre></div>
+<p>Notice the DOM id of the div contains the unique id of the post. If you ever have multiple levels of resources nested on the page this will be important for avoiding duplicate DOM ids that would break ThinMan. Stay in the habit of using unique ids in your
+target selectors to avoid unpleasant, hard-to-debug problems down the line.</p>
+
+<p>Now your new comment link can reference the DOM id of your comment list container:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">&lt;%= ajax_link &#39;add a comment&#39;, comment_url, {}, &quot;#post_#{post.id}_comments&quot;, &#39;append&#39; %&gt;
+</code></pre></div>
+<p>This link will put the AJAX response at the end of the container, as designated by the jQuery &#39;append&#39; method.</p>
+
+<p>Now let&#39;s look at the comment DOM. You&#39;ll need 2 rails view partials for displaying list elements.</p>
+
+<p>The first renders a container, the second renders the contents.</p>
+
+<p>app/views/comments/<em>show</em>container.html.erb</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">&lt;div id=&quot;comment_#{comment.id}&quot;&gt;
+  &lt;%= render partial: &#39;comments/show&#39;, locals: {comment: comment} %&gt;
+&lt;/div&gt;
+</code></pre></div>
+<p>app/views/comments/_show.html.erb</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">  &lt;%= comment.body %&gt;
+  &lt;%= ajax_link &#39;edit&#39;, edit_comment_url(comment), {} &quot;#comment_#{comment.id}&quot; %&gt;
+  &lt;%= link_to &#39;delete&#39;, comment_url(comment), data: {delete_link: true, ajax_target: &quot;#comment_#{comment.id}&quot;} %&gt;
+</code></pre></div>
+<p>app/views/comments/_edit.html.erb</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">  &lt;%= form_for comment, html: ajax_hash(&quot;#comment_#{comment.id}&quot;), do |f| %&gt;
+    ...
+  &lt;% end %&gt;
+</code></pre></div>
+<p>In your controllers:</p>
+
+<p>app/controllers/comments_controller.rb</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">def show
+  render partial: &#39;show&#39;, locals: {comment: @comment}
+end
+
+def edit
+  render partial: &#39;edit&#39;, locals: {comment: @comment}
+end
+
+def create
+  @comment = Comment.create(params[:comment])
+  render partial: &#39;show_container&#39;, locals: {comment: @comment}
+end
+
+def update
+  @comment.update_attributes(params[:comment])
+  render partial: &#39;show&#39;, locals: {comment: @comment}
+end
+
+def destroy
+  @comment.destroy
+  render nothing: true
+end
+</code></pre></div>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/edraut">edraut</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+  </body>
+</html>

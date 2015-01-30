@@ -27,28 +27,19 @@
         </ul>
       </header>
       <section>
-      <h3>Server Options</h3>
+      <h3>Extending ThinMan</h3>
 
-<h4>Respond with javascript methods to be called</h4>
-
-<p>This is intended for naming a Javascript function and passing it JSON parameters, no actual javascript implementation should live here.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">render json: {function_calls: {&#39;myUtilities.redirectToPage&#39; =&gt; next_step_url}}
+<p>ThinMan uses John Resig&#39;s Javascript Class extension. You can subclass any of the ThinMan classes and extend the behavior.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var AjaxBlinkLink = AjaxLinkSubmission.extend({
+  ajaxSuccess: function(data,textStatus,jqXHR) {
+    this._super(data,textStatus,jqXHR);
+    myLibrary.blinkThis($(this.jq_obj));
+  }
+});
 </code></pre></div>
-<p>The only case we&#39;ve see for this is reloading the page after a single-page ajax wizard-style sequence has completed.
-We don&#39;t want to redirect the page if there was an error in the last ajax step for the wizard, but if it succeeds we
-do want to redirect the page.</p>
+<p>Full documentation on the methods and attributes to use when extending can be written if there is demand. Add an issue
+in the ThinMan wiki and @mention edraut.</p>
 
-<p>Purists avert your delicate eyes, there&#39;s Javascript in my Ruby <em>gasp</em>! Yes, we feel that
-having javascript implementation in our view files is far worse than having some asynchronous RPC in our Ruby.  It&#39;s just asynchronous RPC people.</p>
-
-<p>You can also pass an html key with a render<em>to</em>string call as the value if you want to do both, but in that case we&#39;d recommend
-just adding data attributes to your response that can be bound by some custom javascript you provide in a javascript file.</p>
-
-<h4>Respond with a javscript class to instantiate</h4>
-
-<p>Similar to the above, but calls &#39;new&#39; on the class, passing in the params.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">render json: {class_triggers: {&#39;myRedirectClass&#39; =&gt; next_step_url}}
-</code></pre></div>
       </section>
     </div>
     <footer>
