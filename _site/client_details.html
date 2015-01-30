@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Thin-man by edraut</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="/thin-man">Thin-man</a></h1>
+        <p>A Rails library that makes web apps lively while keeping all the logic on the server.</p>
+        <p class="view"><a href="https://github.com/edraut/thin-man">View the Project on GitHub <small>edraut/thin-man</small></a></p>
+        <ul>
+          <li><a href="https://github.com/edraut/thin-man/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/edraut/thin-man/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/edraut/thin-man">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+      <h3>View Options</h3>
+
+<p>You can apply these data attributes to dom elements in your views and ThinMan will bind them with the behavior described.</p>
+
+<h4>Standard Options for both links and forms</h4>
+
+<p class="callout">
+  <span class="fixed-width">data-ajax-link: true</span><br/>
+  Apply ajax behavior to this link
+</p>
+
+<p class="callout">
+  <span class="fixed-width">data-ajax-target: &lt;css selector&gt;</span><br/>
+  The DOM element represented by the css selector will be the target for
+  placing the ajax response HTML. The default behavior is to replace the
+  innerHTML of the element with the response HTML. See data-insert-method for
+  options to configure the placement in relation to the target.
+  For ajax delete links, this is the DOM element to remove after a success
+  response from the server.
+</p>
+
+<p class="callout">
+  <span class="fixed-width">data-insert-method: &lt;jQuery insertion method&gt;</span><br/>
+  How to place the response HTML in relation to the selected target. Uses
+  jQuery insertion methods, e.g. 'html', 'append', 'prepend', 'after',
+  'before', etc. See the jQuery manipulation docs for more options. The default
+  is 'html'.
+</p>
+
+<p class="callout">
+  <span class="fixed-width">data-error-target: &lt;css selector&gt;</span><br/>
+  Where to place the response HTML if the request generated a conflict on the
+  server (e.g. the request failed validation). This only takes precedence if
+  the server responds with a 409 CONFLICT. It does not handle 500-class
+  errors. The default behavior is to use the same DOM element as
+  data-ajax-target.
+</p>
+
+<h4>Link-only options</h4>
+
+<p class="callout">
+  <span class="fixed-width">data-method: &lt;HTTP method&gt;</span><br/>
+  The HTTP method to use in sending the ajax request
+</p>
+
+<h4>Delete-link-only options</h4>
+
+<p class="callout">
+  <span class="fixed-width">data-ajax-target: &lt;css selector&gt;</span><br/>
+  The DOM element that should be removed after a success response for the ajax request
+</p>
+
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/edraut">edraut</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+  </body>
+</html>
