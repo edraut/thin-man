@@ -54,7 +54,7 @@ See [here](/thin-man/server_details.html) for more dark magic you can do from yo
 
 ### How to make a restul-AJAX app with ThinMan
 It's all good and well to give you this general-purpose Rails AJAX tool, but if you want to put together
-a restful AJAX app that doesn't suck, [follow these patterns](/thin_man/restful_ajax.html) we've learned from experience.
+a restful AJAX app that doesn't suck, [follow these patterns](/thin-man/restful_ajax.html) we've learned from experience.
 
 ### Extending ThinMan
 If you want to extend the javascript behaviors in ThinMan, [see here](/thin-man/extending.html)
