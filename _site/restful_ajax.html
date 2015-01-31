@@ -32,17 +32,17 @@
 <p>Let&#39;s take the example of Comments on a Post. Say we have a page that displays a Post with all its comments. We&#39;ll have a list of Comments and a button/link to create a new comment. If you&#39;re the moderator, you might have delete buttons/links for each comment as well.</p>
 
 <p>To keep things manageable, you&#39;ll want a container for the list:</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">&lt;div id=&quot;post_#{post.id}_comments&quot;&gt;
-  &lt;% post.comments.each do |comment| %&gt;
-    &lt;%= render partial: &#39;comments/show&#39;, locals: {comment: comment} %&gt;
-  &lt;% end %&gt;
-&lt;/div&gt;
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="n">div</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;post_</span><span class="si">#{</span><span class="n">post</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">_comments&quot;</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="sx">% post.comments.each </span><span class="k">do</span> <span class="o">|</span><span class="n">comment</span><span class="o">|</span> <span class="sx">%&gt;</span>
+<span class="sx">    &lt;%= render partial: &#39;comments/show&#39;, locals: {comment: comment} %&gt;</span>
+  <span class="o">&lt;</span><span class="sx">% end %&gt;</span>
+<span class="sx">&lt;/div&gt;</span>
 </code></pre></div>
 <p>Notice the DOM id of the div contains the unique id of the post. If you ever have multiple levels of resources nested on the page this will be important for avoiding duplicate DOM ids that would break ThinMan. Stay in the habit of using unique ids in your
 target selectors to avoid unpleasant, hard-to-debug problems down the line.</p>
 
 <p>Now your new comment link can reference the DOM id of your comment list container:</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">&lt;%= ajax_link &#39;add a comment&#39;, comment_url, {}, &quot;#post_#{post.id}_comments&quot;, &#39;append&#39; %&gt;
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;%=</span> <span class="n">ajax_link</span> <span class="s1">&#39;add a comment&#39;</span><span class="p">,</span> <span class="n">comment_url</span><span class="p">,</span> <span class="p">{},</span> <span class="s2">&quot;#post_</span><span class="si">#{</span><span class="n">post</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">_comments&quot;</span><span class="p">,</span> <span class="s1">&#39;append&#39;</span> <span class="o">%&gt;</span>
 </code></pre></div>
 <p>This link will put the AJAX response at the end of the container, as designated by the jQuery &#39;append&#39; method.</p>
 
@@ -51,45 +51,45 @@ target selectors to avoid unpleasant, hard-to-debug problems down the line.</p>
 <p>The first renders a container, the second renders the contents.</p>
 
 <p>app/views/comments/<em>show</em>container.html.erb</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">&lt;div id=&quot;comment_#{comment.id}&quot;&gt;
-  &lt;%= render partial: &#39;comments/show&#39;, locals: {comment: comment} %&gt;
-&lt;/div&gt;
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="n">div</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;comment_</span><span class="si">#{</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">&gt;</span>
+  <span class="o">&lt;%=</span> <span class="n">render</span> <span class="ss">partial</span><span class="p">:</span> <span class="s1">&#39;comments/show&#39;</span><span class="p">,</span> <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span><span class="ss">comment</span><span class="p">:</span> <span class="n">comment</span><span class="p">}</span> <span class="sx">%&gt;</span>
+<span class="sx">&lt;/div&gt;</span>
 </code></pre></div>
 <p>app/views/comments/_show.html.erb</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">  &lt;%= comment.body %&gt;
-  &lt;%= ajax_link &#39;edit&#39;, edit_comment_url(comment), {} &quot;#comment_#{comment.id}&quot; %&gt;
-  &lt;%= link_to &#39;delete&#39;, comment_url(comment), data: {delete_link: true, ajax_target: &quot;#comment_#{comment.id}&quot;} %&gt;
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="o">&lt;</span><span class="sx">%= comment.body %&gt;</span>
+<span class="sx">  &lt;%=</span> <span class="n">ajax_link</span> <span class="s1">&#39;edit&#39;</span><span class="p">,</span> <span class="n">edit_comment_url</span><span class="p">(</span><span class="n">comment</span><span class="p">),</span> <span class="p">{}</span> <span class="s2">&quot;#comment_</span><span class="si">#{</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span> <span class="sx">%&gt;</span>
+<span class="sx">  &lt;%= link_to &#39;delete&#39;, comment_url(comment), data: {delete_link: true, ajax_target: &quot;#comment_</span><span class="si">#{</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="sx">&quot;} %&gt;</span>
 </code></pre></div>
 <p>app/views/comments/_edit.html.erb</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">  &lt;%= form_for comment, html: ajax_hash(&quot;#comment_#{comment.id}&quot;), do |f| %&gt;
-    ...
-  &lt;% end %&gt;
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="o">&lt;%=</span> <span class="n">form_for</span> <span class="n">comment</span><span class="p">,</span> <span class="ss">html</span><span class="p">:</span> <span class="n">ajax_hash</span><span class="p">(</span><span class="s2">&quot;#comment_</span><span class="si">#{</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="sx">%&gt;</span>
+<span class="sx">    ...</span>
+<span class="sx">  &lt;% end %&gt;</span>
 </code></pre></div>
 <p>In your controllers:</p>
 
 <p>app/controllers/comments_controller.rb</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">def show
-  render partial: &#39;show&#39;, locals: {comment: @comment}
-end
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">show</span>
+  <span class="n">render</span> <span class="ss">partial</span><span class="p">:</span> <span class="s1">&#39;show&#39;</span><span class="p">,</span> <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span><span class="ss">comment</span><span class="p">:</span> <span class="vi">@comment</span><span class="p">}</span>
+<span class="k">end</span>
 
-def edit
-  render partial: &#39;edit&#39;, locals: {comment: @comment}
-end
+<span class="k">def</span> <span class="nf">edit</span>
+  <span class="n">render</span> <span class="ss">partial</span><span class="p">:</span> <span class="s1">&#39;edit&#39;</span><span class="p">,</span> <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span><span class="ss">comment</span><span class="p">:</span> <span class="vi">@comment</span><span class="p">}</span>
+<span class="k">end</span>
 
-def create
-  @comment = Comment.create(params[:comment])
-  render partial: &#39;show_container&#39;, locals: {comment: @comment}
-end
+<span class="k">def</span> <span class="nf">create</span>
+  <span class="vi">@comment</span> <span class="o">=</span> <span class="no">Comment</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:comment</span><span class="o">]</span><span class="p">)</span>
+  <span class="n">render</span> <span class="ss">partial</span><span class="p">:</span> <span class="s1">&#39;show_container&#39;</span><span class="p">,</span> <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span><span class="ss">comment</span><span class="p">:</span> <span class="vi">@comment</span><span class="p">}</span>
+<span class="k">end</span>
 
-def update
-  @comment.update_attributes(params[:comment])
-  render partial: &#39;show&#39;, locals: {comment: @comment}
-end
+<span class="k">def</span> <span class="nf">update</span>
+  <span class="vi">@comment</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:comment</span><span class="o">]</span><span class="p">)</span>
+  <span class="n">render</span> <span class="ss">partial</span><span class="p">:</span> <span class="s1">&#39;show&#39;</span><span class="p">,</span> <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span><span class="ss">comment</span><span class="p">:</span> <span class="vi">@comment</span><span class="p">}</span>
+<span class="k">end</span>
 
-def destroy
-  @comment.destroy
-  render nothing: true
-end
+<span class="k">def</span> <span class="nf">destroy</span>
+  <span class="vi">@comment</span><span class="o">.</span><span class="n">destroy</span>
+  <span class="n">render</span> <span class="ss">nothing</span><span class="p">:</span> <span class="kp">true</span>
+<span class="k">end</span>
 </code></pre></div>
       </section>
     </div>

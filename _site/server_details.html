@@ -32,7 +32,7 @@
 <h4>Respond with javascript methods to be called</h4>
 
 <p>This is intended for naming a Javascript function and passing it JSON parameters, no actual javascript implementation should live here.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">render json: {function_calls: {&#39;myUtilities.redirectToPage&#39; =&gt; next_step_url}}
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">render</span> <span class="ss">json</span><span class="p">:</span> <span class="p">{</span><span class="ss">function_calls</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;myUtilities.redirectToPage&#39;</span> <span class="o">=&gt;</span> <span class="n">next_step_url</span><span class="p">}}</span>
 </code></pre></div>
 <p>The only case we&#39;ve see for this is reloading the page after a single-page ajax wizard-style sequence has completed.
 We don&#39;t want to redirect the page if there was an error in the last ajax step for the wizard, but if it succeeds we
@@ -47,7 +47,7 @@ just adding data attributes to your response that can be bound by some custom ja
 <h4>Respond with a javscript class to instantiate</h4>
 
 <p>Similar to the above, but calls &#39;new&#39; on the class, passing in the params.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">render json: {class_triggers: {&#39;myRedirectClass&#39; =&gt; next_step_url}}
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">render</span> <span class="ss">json</span><span class="p">:</span> <span class="p">{</span><span class="ss">class_triggers</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;myRedirectClass&#39;</span> <span class="o">=&gt;</span> <span class="n">next_step_url</span><span class="p">}}</span>
 </code></pre></div>
       </section>
     </div>

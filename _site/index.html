@@ -32,30 +32,30 @@
 <h4>In your views</h4>
 
 <p>The basic method uses data attributes. The first example sends an AJAX request to retrieve a form for editing a user, then replaces the html of the DOM element selected by the css selector #user-&lt;user.id&gt; with the ajax response, presumeably the user edit form.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">&lt;%= link_to &#39;edit&#39;, edit_user_path(user),
-    data: {ajax_link: true, ajax_target: &quot;#user-#{user.id}&quot;} %&gt;
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;%=</span> <span class="n">link_to</span> <span class="s1">&#39;edit&#39;</span><span class="p">,</span> <span class="n">edit_user_path</span><span class="p">(</span><span class="n">user</span><span class="p">),</span>
+    <span class="ss">data</span><span class="p">:</span> <span class="p">{</span><span class="ss">ajax_link</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">ajax_target</span><span class="p">:</span> <span class="s2">&quot;#user-</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span> <span class="o">%&gt;</span>
 </code></pre></div>
 <p>This example posts/patches a form with user data via AJAX and replaces the html of the DOM element selected by #user-&lt;user.id&gt; with the response, presumeably the read-only representation of the user record.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">&lt;%= form_for user, html: {
-    data: { ajax_form: true, ajax_target: &quot;#user-#{user.id}&quot;} } do |f| %&gt;
-...
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;%=</span> <span class="n">form_for</span> <span class="n">user</span><span class="p">,</span> <span class="ss">html</span><span class="p">:</span> <span class="p">{</span>
+    <span class="ss">data</span><span class="p">:</span> <span class="p">{</span> <span class="ss">ajax_form</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">ajax_target</span><span class="p">:</span> <span class="s2">&quot;#user-</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span> <span class="p">}</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="o">%&gt;</span>
+<span class="o">.</span><span class="n">.</span><span class="o">.</span>
 </code></pre></div>
 <p>This creates a delete link that will remove the DOM element selected by #user-&lt;user.id&gt; after receiving a success response.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">&lt;%= link_to &#39;delete&#39;, user_path,
-    data: {ajax_delete: true, ajax_target: &quot;#user-#{user.id}&quot; %&gt;
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;%=</span> <span class="n">link_to</span> <span class="s1">&#39;delete&#39;</span><span class="p">,</span> <span class="n">user_path</span><span class="p">,</span>
+    <span class="ss">data</span><span class="p">:</span> <span class="p">{</span><span class="ss">ajax_delete</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">ajax_target</span><span class="p">:</span> <span class="s2">&quot;#user-</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">%&gt;</span>
 </code></pre></div>
 <p>There are some view helpers if you prefer them. This does the same thing as the first example:</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">&lt;%= ajax_link &#39;edit&#39;, edit_user_path(user), {}, &quot;#user-container-#{user.id}&quot; %&gt;
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;%=</span> <span class="n">ajax_link</span> <span class="s1">&#39;edit&#39;</span><span class="p">,</span> <span class="n">edit_user_path</span><span class="p">(</span><span class="n">user</span><span class="p">),</span> <span class="p">{},</span> <span class="s2">&quot;#user-container-</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">%&gt;</span>
 </code></pre></div>
 <p>And this does the same thing as the second example:</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">&lt;%= form_for(user, html: ajax_hash(&quot;#user-#{user.id}&quot;) do |f| %&gt;
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;%=</span> <span class="n">form_for</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="ss">html</span><span class="p">:</span> <span class="n">ajax_hash</span><span class="p">(</span><span class="s2">&quot;#user-</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="o">%&gt;</span>
 </code></pre></div>
 <p>See <a href="/thin-man/client_details.html">here</a> for more options and ways to customize the behavior of ajax requests.</p>
 
 <h4>In your controllers</h4>
 
 <p>The most basic method is to simply respond with an html partial:</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby">render partial: &#39;edit&#39;, locals: { user: @user }
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">render</span> <span class="ss">partial</span><span class="p">:</span> <span class="s1">&#39;edit&#39;</span><span class="p">,</span> <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span> <span class="ss">user</span><span class="p">:</span> <span class="vi">@user</span> <span class="p">}</span>
 </code></pre></div>
 <p>See <a href="/thin-man/server_details.html">here</a> for more dark magic you can do from your controller to vivify your client.</p>
 
