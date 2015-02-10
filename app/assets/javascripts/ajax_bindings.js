@@ -211,12 +211,12 @@ var AjaxProgress = Class.extend({
 });
 var AjaxFlash = Class.extend({
   init: function(type,message,elem){
-    this.flash_container = $('#ajax_flash_container').clone();
+    this.flash_container = $('#thin-man-flash-container').clone();
     $('body').append(this.flash_container);
     this.flash_container.css({position:'absolute',visibility: 'hidden'});
     var alert_class = 'alert-' + type;
     this.flash_container.addClass(alert_class);
-    $('#ajax_flash_content', this.flash_container).html(message);
+    $('#thin-man-flash-content', this.flash_container).html(message);
     this.flash_container.show();
     this.reposition(elem);
   },
