@@ -113,15 +113,18 @@ var AjaxSubmission = Class.extend({
     }
   },
   ajaxComplete: function(jqXHR) {
-    response_data = JSON.parse(jqXHR.responseText)
     this.showTrigger();
     if(this.progress_indicator){
       this.progress_indicator.stop();
     }
+    try{
+      response_data = JSON.parse(jqXHR.responseText)
+    } catch(err) {
+      response_data = {}
+      // hmmm, the response is not JSON, so there's no flash.
+    }
     if(typeof response_data.flash_message != 'undefined'){
-      console.log('got a flash')
       flash_style = this.httpResponseToFlashStyle(jqXHR.status)
-      console.log(flash_style)
       new AjaxFlash(flash_style, response_data.flash_message,this.target);
     }
   },
@@ -175,9 +178,6 @@ var AjaxBrowserPushFlash = Class.extend({
     this.message = $flash.data('ajax-browser-push-flash')
     this.$target = $($flash.data('ajax-browser-push-flash-target'));
     this.$target.data('ajax-browser-push-flash',this.message);
-    console.log("AjaxBrowserPushFlash: ")
-    console.log(this.message)
-    console.log(this.$target.data());
   }
 });
 var AjaxProgress = Class.extend({
@@ -211,10 +211,6 @@ var AjaxProgress = Class.extend({
 });
 var AjaxFlash = Class.extend({
   init: function(type,message,elem){
-    console.log('ajaxflash:')
-    console.log(type)
-    console.log(message)
-    console.log(elem)
     this.flash_container = $('#ajax_flash_container').clone();
     $('body').append(this.flash_container);
     this.flash_container.css({position:'absolute',visibility: 'hidden'});
