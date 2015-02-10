@@ -112,10 +112,17 @@ var AjaxSubmission = Class.extend({
       $(form_map[step]).ScrollTo();
     }
   },
-  ajaxComplete: function(jqXHr) {
+  ajaxComplete: function(jqXHR) {
+    response_data = JSON.parse(jqXHR.responseText)
     this.showTrigger();
     if(this.progress_indicator){
       this.progress_indicator.stop();
+    }
+    if(typeof response_data.flash_message != 'undefined'){
+      console.log('got a flash')
+      flash_style = this.httpResponseToFlashStyle(jqXHR.status)
+      console.log(flash_style)
+      new AjaxFlash(flash_style, response_data.flash_message,this.target);
     }
   },
   ajaxBefore: function(jqXHr) {
@@ -125,7 +132,7 @@ var AjaxSubmission = Class.extend({
   ajaxError: function(jqXHR) {
     if(jqXHR.status == 409){
       this.error_target.html(jqXHR.responseText);
-    }else{
+    }else if(jqXHR.status == 500){
       alert('There was an error communicating with the server.')
     }
   },
@@ -141,6 +148,15 @@ var AjaxSubmission = Class.extend({
         this.target.find('[data-loading-visible="true"]').removeClass('hidden');
       }
     }
+  },
+  httpResponseToFlashStyle: function(response_code){
+    if([403,409,500].indexOf(response_code) > -1){
+      return 'error'
+    }
+    if([200].indexOf(response_code) > -1){
+      return 'success'
+    }
+    return 'error'
   }
 });
 
@@ -195,6 +211,10 @@ var AjaxProgress = Class.extend({
 });
 var AjaxFlash = Class.extend({
   init: function(type,message,elem){
+    console.log('ajaxflash:')
+    console.log(type)
+    console.log(message)
+    console.log(elem)
     this.flash_container = $('#ajax_flash_container').clone();
     $('body').append(this.flash_container);
     this.flash_container.css({position:'absolute',visibility: 'hidden'});
