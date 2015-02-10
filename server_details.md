@@ -21,7 +21,16 @@ render json: {flash_message: "Access denied."}, status: 403
 #####Flash styling
 
 ######DOM element
-thin_man expects to find a hidden element with the DOM id 'thin-man-flash-container' on the page. It will use this to display the flash message. You can style this container however you wish, in keeping with the styles of your project.
+thin_man expects to find a hidden element with the DOM id 'thin-man-flash-container' on the page. It should wrap another element with the id 'thin-man-flash-content'. It will use this to display the flash message. You can style this container however you wish, in keeping with the styles of your project.
+Here is an example:
+
+```HTML
+    <div class="alert" style="display: none;" id="thin-man-flash-container">
+      <a class="close" data-dismiss="alert">&#215;</a>
+      <div id="thin-man-flash-content">Your changes were saved</div>
+    </div>
+```
+The classes are merely suggestions, you should style this to meet the design of your project. The dismiss element is also merely a suggestion, you can use whatever method fits the look and feel of your project, e.g. a data attribute that you can bind in your custom JS to fade out after n seconds.
 
 ######Dynamic CSS classes
 thin_man will dynamically add a css class to the flash container based on the HTTP status code. If the code is 200, then it will add `alert-success`. If the status is 403 or 409 it will add `alert-error`. You can create these classes to style the flash messages however you like.
