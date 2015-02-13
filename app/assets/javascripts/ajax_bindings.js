@@ -104,9 +104,11 @@ var AjaxSubmission = Class.extend({
         })
       }
     }
-    var ajax_flash = this.target.children().last().data('ajax-flash');
-    if((jqXHR.status == 200) && ajax_flash){
-      new AjaxFlash('success', ajax_flash.notice,this.target);
+    if(this.target){
+      var ajax_flash = this.target.children().last().data('ajax-flash');
+      if((jqXHR.status == 200) && ajax_flash){
+        new AjaxFlash('success', ajax_flash.notice,this.target);
+      }
     }
     if ((jqXHR.status == 200) && !(typeof step === 'undefined')) {
       $(form_map[step]).ScrollTo();
@@ -125,7 +127,11 @@ var AjaxSubmission = Class.extend({
     }
     if(typeof response_data.flash_message != 'undefined'){
       flash_style = this.httpResponseToFlashStyle(jqXHR.status)
-      new AjaxFlash(flash_style, response_data.flash_message,this.target);
+      if(this.target){
+        new AjaxFlash(flash_style, response_data.flash_message,this.target);
+      }else{
+        new AjaxFlash(flash_style, response_data.flash_message,this.jq_obj);
+      }
     }
   },
   ajaxBefore: function(jqXHr) {
@@ -156,7 +162,7 @@ var AjaxSubmission = Class.extend({
     if([403,409,500].indexOf(response_code) > -1){
       return 'error'
     }
-    if([200].indexOf(response_code) > -1){
+    if([200,202].indexOf(response_code) > -1){
       return 'success'
     }
     return 'error'
@@ -355,7 +361,9 @@ var ResetOnSubmitForm = AjaxFormSubmission.extend({
 var DeleteLink = AjaxSubmission.extend({
   ajaxSuccess: function(data,textStatus,jqXHR){
     this._super(data,textStatus,jqXHR);
-    this.target.remove();
+    if(this.target){
+      this.target.remove();
+    }
   },
   getAjaxType: function(){
     return 'DELETE';
