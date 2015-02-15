@@ -4,6 +4,14 @@ layout: default
 
 ##Server Options
 
+###Render with convenience
+```ruby
+def show
+  render_ajax locals: {post: @post}
+end
+```
+If the name of the partial you want to render is the same as the action name, use `render_ajax` to simplify your rendering calls. The example above would render the partial named 'show' (ie. filename begins with `_show.`)
+
 ###Respond with a flash message
 
 ```ruby
