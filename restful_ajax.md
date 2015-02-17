@@ -19,10 +19,13 @@ To keep things manageable, you'll want a container for the list:
 Notice the DOM id of the div contains the unique id of the post. If you ever have multiple levels of resources nested on the page this will be important for avoiding duplicate DOM ids that would break ThinMan. Stay in the habit of using unique ids in your
 target selectors to avoid unpleasant, hard-to-debug problems down the line.
 
-Now your new comment link can reference the DOM id of your comment list container:
+Now your new comment form can reference the DOM id of your comment list container:
 
 ```HTML+ERB
-<%= ajax_link 'add a comment', comment_url, {}, "#post_#{post.id}_comments", 'append' %>
+  <%= form_for @post.comments.new, html: ajax_hash("#post_#{post.id}_comments",
+      'append'), do |f| %>
+    ...
+  <% end %>
 ```
 
 This link will put the AJAX response at the end of the container, as designated by the jQuery 'append' method.
@@ -31,7 +34,7 @@ Now let's look at the comment DOM. You'll need 2 rails view partials for display
 
 The first renders a container, the second renders the contents.
 
-app/views/comments/_show_container.html.erb
+`app/views/comments/_show_container.html.erb`
 
 ```HTML+ERB
 <div id="comment_#{comment.id}">
@@ -39,15 +42,16 @@ app/views/comments/_show_container.html.erb
 </div>
 ```
 
-app/views/comments/_show.html.erb
+`app/views/comments/_show.html.erb`
 
 ```HTML+ERB
   <%= comment.body %>
   <%= ajax_link 'edit', edit_comment_url(comment), {} "#comment_#{comment.id}" %>
-  <%= link_to 'delete', comment_url(comment), data: {delete_link: true, ajax_target: "#comment_#{comment.id}"} %>
+  <%= link_to 'delete', comment_url(comment), data: {delete_link: true,
+      ajax_target: "#comment_#{comment.id}"} %>
 ```
 
-app/views/comments/_edit.html.erb
+`app/views/comments/_edit.html.erb`
 
 ```HTML+ERB
   <%= form_for comment, html: ajax_hash("#comment_#{comment.id}"), do |f| %>
@@ -57,7 +61,7 @@ app/views/comments/_edit.html.erb
 
 In your controllers:
 
-app/controllers/comments_controller.rb
+`app/controllers/comments_controller.rb`
 
 ```ruby
 def show

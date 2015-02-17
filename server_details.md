@@ -47,6 +47,11 @@ thin_man will dynamically add a css class to the flash container based on the HT
 
 This is intended for naming a Javascript function and passing it JSON parameters, no actual javascript implementation should live here.
 
+> If you are tempted to handle side-effects for other resources this way, don't shoot yourself in the foot like that.
+> Use the `foreign_office` gem to broadcast the state of associated objects from the server and have listeners on the
+> page that will update associations and aggregations independently of this. `thin_man` is meant to operate on one
+> resource at a time.
+
 ```ruby
 render json: {function_calls: {'myUtilities.redirectToPage' => next_step_url}}
 ```
@@ -60,12 +65,4 @@ having javascript implementation in our view files is far worse than having some
 
 You can also pass an html key with a render_to_string call as the value if you want to do both, but in that case we'd recommend
 just adding data attributes to your response that can be bound by some custom javascript you provide in a javascript file.
-
-###Respond with a javscript class to instantiate
-
-Similar to the above, but calls 'new' on the class, passing in the params.
-
-```ruby
-render json: {class_triggers: {'myRedirectClass' => next_step_url}}
-```
 

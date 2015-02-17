@@ -27,7 +27,27 @@
         </ul>
       </header>
       <section>
-      <h3>How it works</h3>
+<!--         <ul class="toc">
+          <li> <a href="/thin-man">How it works</a>
+            <ul>
+              <li> <a href="/thin-man">In your views</a>
+                <ul>
+                  <li> <a href="/thin-man/client_details.html">available attributes</a> </li>
+                </ul>
+              </li>
+              <li> <a href="/thin-man#controllers">In your controllers</a>
+                <ul>
+                  <li> <a href="/thin-man/server_details.html">convention for convenience</a> </li>
+                  <li> <a href="/thin-man/server_details.html#flash">flash message</a> </li>
+                  <li> <a href="/thin-man/server_details.html#extending">extending the callback</a> </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li> <a href="#restful">Restful AJAX</a> </li>
+          <li> <a href="#authors">Authors and Contributors</a> </li>
+        </ul>
+ -->      <h3>How it works</h3>
 
 <h4>In your views</h4>
 
@@ -51,23 +71,17 @@
 </code></pre></div>
 <p>See <a href="/thin-man/client_details.html">here</a> for more options and ways to customize the behavior of ajax requests.</p>
 
-<h4>In your controllers</h4>
+<h4 id="controllers">In your controllers</h4>
 
 <p>The most basic method is to simply respond with an html partial:</p>
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">render</span> <span class="ss">partial</span><span class="p">:</span> <span class="s1">&#39;edit&#39;</span><span class="p">,</span> <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span> <span class="ss">user</span><span class="p">:</span> <span class="vi">@user</span> <span class="p">}</span>
 </code></pre></div>
-<p>See <a href="/thin-man/server_details.html">here</a> for more dark magic you can do from your controller to vivify your client.</p>
-
-<h3>How to make a restul-AJAX app with ThinMan</h3>
-
-<p>It&#39;s all good and well to give you this general-purpose Rails AJAX tool, but if you want to put together
+<p>See <a href="/thin-man/server_details.html">here</a> for more dark magic you can do from your controller to vivify your client.
+<h3 id="restful">How to make a restul-AJAX app with ThinMan</h3>
+It&#39;s all good and well to give you this general-purpose Rails AJAX tool, but if you want to put together
 a restful AJAX app that doesn&#39;t suck, <a href="/thin-man/restful_ajax.html">follow these patterns</a> we&#39;ve learned from experience.</p>
 
-<h3>Extending ThinMan</h3>
-
-<p>If you want to extend the javascript behaviors in ThinMan, <a href="/thin-man/extending.html">see here</a></p>
-
-<h3>Authors and Contributors</h3>
+<h3 id="authors"> Authors and Contributors</h3>
 
 <p>Eric Draut (@edraut), Adam Bialek (@abialek)</p>
 

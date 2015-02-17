@@ -27,7 +27,27 @@
         </ul>
       </header>
       <section>
-      <h2>Server Options</h2>
+<!--         <ul class="toc">
+          <li> <a href="/thin-man">How it works</a>
+            <ul>
+              <li> <a href="/thin-man">In your views</a>
+                <ul>
+                  <li> <a href="/thin-man/client_details.html">available attributes</a> </li>
+                </ul>
+              </li>
+              <li> <a href="/thin-man#controllers">In your controllers</a>
+                <ul>
+                  <li> <a href="/thin-man/server_details.html">convention for convenience</a> </li>
+                  <li> <a href="/thin-man/server_details.html#flash">flash message</a> </li>
+                  <li> <a href="/thin-man/server_details.html#extending">extending the callback</a> </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li> <a href="#restful">Restful AJAX</a> </li>
+          <li> <a href="#authors">Authors and Contributors</a> </li>
+        </ul>
+ -->      <h2>Server Options</h2>
 
 <h3>Render with convenience</h3>
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">show</span>
@@ -65,6 +85,13 @@ Here is an example:</p>
 <h3>Respond with javascript methods to be called</h3>
 
 <p>This is intended for naming a Javascript function and passing it JSON parameters, no actual javascript implementation should live here.</p>
+
+<blockquote>
+<p>If you are tempted to handle side-effects for other resources this way, don&#39;t shoot yourself in the foot like that.
+Use the <code>foreign_office</code> gem to broadcast the state of associated objects from the server and have listeners on the
+page that will update associations and aggregations independently of this. <code>thin_man</code> is meant to operate on one
+resource at a time.</p>
+</blockquote>
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">render</span> <span class="ss">json</span><span class="p">:</span> <span class="p">{</span><span class="ss">function_calls</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;myUtilities.redirectToPage&#39;</span> <span class="o">=&gt;</span> <span class="n">next_step_url</span><span class="p">}}</span>
 </code></pre></div>
 <p>The only case we&#39;ve see for this is reloading the page after a single-page ajax wizard-style sequence has completed.
@@ -77,11 +104,6 @@ having javascript implementation in our view files is far worse than having some
 <p>You can also pass an html key with a render<em>to</em>string call as the value if you want to do both, but in that case we&#39;d recommend
 just adding data attributes to your response that can be bound by some custom javascript you provide in a javascript file.</p>
 
-<h3>Respond with a javscript class to instantiate</h3>
-
-<p>Similar to the above, but calls &#39;new&#39; on the class, passing in the params.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">render</span> <span class="ss">json</span><span class="p">:</span> <span class="p">{</span><span class="ss">class_triggers</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;myRedirectClass&#39;</span> <span class="o">=&gt;</span> <span class="n">next_step_url</span><span class="p">}}</span>
-</code></pre></div>
       </section>
     </div>
     <footer>

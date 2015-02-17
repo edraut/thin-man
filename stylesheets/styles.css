@@ -120,6 +120,22 @@ header ul {
   box-shadow: inset rgba(255, 255, 255, 0.45) 0 1px 0, inset rgba(0, 0, 0, 0.2) 0 -1px 0;
   width: auto;
 }
+ul.toc {
+  position: absolute;
+  left: 650px;
+  background: none;
+  color: white;
+  width: 200px;
+}
+ul.toc a {
+  color: white;
+}
+ul.toc li {
+  position: relative;
+  float: left;
+  display: block;
+  margin-left: -20px;
+}
 header ul:before {
   content: '';
   position: absolute;
@@ -269,6 +285,15 @@ li pre {
   padding-left: 60px;
 }
 
+ol ol ul, ol ul ul, ul ol ul, ul ul ul {
+  list-style-type: none;
+}
+ol ul, ul ul {
+  list-style-type: none;
+}
+ul {
+  list-style-type: none;
+}
 table {
   width: 100%;
   border-collapse: collapse;

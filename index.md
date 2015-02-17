@@ -41,7 +41,7 @@ And this does the same thing as the second example:
 See [here](/thin-man/client_details.html) for more options and ways to customize the behavior of ajax requests.
 
 
-####In your controllers
+<h4 id="controllers">In your controllers</h4>
 
 The most basic method is to simply respond with an html partial:
 
@@ -50,13 +50,9 @@ render partial: 'edit', locals: { user: @user }
 ```
 
 See [here](/thin-man/server_details.html) for more dark magic you can do from your controller to vivify your client.
-
-### How to make a restul-AJAX app with ThinMan
+<h3 id="restful">How to make a restul-AJAX app with ThinMan</h3>
 It's all good and well to give you this general-purpose Rails AJAX tool, but if you want to put together
 a restful AJAX app that doesn't suck, [follow these patterns](/thin-man/restful_ajax.html) we've learned from experience.
 
-### Extending ThinMan
-If you want to extend the javascript behaviors in ThinMan, [see here](/thin-man/extending.html)
-
-### Authors and Contributors
+<h3 id="authors"> Authors and Contributors</h3>
 Eric Draut (@edraut), Adam Bialek (@abialek)
