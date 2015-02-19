@@ -20,5 +20,9 @@ module ThinMan
         ajax_target: target,
         insert_method: method } }
     end
+
+    def dom_target(resource)
+      '#' + dom_id(resource)
+    end
   end
 end
