@@ -5,19 +5,19 @@ layout: default
 ###How it works
 
 ####In your views
-The basic method uses data attributes. The first example sends an AJAX request to retrieve a form for editing a user, then replaces the html of the DOM element selected by the css selector #user-\<user.id\> with the ajax response, presumeably the user edit form.
+This example sends an AJAX request to retrieve a form for editing a user, then replaces the html of the DOM element selected by the css selector `#user-<user.id>` with the ajax response, presumeably the user edit form.
 
 ```HTML+ERB
 <%= ajax_link 'edit', edit_user_path(user), {}, dom_target(user) %>
 ```
 
-This example posts/patches a form with user data via AJAX and replaces the html of the DOM element selected by #user-\<user.id\> with the response, presumeably the read-only representation of the user record.
+This example posts/patches a form with user data via AJAX and replaces the html of the DOM element selected by `#user-<user.id>` with the response, presumeably the read-only representation of the user record.
 
 ```HTML+ERB
 <%= form_for(user, html: ajax_form_hash("#user-#{user.id}") do |f| %>
 ```
 
-This creates a delete link that will remove the DOM element selected by #user-\<user.id\> after receiving a success response.
+This creates a delete link that will remove the DOM element selected by `#user-<user.id>` after receiving a success response.
 
 ```HTML+ERB
 <%= ajax_delete 'delete', user_path, {}, dom_target(user) %>

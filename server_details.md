@@ -48,7 +48,7 @@ thin_man will dynamically add a css class to the flash container based on the HT
 This is intended for naming a Javascript function and passing it JSON parameters, no actual javascript implementation should live here.
 
 > If you are tempted to handle side-effects for other resources this way, don't shoot yourself in the foot like that.
-> Use the `foreign_office` gem to broadcast the state of associated objects from the server and have listeners on the
+> Use the [foreign_office](http://edraut.github.io/foreign-office/) gem to broadcast the state of associated objects from the server and have listeners on the
 > page that will update associations and aggregations independently of thin_man. `thin_man` is meant to operate on one
 > resource at a time.
 
