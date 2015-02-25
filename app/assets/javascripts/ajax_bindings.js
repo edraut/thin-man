@@ -53,7 +53,7 @@ var AjaxSubmission = Class.extend({
     }
   },
   getErrorTarget: function(){
-    if($(this.jq_obj.data('error_target')).length > 0){
+    if($(this.jq_obj.data('error-target')).length > 0){
       this.error_target = $(this.jq_obj.data('error-target'));
     }else{
       this.error_target = $(this.jq_obj.data('ajax-target'));
@@ -113,6 +113,16 @@ var AjaxSubmission = Class.extend({
     if ((jqXHR.status == 200) && !(typeof step === 'undefined')) {
       $(form_map[step]).ScrollTo();
     }
+    if(this.removeOnSuccess()){
+      if($(this.removeOnSuccess())){
+        $(this.removeOnSuccess()).remove();
+      }
+    }
+    if(this.emptyOnSuccess()){
+      if($(this.emptyOnSuccess())){
+        $(this.emptyOnSuccess()).empty();
+      }
+    }
   },
   ajaxComplete: function(jqXHR) {
     this.showTrigger();
@@ -157,6 +167,12 @@ var AjaxSubmission = Class.extend({
         this.target.find('[data-loading-visible="true"]').removeClass('hidden');
       }
     }
+  },
+  removeOnSuccess: function(){
+    return this.jq_obj.data('remove-on-success')
+  },
+  emptyOnSuccess: function(){
+    return this.jq_obj.data('empty-on-success')
   },
   httpResponseToFlashStyle: function(response_code){
     if([403,409,500].indexOf(response_code) > -1){
