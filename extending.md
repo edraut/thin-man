@@ -16,4 +16,4 @@ var AjaxBlinkLink = AjaxLinkSubmission.extend({
 ```
 
 Full documentation on the methods and attributes to use when extending can be written if there is demand. Add an issue
-in the ThinMan wiki and @mention edraut.
+in the ThinMan wiki and mention @edraut.

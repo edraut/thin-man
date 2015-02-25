@@ -37,7 +37,7 @@ The first renders a container, the second renders the contents.
 `app/views/comments/_show_container.html.erb`
 
 ```HTML+ERB
-<div id="comment_#{comment.id}">
+<div id="<%= dom_id(comment) %>">
   <%= render partial: 'comments/show', locals: {comment: comment} %>
 </div>
 ```
@@ -46,15 +46,14 @@ The first renders a container, the second renders the contents.
 
 ```HTML+ERB
   <%= comment.body %>
-  <%= ajax_link 'edit', edit_comment_url(comment), {} "#comment_#{comment.id}" %>
-  <%= link_to 'delete', comment_url(comment), data: {delete_link: true,
-      ajax_target: "#comment_#{comment.id}"} %>
+  <%= ajax_link 'edit', edit_comment_url(comment), {} dom_target(comment) %>
+  <%= ajax_delete 'delete', comment_url(comment), {}, dom_target(comment) %>
 ```
 
 `app/views/comments/_edit.html.erb`
 
 ```HTML+ERB
-  <%= form_for comment, html: ajax_hash("#comment_#{comment.id}"), do |f| %>
+  <%= form_for comment, html: ajax_form_hash(dom_target(comment)), do |f| %>
     ...
   <% end %>
 ```

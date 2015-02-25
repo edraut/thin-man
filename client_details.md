@@ -4,9 +4,17 @@ layout: default
 
 ###View Options
 
-You can apply these data attributes to dom elements in your views and ThinMan will bind them with the behavior described.
+####Helper Options
 
-####Standard Options for both links and forms
+<p class="callout">
+  <span class="fixed-width">insert_method: &lt;jQuery insert method&gt;</span><br/>
+  Insert the response html using this jQuery insert method, e.g. `html`, `append`, `prepend`, `before`, `after`, etc.
+  Any valid jQuery method for placing content in relation to the target may be used. It will be called thusly `$(target)[insert_method](response_html)`. The default is `html`
+</p>
+
+####Data attribute options for both links and forms
+
+You can apply these data attributes to dom elements in your views and ThinMan will bind them with the behavior described.
 
 <p class="callout">
   <span class="fixed-width">data-ajax-link: true</span><br/>
@@ -40,14 +48,26 @@ You can apply these data attributes to dom elements in your views and ThinMan wi
   data-ajax-target.
 </p>
 
-####Link-only options
+<p class="callout">
+  <span class="fixed-width">data-empty-on-success: &lt;css selector&gt;</span><br/>
+  Thin_man will empty the contents of the element selected by the provided selector
+  if the request is successful.
+</p>
+
+<p class="callout">
+  <span class="fixed-width">data-remove-on-success: &lt;css selector&gt;</span><br/>
+  Thin_man will remove the element selected by the provided selector
+  if the request is successful.
+</p>
+
+####Link-only data-attribute options
 
 <p class="callout">
   <span class="fixed-width">data-method: &lt;HTTP method&gt;</span><br/>
   The HTTP method to use in sending the ajax request
 </p>
 
-####Delete-link-only options
+####Delete-link-only data-attribute options
 
 <p class="callout">
   <span class="fixed-width">data-ajax-target: &lt;css selector&gt;</span><br/>

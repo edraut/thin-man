@@ -49,7 +49,7 @@ This is intended for naming a Javascript function and passing it JSON parameters
 
 > If you are tempted to handle side-effects for other resources this way, don't shoot yourself in the foot like that.
 > Use the `foreign_office` gem to broadcast the state of associated objects from the server and have listeners on the
-> page that will update associations and aggregations independently of this. `thin_man` is meant to operate on one
+> page that will update associations and aggregations independently of thin_man. `thin_man` is meant to operate on one
 > resource at a time.
 
 ```ruby
@@ -60,9 +60,5 @@ The only case we've see for this is reloading the page after a single-page ajax 
 We don't want to redirect the page if there was an error in the last ajax step for the wizard, but if it succeeds we
 do want to redirect the page.
 
-Purists avert your delicate eyes, there's Javascript in my Ruby *gasp*! Yes, we feel that
-having javascript implementation in our view files is far worse than having some asynchronous RPC in our Ruby.  It's just asynchronous RPC people.
-
-You can also pass an html key with a render_to_string call as the value if you want to do both, but in that case we'd recommend
-just adding data attributes to your response that can be bound by some custom javascript you provide in a javascript file.
+**You can combine `function_calls`, `flash_message`, and `html` keys as necessary.**
 
