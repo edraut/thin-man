@@ -1,12 +1,21 @@
 module ThinMan
   module AjaxHelper
     def ajax_link(name, options, html_options, target, sub_class: nil, insert_method: nil)
-      sub_class ||= 'true'
-      insert_method ||= 'html'
       ajax_options = {
         'data-ajax-link' => true,
-        'data-ajax-target' => target,
-        'data-insert-method' => insert_method
+        'data-ajax-target' => target
+      }
+      ajax_options.merge!('data-sub-type' => sub_class) if sub_class.present?
+      ajax_options.merge!('data-insert-method' => insert_method) if insert_method.present?
+      link_to(name,
+              options,
+              html_options.merge(ajax_options))
+    end
+
+    def ajax_delete(name, options, html_options, target, sub_class: nil)
+      ajax_options = {
+        'data-ajax-delete' => true,
+        'data-ajax-target' => target
       }
       ajax_options.merge!('data-sub-type' => sub_class) if sub_class.present?
       link_to(name,
