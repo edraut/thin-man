@@ -16,7 +16,7 @@ If the name of the partial you want to render is the same as the action name, us
 
 ```ruby
 render json: {flash_message: "Your changes were saved.", html:
-  {render_to_string partial: 'show', locals: {post: @popst}}
+  {render_to_string partial: 'show', locals: {post: @post}}
 ```
 Notice the `html:` key. If you're responding with an html partial in addition to other data, you'll need to render your html to a string so that it can be included in a JSON response.
 
