@@ -76,8 +76,7 @@ var AjaxSubmission = Class.extend({
   ajaxSuccess: function(data,textStatus,jqXHR){
     if(typeof data === 'string'){
       this.insertHtml(data);
-    }
-    else if(typeof data === 'object'){
+    } else if(typeof data === 'object') {
       if(typeof data.html != 'undefined'){
         this.insertHtml(data.html)
       }
@@ -431,58 +430,6 @@ var AjaxPushState = Class.extend({
   }
 });
 
-var RadioFormGroup = Class.extend({
-  init: function($form_group){
-    this.$form_group = $form_group;
-    $form_group.data('form-group', this);
-  },
-  closeForm: function(){
-    this.cancel_button.cancel();
-  },
-  removeOpenForm: function(){
-    delete this.cancel_button;
-  }
-});
-
-var RadioEdit = Class.extend({
-  init: function($radio_edit){
-    $radio_edit.data('radio-edit-loaded',true);
-    this.$radio_edit = $radio_edit;
-    this.$go_link = $($radio_edit.data('radio-edit'));
-    var radio_edit = this;
-    $radio_edit.bind('click',function(e){
-      e.preventDefault();
-      radio_edit.tryEdit();
-      return false;
-    })
-  },
-  tryEdit: function(){
-    if(confirm("Any incomplete changes on other forms will be lost, are you sure you want to open this form?")){
-      this.form_group.closeForm();
-      step = this.$go_link.data('step-link') - 1;
-      this.$go_link.click();
-    }
-  },
-  findGroup: function(){
-    $form_group = this.$radio_edit.parents('[data-radio-form-group]')
-    this.form_group = $form_group.data('form-group');
-  }
-});
-
-var RadioCancel = Class.extend({
-  init: function($radio_cancel){
-    this.$radio_cancel = $radio_cancel;
-  },
-  findGroup: function(){
-    $form_group = this.$radio_cancel.parents('[data-radio-form-group]')
-    this.form_group = $form_group.data('form-group');
-    this.form_group.cancel_button = this;
-  },
-  cancel: function(){
-    this.$radio_cancel.click();
-  }
-});
-
 $(document).ready(function(){
   $(document).on('click','[data-ajax-link]',function(e){
     e.preventDefault();
@@ -504,40 +451,8 @@ $(document).ready(function(){
     var deletion = new this_class($(this));
   });
 
-  $(document).on('click','form input[type=submit]',function(e){
-    $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
-    $(this).attr("clicked", "true");
-  });
-
   $('[data-sortable]').each(function(){
     new AjaxSorter($(this));
   });
 
-  $('[data-radio-form-group]').each(function(){
-    new RadioFormGroup($(this));
-  })
-});
-$(document).ready(function(){
-  $('[data-radio-edit]').each(function(){
-    if(!($(this).data('radio-edit-loaded'))){
-      var radio_edit = new RadioEdit($(this))
-      radio_edit.findGroup();
-    }
-  });
-  $('[data-radio-cancel]').each(function(){
-    var radio_cancel = new RadioCancel($(this))
-    radio_cancel.findGroup();
-  });
-});
-$(document).ajaxComplete(function(){
-  $('[data-radio-edit]').each(function(){
-    if(!($(this).data('radio-edit-loaded'))){
-      var radio_edit = new RadioEdit($(this))
-      radio_edit.findGroup();
-    }
-  });
-  $('[data-radio-cancel]').each(function(){
-    var radio_cancel = new RadioCancel($(this))
-    radio_cancel.findGroup();
-  });
 });

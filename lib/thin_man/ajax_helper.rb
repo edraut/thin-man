@@ -36,6 +36,15 @@ module ThinMan
       ajax_options
     end
 
+    def ajax_form_attrs(target, sub_class: nil, insert_method: nil, error_target: nil, empty_on_success: nil)
+      data_attrs = "data-ajax-form=true data-ajax-target=#{target}"
+      data_attrs += " data-insert-method=#{insert_method}" if insert_method
+      data_attrs += " data-sub-type=#{sub_class}" if sub_class
+      data_attrs += " data-empty-on-success=#{empty_on_success}" if empty_on_success
+      data_attrs += " data-error-target=#{error_target}" if error_target
+      data_attrs
+    end
+
     def ajax_link_attrs(target, insert_method: nil, sub_type: nil, empty_on_success: nil)
       data_attrs = "data-ajax-link=true data-ajax-target=#{target}"
       data_attrs += " data-insert-method=#{insert_method}" if insert_method
