@@ -27,8 +27,10 @@ function addUrlParams(url,params){
 };
 
 var AjaxSubmission = Class.extend({
-  init: function(jq_obj){
+  init: function(jq_obj,params){
     this.jq_obj = jq_obj;
+    this.params = params;
+    if(!this.params){ this.params = {}}
     this.getTrigger();
     this.getTarget();
     this.getErrorTarget();
@@ -141,6 +143,9 @@ var AjaxSubmission = Class.extend({
       }else{
         new AjaxFlash(flash_style, response_data.flash_message,this.jq_obj);
       }
+    }
+    if('function' == typeof this.params.on_complete){
+      this.params.on_complete()
     }
   },
   ajaxBefore: function(jqXHr) {
@@ -303,7 +308,7 @@ var AjaxLinkSubmission = AjaxSubmission.extend({
     return this_data
   },
   getAjaxType: function(){
-    return this.jq_obj.data('method') || 'GET'
+    return this.jq_obj.data('ajax-method') || 'GET'
   },
   getTrigger: function(){
     this.trigger = this.jq_obj;
@@ -424,7 +429,7 @@ var AjaxSorter = Class.extend({
 
 var AjaxPushState = Class.extend({
   init: function(obj) {
-    if (obj.data('push-state') != null && obj.data('push-state') != "") {
+    if (obj.data('push-state') != null && obj.data('push-state') != "" && !obj.data('tab-trigger')) {
       history.pushState(null, null, obj.data('push-state'));
     }
   }
@@ -450,6 +455,11 @@ $(document).ready(function(){
     var this_class = eval(getSubClass($(this).data('sub-type'),'DeleteLink'));
     var deletion = new this_class($(this));
   });
+
+  $(document).on('click', '[data-change-url]',function(e){
+    e.preventDefault();
+    new AjaxPushState($(this))
+  })
 
   $('[data-sortable]').each(function(){
     new AjaxSorter($(this));
