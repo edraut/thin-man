@@ -73,6 +73,7 @@ var AjaxSubmission = Class.extend({
   insertHtml: function(data) {
     if(this.target){
       this.target[this.insert_method](data);
+      this.target.find('input:visible:first').focus();
     }
   },
   ajaxSuccess: function(data,textStatus,jqXHR){
