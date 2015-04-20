@@ -73,7 +73,11 @@ var AjaxSubmission = Class.extend({
   insertHtml: function(data) {
     if(this.target){
       this.target[this.insert_method](data);
-      this.target.find('input:visible:first').focus();
+      this.target.find('input,select,textarea').filter(':visible:enabled:first').each(function(){
+        if(!$(this).data('date-picker')){
+          $(this).focus();
+        }
+      });
     }
   },
   ajaxSuccess: function(data,textStatus,jqXHR){
