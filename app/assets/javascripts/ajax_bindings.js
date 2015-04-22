@@ -142,11 +142,19 @@ var AjaxSubmission = Class.extend({
       // hmmm, the response is not JSON, so there's no flash.
     }
     if(typeof response_data.flash_message != 'undefined'){
-      flash_style = this.httpResponseToFlashStyle(jqXHR.status)
+      var flash_style = this.httpResponseToFlashStyle(jqXHR.status);
+      var flash_duration = null;
+      if(typeof response_data.flash_persist != 'undefined'){
+        if(response_data.flash_persist){
+          flash_duration = 'persist'
+        } else {
+          flash_duration = 'fade'
+        }
+      }
       if(this.target){
-        new AjaxFlash(flash_style, response_data.flash_message,this.target);
+        new AjaxFlash(flash_style, response_data.flash_message,this.target, flash_duration);
       }else{
-        new AjaxFlash(flash_style, response_data.flash_message,this.jq_obj);
+        new AjaxFlash(flash_style, response_data.flash_message,this.jq_obj, flash_duration);
       }
     }
     if('function' == typeof this.params.on_complete){
@@ -241,15 +249,33 @@ var AjaxProgress = Class.extend({
   }
 });
 var AjaxFlash = Class.extend({
-  init: function(type,message,elem){
+  init: function(type,message,elem,duration){
     this.flash_container = $('#thin-man-flash-container').clone();
     $('body').append(this.flash_container);
     this.flash_container.css({position:'absolute',visibility: 'hidden'});
+    this.alert_type = type;
+    this.elem = elem;
     var alert_class = 'alert-' + type;
     this.flash_container.addClass(alert_class);
     $('#thin-man-flash-content', this.flash_container).html(message);
     this.flash_container.show();
+    this.setFadeBehavior(duration);
     this.reposition(elem);
+  },
+  setFadeBehavior: function(duration){
+    if(duration){
+      if('persist' == duration){
+        this.fade = false
+      } else {
+        this.fade = true
+      }
+    }else{ //default behavior if persist duration is not sent back with message
+      if('error' == this.alert_type || 'warning' == this.alert_type || 'info' == this.alert_type){
+        this.fade = false;
+      } else {
+        this.fade = true;
+      }
+    }
   },
   reposition: function(elem){
     var this_window = {
@@ -270,8 +296,8 @@ var AjaxFlash = Class.extend({
     var new_left = this_window.horiz_middle - this_flash.half_width;
     this.flash_container.css({left: new_left, top: new_top, visibility: 'visible'});
     var ajax_flash = this;
-    if (! $('form', elem).data('ajax-flash-persist')) {
-      setTimeout(function(){ajax_flash.fadeOut()},1000);
+    if (this.fade) {
+      setTimeout(function(){ajax_flash.fadeOut()},1618);
     }
   },
   fadeOut: function(){
