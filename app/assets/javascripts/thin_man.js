@@ -286,17 +286,16 @@ var initThinMan = function(){
       }
     }),
     AjaxSorter: Class.extend({
-      init: function(jq_obj){
-        var sort_container = jq_obj;
-        var base_url = sort_container.data('url');
-        sort_container.sortable({
+      init: function($sort_container){
+        var base_url = $sort_container.data('url');
+        $sort_container.sortable({
           helper: "clone",
           tolerance: 'pointer',
           stop: function( event, ui) {
-            new thin_man.AjaxSortSubmission(sort_container);
+            new thin_man.AjaxSortSubmission($sort_container);
           }
         });
-        jq_obj.disableSelection();
+        $sort_container.disableSelection();
       }
     })
   };
@@ -435,7 +434,11 @@ var initThinMan = function(){
     ajaxSuccess: function(){
 
     }
-  })
+  });
+  thin_man.loadClasses = function(){
+    window.any_time_manager.registerListWithClasses({'sortable' : 'AjaxSorter'},'thin_man');
+    window.any_time_manager.load();
+  };
   $(document).ready(function(){
     $(document).on('click','[data-ajax-link]',function(e){
       e.preventDefault();
@@ -462,13 +465,27 @@ var initThinMan = function(){
       new thin_man.AjaxPushState($(this))
     })
 
-    $('[data-sortable]').each(function(){
-      new thin_man.AjaxSorter($(this));
-    });
+    if(typeof window.any_time_manager === "undefined" && typeof window.loading_any_time_manager === "undefined"){
+      window.loading_any_time_manager = true;
+      $.getScript("https://cdn.rawgit.com/edraut/anytime_manager/9f710d2280e68ea6156551728cb7e2d537a06ee6/anytime_manager.js",function(){
+        window.loading_any_time_manager = false
+        thin_man.loadClasses();
+      });
+    }else if(typeof window.any_time_manager === "undefined"){
+      if(typeof window.any_time_load_functions === 'undefined'){
+        window.any_time_load_functions = []
+      }
+      window.any_time_load_functions.push(thin_man.loadClasses)
+    }else{
+      thin_man.loadClasses();
+    };
 
   });
 
 };
+    $('[data-sortable]').each(function(){
+      new thin_man.AjaxSorter($(this));
+    });
 
 if(typeof Class === "undefined"){
   $.getScript('https://rawgit.com/edraut/js_inheritance/a6c1e40986ecb276335b0a0b1792abd01f05ff6c/inheritance.js', function(){
