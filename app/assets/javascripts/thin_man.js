@@ -16,6 +16,11 @@ var initThinMan = function(){
         this.getTrigger();
         this.getTarget();
         this.getErrorTarget();
+        this.progress_color = jq_obj.data('progress-color');
+        this.progress_target = jq_obj.data('progress_target');
+        if(!this.progress_target){
+          this.progress_target = this.trigger
+        }
         this.insert_method = this.getInsertMethod();
         var ajax_submission = this;
         this.ajax_options = {
@@ -98,9 +103,6 @@ var initThinMan = function(){
             new thin_man.AjaxFlash('success', ajax_flash.notice,this.target);
           }
         }
-        if ((jqXHR.status == 200) && !(typeof step === 'undefined')) {
-          $(form_map[step]).ScrollTo();
-        }
         if(this.removeOnSuccess()){
           if($(this.removeOnSuccess())){
             $(this.removeOnSuccess()).remove();
@@ -145,7 +147,7 @@ var initThinMan = function(){
       },
       ajaxBefore: function(jqXHr) {
         this.toggleLoading();
-        this.progress_indicator = new thin_man.AjaxProgress(this.trigger);
+        this.progress_indicator = new thin_man.AjaxProgress(this.progress_target,this.target,this.progress_color);
       },
       ajaxError: function(jqXHR) {
         if(jqXHR.status == 409){
@@ -160,10 +162,10 @@ var initThinMan = function(){
       toggleLoading: function() {
         if(this.target){
           if (this.target.find('[data-loading-visible="false"]').length > 0) {
-            this.target.find('[data-loading-visible="false"]').addClass('hidden');
+            this.target.find('[data-loading-visible="false"]').hide();
           }
           if (this.target.find('[data-loading-visible="true"]').length > 0) {
-            this.target.find('[data-loading-visible="true"]').removeClass('hidden');
+            this.target.find('[data-loading-visible="true"]').show();
           }
         }
       },
@@ -189,7 +191,7 @@ var initThinMan = function(){
         if(this.trigger.length < 1){
           this.trigger = $connector;
         }
-        this.browser_push_progress_indicator = new thin_man.AjaxProgress(this.trigger);
+        this.browser_push_progress_indicator = new thin_man.AjaxProgress(this.trigger,this.trigger,this.progress_color);
         $connector.data('browser-push-progress-indicator-object', this.browser_push_progress_indicator);
       }
     }),
@@ -201,22 +203,28 @@ var initThinMan = function(){
       }
     }),
     AjaxProgress: Class.extend({
-      init: function(target){
-        if(target.not(':visible')){
-          var targetOffset = target.parent().offset();
+      init: function(target,alt,progress_color){
+        if(target.length == 0){
+          var progress_target = alt;
+        } else if(typeof(alt) != 'undefined' && alt.length > 0) {
+          var progress_target = target;
         } else {
-          var targetOffset = target.offset();
+          var progress_target = $('body');
         }
-        if(targetOffset){
-          var targetLeft = targetOffset.left;
-          var targetTop = targetOffset.top;
-          this.progress_container = $('#ajax_progress_container').clone();
-          uuid = new UUID;
-          this.progress_container.prop('id', uuid.value);
-          $('body').append(this.progress_container);
-          this.progress_container.css({position:'absolute',left: targetLeft, top: targetTop});
-          this.progress_container.show();
+        if(!progress_color){
+          progress_color = 'black';
         }
+        this.progress_container = $('#ajax_progress_container').clone();
+        uuid = new UUID;
+        this.progress_container.prop('id', uuid.value);
+        progress_target.append(this.progress_container);
+        this.progress_container.css({
+          display: 'block', visibility: 'visible', position: 'absolute', top: '50%', left: '50%',
+          'color': progress_color, 'z-index': 1000000,
+          '-ms-transform': 'translate(-50%, -50%)', /* IE 9 */
+          '-webkit-transform': 'translate(-50%, -50%)', /* Safari */
+          'transform': 'translate(-50%, -50%)'
+        })
       },
       stop: function(){
         if(this.progress_container){
