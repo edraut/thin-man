@@ -204,10 +204,10 @@ var initThinMan = function(){
     }),
     AjaxProgress: Class.extend({
       init: function(target,alt,progress_color){
-        if(target.length == 0){
-          var progress_target = alt;
-        } else if(typeof(alt) != 'undefined' && alt.length > 0) {
+        if(target.length > 0){
           var progress_target = target;
+        } else if(typeof(alt) != 'undefined') {
+          var progress_target = alt;
         } else {
           var progress_target = $('body');
         }
@@ -467,11 +467,20 @@ var initThinMan = function(){
       var this_class = eval('thin_man.' + thin_man.getSubClass($(this).data('sub-type'),'DeleteLink'));
       var deletion = new this_class($(this));
     });
-
+    $(document).ready(function(){
+      $('[data-ajax-link-now]').each(function(){
+        var this_class = eval('thin_man.' + thin_man.getSubClass($(this).data('sub-type'),'AjaxLinkSubmission'));
+        var submission = new this_class($(this));
+      })
+    })
     $(document).on('click', '[data-change-url]',function(e){
       e.preventDefault();
       new thin_man.AjaxPushState($(this))
     })
+
+    $('[data-sortable]').each(function(){
+      new thin_man.AjaxSorter($(this));
+    });
 
     if(typeof window.any_time_manager === "undefined" && typeof window.loading_any_time_manager === "undefined"){
       window.loading_any_time_manager = true;
@@ -491,9 +500,6 @@ var initThinMan = function(){
   });
 
 };
-    $('[data-sortable]').each(function(){
-      new thin_man.AjaxSorter($(this));
-    });
 
 if(typeof Class === "undefined"){
   $.getScript('https://rawgit.com/edraut/js_inheritance/a6c1e40986ecb276335b0a0b1792abd01f05ff6c/inheritance.js', function(){

@@ -14,6 +14,20 @@ module ThinMan
               html_options.merge(ajax_options))
     end
 
+    def ajax_link_now(name, options, html_options, target, sub_class: nil, insert_method: nil, empty_on_success: nil, http_method: nil)
+      ajax_options = {
+        'data-ajax-link-now' => true,
+        'data-ajax-target' => target
+      }
+      ajax_options.merge!('data-sub-type' => sub_class) if sub_class.present?
+      ajax_options.merge!('data-insert-method' => insert_method) if insert_method.present?
+      ajax_options.merge!('data-ajax-method' => http_method) if http_method.present?
+      ajax_options.merge!('data-empty-on-success' => empty_on_success) if empty_on_success.present?
+      link_to(name,
+              options,
+              html_options.merge(ajax_options))
+    end
+
     def ajax_delete(name, options, html_options, target, sub_class: nil)
       ajax_options = {
         'data-ajax-delete' => true,
