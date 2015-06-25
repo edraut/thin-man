@@ -1,3 +1,11 @@
+var UUID = Class.extend({
+  init: function(){
+    this.value = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+      return v.toString(16);
+    });
+  }
+})
 var initThinMan = function(){
   thin_man = {
     getSubClass: function(sub_class_name,parent_class){
@@ -484,7 +492,7 @@ var initThinMan = function(){
 
     if(typeof window.any_time_manager === "undefined" && typeof window.loading_any_time_manager === "undefined"){
       window.loading_any_time_manager = true;
-      $.getScript("https://cdn.rawgit.com/edraut/anytime_manager/9f710d2280e68ea6156551728cb7e2d537a06ee6/anytime_manager.js",function(){
+      $.getScript("https://cdn.rawgit.com/edraut/anytime_manager/51dd4568a18599ff5e5f864417e10aa9376c0a1b/anytime_manager.js",function(){
         window.loading_any_time_manager = false
         thin_man.loadClasses();
       });
