@@ -1,11 +1,3 @@
-var UUID = Class.extend({
-  init: function(){
-    this.value = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-      return v.toString(16);
-    });
-  }
-})
 var initThinMan = function(){
   thin_man = {
     getSubClass: function(sub_class_name,parent_class){
@@ -505,6 +497,15 @@ var initThinMan = function(){
       thin_man.loadClasses();
     };
 
+  });
+
+  UUID = Class.extend({
+    init: function(){
+      this.value = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+      });
+    }
   });
 
 };

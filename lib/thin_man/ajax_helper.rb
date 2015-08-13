@@ -39,13 +39,14 @@ module ThinMan
               html_options.merge(ajax_options))
     end
 
-    def ajax_form_hash(target, sub_class: nil, insert_method: nil, error_target: nil, empty_on_success: nil)
+    def ajax_form_hash(target, sub_class: nil, insert_method: nil, error_target: nil, empty_on_success: nil, container: nil)
       ajax_options = {
         'data-ajax-form' => true,
         'data-ajax-target' => target
       }
       ajax_options.merge!('data-insert-method' => insert_method) if insert_method.present?
       ajax_options.merge!('data-sub-type' => sub_class) if sub_class.present?
+      ajax_options.merge!('data-container' => container) if container.present?
       ajax_options.merge!('data-error-target' => error_target) if error_target.present?
       ajax_options.merge!('data-empty-on-success' => empty_on_success) if empty_on_success.present?
       ajax_options
