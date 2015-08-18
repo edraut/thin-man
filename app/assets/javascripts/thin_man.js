@@ -444,7 +444,8 @@ var initThinMan = function(){
     }
   });
   thin_man.loadClasses = function(){
-    window.any_time_manager.registerListWithClasses({'sortable' : 'AjaxSorter'},'thin_man');
+    window.any_time_manager.registerListWithClasses({'sortable' : 'AjaxSorter', 'ajax-link-now' : 'AjaxLinkSubmission'},'thin_man');
+    window.any_time_manager.registerList(['ajax-link-now'])
     window.any_time_manager.load();
   };
   $(document).ready(function(){
@@ -467,35 +468,110 @@ var initThinMan = function(){
       var this_class = eval('thin_man.' + thin_man.getSubClass($(this).data('sub-type'),'DeleteLink'));
       var deletion = new this_class($(this));
     });
-    $(document).ready(function(){
-      $('[data-ajax-link-now]').each(function(){
-        var this_class = eval('thin_man.' + thin_man.getSubClass($(this).data('sub-type'),'AjaxLinkSubmission'));
-        var submission = new this_class($(this));
-      })
-    })
     $(document).on('click', '[data-change-url]',function(e){
       e.preventDefault();
       new thin_man.AjaxPushState($(this))
-    })
+    });
 
     $('[data-sortable]').each(function(){
       new thin_man.AjaxSorter($(this));
     });
 
     if(typeof window.any_time_manager === "undefined" && typeof window.loading_any_time_manager === "undefined"){
-      window.loading_any_time_manager = true;
-      $.getScript("https://cdn.rawgit.com/edraut/anytime_manager/51dd4568a18599ff5e5f864417e10aa9376c0a1b/anytime_manager.js",function(){
-        window.loading_any_time_manager = false
-        thin_man.loadClasses();
+      //Anytime loader, simulates load events for ajax requests
+      function getSubClass(sub_class_name,parent_class){
+        if((typeof(sub_class_name) == 'string') && (sub_class_name != '') && (sub_class_name != 'true')){
+          var this_class = sub_class_name;
+        } else {
+          var this_class = parent_class;
+        }
+        return this_class;
+      };
+
+      String.prototype.toCapCamel = function(){
+        camel = this.replace(/[-_]([a-z])/g, function (g) { return g.replace(/[-_]/,'').charAt(0).toUpperCase(); });
+        return camel.charAt(0).toUpperCase() + camel.slice(1);
+      };
+
+      var AnyTimeManager = Class.extend({
+        init: function(){
+          this.loader_array = []
+        },
+        register: function(data_attribute,load_method,base_class,namespace){
+          if(!namespace){namespace = ''}else{namespace= namespace + '.'}
+          this.loader_array.push({data_attribute: data_attribute, base_class: base_class, load_method: load_method, namespace: namespace});
+        },
+        registerList: function(list,namespace){
+          var anytime_manager = this;
+          $.each(list,function(){
+            anytime_manager.register(this + '','instantiate',null,namespace)
+          })
+        },
+        registerListWithClasses: function(list,namespace){
+          var anytime_manager = this;
+          $.each(list,function(attr,klass){
+            anytime_manager.register(attr,'instantiate',klass,namespace)
+          })
+        },
+        registerRunList: function(list){
+          var anytime_manager = this;
+          $.each(list,function(attr,method){
+            anytime_manager.register(attr,method,null)
+          })
+        },
+        instantiate: function(jq_obj, class_name){
+          if(!jq_obj.data('anytime_loaded')){
+            jq_obj.data('anytime_loaded',true);
+            var this_class = eval(class_name);
+            new this_class(jq_obj);
+          }
+        },
+        run: function (jq_obj, resource, method_name){
+          if(!jq_obj.data('anytime_run')){
+            jq_obj.data('anytime_run',true);
+            resource[method_name](jq_obj);
+          }
+        },
+        load: function(){
+          var atm = this;
+          $.each(atm.loader_array,function(){
+            var data_attribute = this['data_attribute'];
+            var base_class = this['base_class'];
+            if(!base_class){
+              base_class = data_attribute.toCapCamel();
+            }
+            var this_method = this['load_method'];
+            var namespace = this['namespace'];
+            $('[data-' + data_attribute + ']').each(function(){
+              if('instantiate' == this_method){
+                var declared_class = $(this).data('sub-type');
+                var this_class = getSubClass(declared_class,base_class);
+                this_class = namespace + this_class;
+                atm.instantiate($(this),this_class);
+              }else{
+                atm.run($(this),base_class,this_method);
+              }
+
+            });
+          });
+        }
       });
-    }else if(typeof window.any_time_manager === "undefined"){
-      if(typeof window.any_time_load_functions === 'undefined'){
-        window.any_time_load_functions = []
-      }
-      window.any_time_load_functions.push(thin_man.loadClasses)
-    }else{
-      thin_man.loadClasses();
-    };
+      window.any_time_manager = new AnyTimeManager();
+      $(document).ajaxComplete(function(){
+        window.any_time_manager.load();
+      });
+      $(document).ready(function(){
+        if(typeof window.any_time_load_functions != 'undefined'){
+          $.each(window.any_time_load_functions, function(i,func){
+            func();
+          });
+        }
+        window.any_time_manager.load();
+      });
+
+      // End AnyTime library
+    }
+    thin_man.loadClasses();
 
   });
 
@@ -511,9 +587,68 @@ var initThinMan = function(){
 };
 
 if(typeof Class === "undefined"){
-  $.getScript('https://rawgit.com/edraut/js_inheritance/a6c1e40986ecb276335b0a0b1792abd01f05ff6c/inheritance.js', function(){
-    initThinMan();
-  });
-}else{
-  initThinMan();
+  /* Simple JavaScript Inheritance
+   * By John Resig http://ejohn.org/
+   * MIT Licensed.
+   */
+  // Inspired by base2 and Prototype
+  (function(){
+    var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
+    // The base Class implementation (does nothing)
+    this.Class = function(){};
+
+    // Create a new Class that inherits from this class
+    Class.extend = function(prop) {
+      var _super = this.prototype;
+
+      // Instantiate a base class (but only create the instance,
+      // don't run the init constructor)
+      initializing = true;
+      var prototype = new this();
+      initializing = false;
+
+      // Copy the properties over onto the new prototype
+      for (var name in prop) {
+        // Check if we're overwriting an existing function
+        prototype[name] = typeof prop[name] == "function" &&
+          typeof _super[name] == "function" && fnTest.test(prop[name]) ?
+          (function(name, fn){
+            return function() {
+              var tmp = this._super;
+
+              // Add a new ._super() method that is the same method
+              // but on the super-class
+              this._super = _super[name];
+
+              // The method only need to be bound temporarily, so we
+              // remove it when we're done executing
+              var ret = fn.apply(this, arguments);
+              this._super = tmp;
+
+              return ret;
+            };
+          })(name, prop[name]) :
+          prop[name];
+      }
+
+      // The dummy class constructor
+      function Class() {
+        // All construction is actually done in the init method
+        if ( !initializing && this.init )
+          this.init.apply(this, arguments);
+      }
+
+      // Populate our constructed prototype object
+      Class.prototype = prototype;
+
+      // Enforce the constructor to be what we expect
+      Class.prototype.constructor = Class;
+
+      // And make this class extendable
+      Class.extend = arguments.callee;
+
+      return Class;
+    };
+  })();
 }
+initThinMan();
