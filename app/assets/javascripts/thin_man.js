@@ -215,7 +215,7 @@ var initThinMan = function(){
           progress_color = 'black';
         }
         this.progress_container = $('#ajax_progress_container').clone();
-        uuid = new UUID;
+        uuid = new this.UUID;
         this.progress_container.prop('id', uuid.value);
         progress_target.append(this.progress_container);
         this.progress_container.css({
@@ -304,6 +304,14 @@ var initThinMan = function(){
           }
         });
         $sort_container.disableSelection();
+      }
+    }),
+    UUID: Class.extend({
+      init: function(){
+        this.value = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+          return v.toString(16);
+        });
       }
     })
   };
@@ -480,12 +488,8 @@ var initThinMan = function(){
 
   });
 
-  UUID = Class.extend({
+  var UUID = Class.extend({
     init: function(){
-      this.value = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-        return v.toString(16);
-      });
     }
   });
 
