@@ -31,7 +31,9 @@ var initThinMan = function(){
           beforeSend: function(jqXHr) { return ajax_submission.ajaxBefore(jqXHr) },
           success: function(data,textStatus,jqXHR) { ajax_submission.ajaxSuccess(data,textStatus,jqXHR) },
           error: function(jqXHr) { ajax_submission.ajaxError(jqXHr) },
-          complete: function(jqXHr) { ajax_submission.ajaxComplete(jqXHr) }
+          complete: function(jqXHr) { ajax_submission.ajaxComplete(jqXHr) },
+          contentType: false,
+          processData: false
         };
         $.ajax(ajax_submission.ajax_options);
       },
@@ -215,7 +217,7 @@ var initThinMan = function(){
           progress_color = 'black';
         }
         this.progress_container = $('#ajax_progress_container').clone();
-        uuid = new this.UUID;
+        uuid = new UUID;
         this.progress_container.prop('id', uuid.value);
         progress_target.append(this.progress_container);
         this.progress_container.css({
@@ -305,14 +307,6 @@ var initThinMan = function(){
         });
         $sort_container.disableSelection();
       }
-    }),
-    UUID: Class.extend({
-      init: function(){
-        this.value = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-          return v.toString(16);
-        });
-      }
     })
   };
   thin_man.AjaxFormSubmission = thin_man.AjaxSubmission.extend({
@@ -323,8 +317,9 @@ var initThinMan = function(){
       return this.jq_obj.attr('method') || 'POST'
     },
     getData: function(){
-      var data_array = this.jq_obj.serializeArray();
-      return data_array;
+// need to implement a data-attribute for multiple file fields so we can allow selecting mutliple files at once. example here:
+// http://stackoverflow.com/questions/12989442/uploading-multiple-files-using-formdata
+      return new FormData(this.jq_obj[0]);
     },
     getTrigger: function(){
       this.trigger = this.jq_obj.find('button, input[type="submit"]');
@@ -488,12 +483,18 @@ var initThinMan = function(){
 
   });
 
+};
+
+if(typeof UUID == 'undefined'){
   var UUID = Class.extend({
     init: function(){
+      this.value = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+      });
     }
-  });
-
-};
+  })
+}
 
 if(typeof Class === "undefined"){
   /* Simple JavaScript Inheritance
