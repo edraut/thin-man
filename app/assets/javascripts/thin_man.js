@@ -485,17 +485,6 @@ var initThinMan = function(){
 
 };
 
-if(typeof UUID == 'undefined'){
-  var UUID = Class.extend({
-    init: function(){
-      this.value = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-        return v.toString(16);
-      });
-    }
-  })
-}
-
 if(typeof Class === "undefined"){
   /* Simple JavaScript Inheritance
    * By John Resig http://ejohn.org/
@@ -561,6 +550,18 @@ if(typeof Class === "undefined"){
     };
   })();
 }
+
+if(typeof UUID == 'undefined'){
+  var UUID = Class.extend({
+    init: function(){
+      this.value = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+      });
+    }
+  })
+}
+
 if(typeof window.any_time_manager === "undefined" && typeof window.loading_any_time_manager === "undefined"){
   //Anytime loader, simulates load events for ajax requests
   function getSubClass(sub_class_name,parent_class){
