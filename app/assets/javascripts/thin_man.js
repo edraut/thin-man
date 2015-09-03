@@ -32,9 +32,12 @@ var initThinMan = function(){
           success: function(data,textStatus,jqXHR) { ajax_submission.ajaxSuccess(data,textStatus,jqXHR) },
           error: function(jqXHr) { ajax_submission.ajaxError(jqXHr) },
           complete: function(jqXHr) { ajax_submission.ajaxComplete(jqXHr) },
-          contentType: false,
-          processData: false
+          processData: ajax_submission.getProcessData()
         };
+        if(!ajax_submission.sendContentType()){
+          this.ajax_options.contentType = false
+        }
+        console.log(this.ajax_options)
         $.ajax(ajax_submission.ajax_options);
       },
       getTarget: function(){
@@ -58,6 +61,12 @@ var initThinMan = function(){
       },
       getData: function() {
         return null;
+      },
+      getProcessData: function() {
+        return true;
+      },
+      sendContentType: function() {
+        return true;
       },
       insertHtml: function(data) {
         if(this.target){
@@ -321,6 +330,12 @@ var initThinMan = function(){
 // http://stackoverflow.com/questions/12989442/uploading-multiple-files-using-formdata
       return new FormData(this.jq_obj[0]);
     },
+    getProcessData: function() {
+      return false;
+    },
+    sendContentType: function() {
+      return false;
+    },
     getTrigger: function(){
       this.trigger = this.jq_obj.find('button, input[type="submit"]');
     },
@@ -341,6 +356,9 @@ var initThinMan = function(){
         $.extend(this_data,this.jq_obj.data('form-data'))
       }
       return this_data
+    },
+    getProcessData: function() {
+      return true;
     },
     getAjaxType: function(){
       return this.jq_obj.data('ajax-method') || 'GET'
@@ -422,6 +440,9 @@ var initThinMan = function(){
     },
     getData: function(){
       return {authenticity_token: $('[name="csrf-token"]').attr('content')};
+    },
+    getProcessData: function() {
+      return true;
     },
     ajaxBefore: function(jqXHR){
       return confirm("Are you sure you want to delete this?");
