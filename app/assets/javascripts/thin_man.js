@@ -37,7 +37,6 @@ var initThinMan = function(){
         if(!ajax_submission.sendContentType()){
           this.ajax_options.contentType = false
         }
-        console.log(this.ajax_options)
         $.ajax(ajax_submission.ajax_options);
       },
       getTarget: function(){
@@ -326,15 +325,28 @@ var initThinMan = function(){
       return this.jq_obj.attr('method') || 'POST'
     },
     getData: function(){
-// need to implement a data-attribute for multiple file fields so we can allow selecting mutliple files at once. example here:
-// http://stackoverflow.com/questions/12989442/uploading-multiple-files-using-formdata
-      return new FormData(this.jq_obj[0]);
+      if(this.getAjaxType().toLowerCase() == 'get'){
+        var data_array = this.jq_obj.serializeArray();
+        return data_array;
+      }else{
+        // need to implement a data-attribute for multiple file fields so we can allow selecting mutliple files at once. example here:
+        // http://stackoverflow.com/questions/12989442/uploading-multiple-files-using-formdata
+        return new FormData(this.jq_obj[0]);
+      }
     },
     getProcessData: function() {
-      return false;
+      if(this.getAjaxType().toLowerCase() == 'get'){
+        return true;
+      }else{
+        return false;
+      }
     },
     sendContentType: function() {
-      return false;
+      if(this.getAjaxType().toLowerCase() == 'get'){
+        return true;
+      }else{
+        return false;
+      }
     },
     getTrigger: function(){
       this.trigger = this.jq_obj.find('button, input[type="submit"]');
