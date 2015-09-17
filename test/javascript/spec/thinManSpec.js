@@ -50,5 +50,57 @@ describe("thin_man", function(){
       expect(getAjaxArg("type")).toMatch("PATCH");
       expect(getAjaxArg("datatype")).toMatch("html");
     });
-  })
+
+    describe("GET request", function(){
+      var $form;
+
+      beforeEach(function() {
+        $form = affix('form[data-ajax-form="true"][action="/url"][method="GET"]');
+      });
+
+      it("serialize data", function(){
+        $form.affix('input[type="text"][name="name"][value="Jon Snow"]');
+        thin_man.AjaxFormSubmission($form);
+        spyOn($, 'ajax');
+        $form.submit();
+        expect($.ajax).toHaveBeenCalled();
+        expect(getAjaxArg("data")).toEqual([{ name: 'name', value: 'Jon Snow' }]);
+      });
+
+      it(".getProcessData", function(){
+        var thin = new thin_man.AjaxFormSubmission($form)
+        expect(thin.getProcessData()).toBe(true);
+      });
+
+      it(".sendContentType", function(){
+        var thin = new thin_man.AjaxFormSubmission($form)
+        expect(thin.sendContentType()).toBe(true);
+      });
+    });
+
+    describe("POST/PATCH/DELETE request", function(){
+      var $form;
+      beforeEach(function(){
+        $form = affix('form[data-ajax-form="true"][action="/url"]');
+      });
+
+      it("Set data in a FormData object", function(){
+        thin_man.AjaxFormSubmission($form)
+        spyOn($, 'ajax');
+        $form.submit();
+        expect(getAjaxArg("data")).toEqual(jasmine.any(FormData));
+      });
+
+      it(".getProcessData", function(){
+        var thin = new thin_man.AjaxFormSubmission($form)
+        expect(thin.getProcessData()).toBe(false);
+      });
+
+      it(".sendContentType", function(){
+        var thin = new thin_man.AjaxFormSubmission($form)
+        expect(thin.sendContentType()).toBe(false);
+      });
+    });
+
+  });
 });
