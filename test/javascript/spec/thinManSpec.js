@@ -36,4 +36,19 @@ describe("thin_man", function(){
       expect($("[type='text']").get(0)).toBe(document.activeElement);
     });
   });
+
+
+  describe("AjaxFormSubmission", function(){
+    it("submits an ajax call with options", function(){
+      var $form = affix('form[data-ajax-form="true"][method="PATCH"][action="/url"]');
+      $form.affix('input[type="text"][name="name"][value="Jon Snow"]')
+      thin_man.AjaxFormSubmission($form)
+      spyOn($, 'ajax');
+      $form.submit();
+      expect($.ajax).toHaveBeenCalled();
+      expect(getAjaxArg("url")).toMatch("/url");
+      expect(getAjaxArg("type")).toMatch("PATCH");
+      expect(getAjaxArg("datatype")).toMatch("html");
+    });
+  })
 });
