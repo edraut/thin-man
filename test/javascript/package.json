@@ -1,0 +1,27 @@
+{
+  "name": "thin-man",
+  "version": "1.0.0",
+  "description": "thin man testing dependencies",
+  "dependencies": {
+    "jasmine-core": "^2.3.4",
+    "karma-jasmine": "^0.3.6",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma": "^0.13.9",
+    "karma-requirejs": "^0.2.2",
+    "karma-jasmine-ajax": "^0.1.13",
+    "karma-spec-reporter": "^0.0.20",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "phantomjs": "^1.9.18",
+    "requirejs": "^2.1.20"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/edraut/thin-man.git"
+  }
+}
