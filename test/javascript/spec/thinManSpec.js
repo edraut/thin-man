@@ -22,7 +22,6 @@ describe("thin_man", function(){
       it("Add result to the target", function(){
         thin.ajaxSuccess({ html: "Hello" }, 'success', TestResponses.success)
         expect($target.html()).toEqual("Hello")
-        expect(false).toEqual(true)
       });
 
       it("focus on first element", function(){
