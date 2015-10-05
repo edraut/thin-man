@@ -1,6 +1,6 @@
 test:
   override:
-    - karma start
+    - cd test/javascript && karma start
 database:
   override:
     - ls
