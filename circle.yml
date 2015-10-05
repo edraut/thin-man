@@ -1,9 +1,11 @@
 test:
   override:
-    - cd test/javascript && karma start
+    - cd test/javascript && node_modules/karma-cli/bin/karma start
 database:
   override:
     - ls
 dependencies:
   override:
     - cd test/javascript && npm install
+  cache_directories:
+    - "test/javascript/node_modules"
