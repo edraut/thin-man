@@ -1,3 +1,6 @@
 test:
   override:
     - karma start
+database:
+  override:
+    - ls
