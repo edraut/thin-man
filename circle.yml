@@ -6,4 +6,4 @@ database:
     - ls
 dependencies:
   override:
-    - npm install
+    - cd test/javascript && npm install
