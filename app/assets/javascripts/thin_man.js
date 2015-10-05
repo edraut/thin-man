@@ -224,12 +224,11 @@ var initThinMan = function(){
     AjaxProgress: Class.extend({
       init: function(target,alt,progress_color){
         if(target.length > 0){
-          var progress_target = target;
-          this.progress_target = progress_target;
+          this.progress_target = target;
         } else if(typeof(alt) != 'undefined') {
-          var progress_target = alt;
+          this.progress_target = alt;
         } else {
-          var progress_target = $('body');
+          this.progress_target = $('body');
         }
         if(!progress_color){
           progress_color = 'black';
@@ -237,7 +236,7 @@ var initThinMan = function(){
         this.progress_container = $('#ajax_progress_container').clone();
         uuid = new UUID;
         this.progress_container.prop('id', uuid.value);
-        progress_target.append(this.progress_container);
+        this.progress_target.append(this.progress_container);
         this.progress_container.css({
           display: 'block', visibility: 'visible', position: 'absolute', top: '50%', left: '50%',
           'color': progress_color, 'z-index': 1000000,
@@ -247,7 +246,7 @@ var initThinMan = function(){
         })
       },
       stop: function(){
-        if(this.progress_target){this.progress_target.empty()};
+        this.progress_container.remove();
       }
     }),
     AjaxFlash: Class.extend({
