@@ -17,7 +17,8 @@ var initThinMan = function(){
         this.getTarget();
         this.getErrorTarget();
         this.progress_color = jq_obj.data('progress-color');
-        this.progress_target = jq_obj.data('progress_target');
+        this.progress_target = $(jq_obj.data('progress-target'));
+        this.custom_progress = typeof(jq_obj.data('custom-progress')) != 'undefined';
         if(!this.progress_target){
           this.progress_target = this.trigger
         }
@@ -34,10 +35,14 @@ var initThinMan = function(){
           complete: function(jqXHr) { ajax_submission.ajaxComplete(jqXHr) },
           processData: ajax_submission.getProcessData()
         };
-        if(!ajax_submission.sendContentType()){
+        if(!this.sendContentType()){
           this.ajax_options.contentType = false
+        };
+        if(typeof this.customXHR === 'function'){
+          this.ajax_options.xhr = this.customXHR
+          this.ajax_options.thin_man_obj = this;
         }
-        $.ajax(ajax_submission.ajax_options);
+        $.ajax(this.ajax_options);
       },
       getTarget: function(){
         var target_selector = this.jq_obj.data('ajax-target');
@@ -128,6 +133,8 @@ var initThinMan = function(){
         this.showTrigger();
         if(this.progress_indicator){
           this.progress_indicator.stop();
+        } else {
+          this.progress_target.remove();
         }
         try{
           response_data = JSON.parse(jqXHR.responseText)
@@ -157,7 +164,9 @@ var initThinMan = function(){
       },
       ajaxBefore: function(jqXHr) {
         this.toggleLoading();
-        this.progress_indicator = new thin_man.AjaxProgress(this.progress_target,this.target,this.progress_color);
+        if(!this.custom_progress){
+          this.progress_indicator = new thin_man.AjaxProgress(this.progress_target,this.target,this.progress_color);
+        }
       },
       ajaxError: function(jqXHR) {
         if(jqXHR.status == 409){
@@ -216,6 +225,7 @@ var initThinMan = function(){
       init: function(target,alt,progress_color){
         if(target.length > 0){
           var progress_target = target;
+          this.progress_target = progress_target;
         } else if(typeof(alt) != 'undefined') {
           var progress_target = alt;
         } else {
@@ -237,14 +247,7 @@ var initThinMan = function(){
         })
       },
       stop: function(){
-        if(this.progress_container){
-          this.progress_container.remove();
-          // This is a hack to force finding the element. For some ridiculous reason in certain cases
-          // the progress_container is present, can be logged in console, yet cannot be removed.
-          // Finding it again by its unique id allows us to remove it. baffled me, but it works now in all known cases.
-          $actual_progress_container = $('#' + this.progress_container.attr('id'))
-          $actual_progress_container.remove();
-        }
+        if(this.progress_target){this.progress_target.empty()};
       }
     }),
     AjaxFlash: Class.extend({
