@@ -4,3 +4,6 @@ test:
 database:
   override:
     - ls
+dependencies:
+  override:
+    - npm install
