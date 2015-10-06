@@ -487,7 +487,7 @@ var initThinMan = function(){
   window.any_time_manager.load();
 
   $(document).ready(function(){
-    $(document).on('click','[data-ajax-link]',function(e){
+    $(document).on('click','[data-ajax-link],[data-ajax-link-now]',function(e){
       e.preventDefault();
       var this_class = eval('thin_man.' + thin_man.getSubClass($(this).data('sub-type'),'AjaxLinkSubmission'));
       var submission = new this_class($(this));
