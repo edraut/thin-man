@@ -471,8 +471,12 @@ var initThinMan = function(){
     }
   }),
   thin_man.AjaxSortSubmission = thin_man.AjaxLinkSubmission.extend({
+    init: function($form){
+      this.sort_field = $form.data('sort-field');
+      this._super($form);
+    },
     getAjaxUrl: function(){
-      return this._super() + '?' + this.jq_obj.sortable("serialize");
+      return this._super() + '?' + 'sort_field=' + this.sort_field + '&' + this.jq_obj.sortable("serialize");
     },
     getAjaxType: function(){
       return 'PUT';
