@@ -170,7 +170,18 @@ var initThinMan = function(){
       },
       ajaxError: function(jqXHR) {
         if(jqXHR.status == 409){
-          this.error_target.html(jqXHR.responseText);
+          try{
+            var data = JSON.parse(jqXHR.responseText);
+          }catch(error){
+            var data = jqXHR.responseText;
+          }
+          if(typeof data === 'string'){
+            this.error_target.html(data);
+          } else if(typeof data === 'object') {
+            if(typeof data.html != 'undefined'){
+              this.error_target.html(data.html);
+            }
+          }
         }else if(jqXHR.status == 500){
           alert('There was an error communicating with the server.')
         }
