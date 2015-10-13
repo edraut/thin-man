@@ -6,5 +6,13 @@ var TestResponses = {
   error: {
     status: 500,
     responseText: '{"flash_message": "error response", "flash_persist": false}'
+  },
+  conflict: {
+    status: 409,
+    responseText: '{"flash_message": "conflict response", "flash_persist": false, "html": "Required field"}'
+  },
+  conflictString: {
+    status: 409,
+    responseText: 'conflict string response'
   }
 };

@@ -45,13 +45,11 @@ describe("thin_man", function(){
 
       describe("Display flash message", function(){
         it("successfully response", function(){
-          var thin = new thin_man.AjaxLinkSubmission($link);
           thin.ajaxComplete(TestResponses.success);
           expect(thin.flash.flash_content.text()).toMatch('successfully response');
         });
 
         it("error response", function(){
-          var thin = new thin_man.AjaxLinkSubmission($link);
           thin.ajaxComplete(TestResponses.error);
           expect(thin.flash.flash_content.text()).toMatch('error response');
         });
@@ -62,6 +60,25 @@ describe("thin_man", function(){
         thin.ajaxComplete(TestResponses.success);
         jasmine.clock().tick(2000);
         expect($.fn.fadeOut).toHaveBeenCalled();
+      });
+    });
+
+    describe(".ajaxError", function(){
+      var $link, thin;
+
+      beforeEach(function(){
+        $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"] #test_dom_id');
+        thin = new thin_man.AjaxLinkSubmission($link);
+      });
+
+      it('as a string', function(){
+        thin.ajaxError(TestResponses.conflictString);
+        expect($('#test_dom_id').html()).toMatch('conflict string response');
+      });
+
+      it('as an object', function(){
+        thin.ajaxError(TestResponses.conflict);
+        expect($('#test_dom_id').html()).toMatch('Required field');
       });
     });
   });
