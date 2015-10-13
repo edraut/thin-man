@@ -28,13 +28,14 @@ module ThinMan
               html_options.merge(ajax_options))
     end
 
-    def ajax_delete(name, options, html_options, target, sub_class: nil, replace_response: false)
+    def ajax_delete(name, options, html_options, target, sub_class: nil, replace_response: false, no_confirm: false)
       ajax_options = {
         'data-ajax-delete' => true,
         'data-ajax-target' => target
       }
       ajax_options.merge!('data-sub-type' => sub_class) if sub_class.present?
       ajax_options.merge!('data-replace-response' => true) if replace_response
+      ajax_options.merge!('data-no-confirm' => true) if no_confirm
       link_to(name,
               options,
               html_options.merge(ajax_options))

@@ -477,7 +477,9 @@ var initThinMan = function(){
       return true;
     },
     ajaxBefore: function(jqXHR){
-      return confirm("Are you sure you want to delete this?");
+      if(!this.jq_obj.data('no-confirm')){
+        return confirm("Are you sure you want to delete this?");
+      }
     }
   }),
   thin_man.ReplaceDelete = thin_man.DeleteLink.extend({
