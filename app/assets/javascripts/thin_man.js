@@ -456,8 +456,12 @@ var initThinMan = function(){
   thin_man.DeleteLink = thin_man.AjaxSubmission.extend({
     ajaxSuccess: function(data,textStatus,jqXHR){
       this._super(data,textStatus,jqXHR);
-      if(this.target){
-        this.target.remove();
+      if(this.jq_obj.data('replace-response')){
+        this.insertHtml(data);
+      } else {
+        if(this.target){
+          this.target.remove();
+        }
       }
     },
     getAjaxType: function(){
