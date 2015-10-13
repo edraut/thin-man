@@ -39,14 +39,22 @@ describe("thin_man", function(){
 
       beforeEach(function(){
         $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"] #test_dom_id');
-        affix('#thin-man-flash-container #thin-man-flash-content');
+        affix('[data-thin-man-flash-template] [data-thin-man-flash-content]');
         thin = new thin_man.AjaxLinkSubmission($link);
       });
 
-      it("display flash message", function(){
-        var thin = new thin_man.AjaxLinkSubmission($link);
-        thin.ajaxComplete(TestResponses.success);
-        expect($('body #thin-man-flash-content').text()).toMatch('successfully response')
+      describe("Display flash message", function(){
+        it("successfully response", function(){
+          var thin = new thin_man.AjaxLinkSubmission($link);
+          thin.ajaxComplete(TestResponses.success);
+          expect(thin.flash.flash_content.text()).toMatch('successfully response');
+        });
+
+        it("error response", function(){
+          var thin = new thin_man.AjaxLinkSubmission($link);
+          thin.ajaxComplete(TestResponses.error);
+          expect(thin.flash.flash_content.text()).toMatch('error response');
+        });
       });
 
       it("fade out if flash_persist is false", function(){

@@ -137,9 +137,9 @@ var initThinMan = function(){
           this.progress_target.remove();
         }
         try{
-          response_data = JSON.parse(jqXHR.responseText)
+          var response_data = JSON.parse(jqXHR.responseText)
         } catch(err) {
-          response_data = {}
+          var response_data = {}
           // hmmm, the response is not JSON, so there's no flash.
         }
         if(typeof response_data.flash_message != 'undefined'){
@@ -153,9 +153,9 @@ var initThinMan = function(){
             }
           }
           if(this.target){
-            new thin_man.AjaxFlash(flash_style, response_data.flash_message,this.target, flash_duration);
+            this.flash = new thin_man.AjaxFlash(flash_style, response_data.flash_message,this.target, flash_duration);
           }else{
-            new thin_man.AjaxFlash(flash_style, response_data.flash_message,this.jq_obj, flash_duration);
+            this.flash = new thin_man.AjaxFlash(flash_style, response_data.flash_message,this.jq_obj, flash_duration);
           }
         }
         if('function' == typeof this.params.on_complete){
@@ -251,14 +251,17 @@ var initThinMan = function(){
     }),
     AjaxFlash: Class.extend({
       init: function(type,message,elem,duration){
-        this.flash_container = $('#thin-man-flash-container').clone();
+        this.flash_container = $('[data-thin-man-flash-template]').clone();
+        this.flash_container.removeAttr('data-thin-man-flash-template');
+        this.flash_container.attr('data-thin-man-flash-container');
         $('body').append(this.flash_container);
         this.flash_container.css({position:'absolute',visibility: 'hidden'});
         this.alert_type = type;
         this.elem = elem;
         var alert_class = 'alert-' + type;
         this.flash_container.addClass(alert_class);
-        $('#thin-man-flash-content', this.flash_container).html(message);
+        this.flash_content = this.flash_container.find('[data-thin-man-flash-content]');
+        this.flash_content.html(message);
         this.flash_container.show();
         this.setFadeBehavior(duration);
         this.reposition(elem);
