@@ -180,6 +180,8 @@ var initThinMan = function(){
           } else if(typeof data === 'object') {
             if(typeof data.html != 'undefined'){
               this.error_target.html(data.html);
+            } else {
+              this.error_target.empty();
             }
           }
         }else if(jqXHR.status == 500){
