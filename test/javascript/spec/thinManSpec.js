@@ -32,6 +32,12 @@ describe("thin_man", function(){
         //Check if it's focused
         expect($("[type='text']").get(0)).toBe(document.activeElement);
       });
+
+      it("empties the target if there is no html in the json", function(){
+        $target.html('Remove me.')
+        thin.ajaxSuccess({flash_message: 'Successfully moved the widget.'}, 'success', TestResponses.success)
+        expect($target.html()).toEqual('')
+      })
     });
 
     describe(".ajaxComplete", function(){
@@ -67,7 +73,8 @@ describe("thin_man", function(){
       var $link, thin;
 
       beforeEach(function(){
-        $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"] #test_dom_id');
+        $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"]');
+        $target = affix('#test_dom_id');
         thin = new thin_man.AjaxLinkSubmission($link);
       });
 
@@ -80,6 +87,13 @@ describe("thin_man", function(){
         thin.ajaxError(TestResponses.conflict);
         expect($('#test_dom_id').html()).toMatch('Required field');
       });
+
+      it("empties the target if there is no html in the json", function(){
+        $target.affix('#remove_me')
+        thin.ajaxError(TestResponses.conflictNoHtml)
+        expect($('#test_dom_id').children().length).toEqual(0)
+      })
+
     });
   });
 

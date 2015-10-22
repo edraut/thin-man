@@ -88,6 +88,8 @@ var initThinMan = function(){
         } else if(typeof data === 'object') {
           if(typeof data.html != 'undefined'){
             this.insertHtml(data.html)
+          } else {
+            this.target.empty()
           }
           if(typeof data.class_triggers != 'undefined'){
             $.each(data.class_triggers, function(class_name, params){

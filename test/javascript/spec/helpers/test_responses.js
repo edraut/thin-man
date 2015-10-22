@@ -11,6 +11,10 @@ var TestResponses = {
     status: 409,
     responseText: '{"flash_message": "conflict response", "flash_persist": false, "html": "Required field"}'
   },
+  conflictNoHtml: {
+    status: 409,
+    responseText: '{"flash_message": "conflict response", "flash_persist": false}'
+  },
   conflictString: {
     status: 409,
     responseText: 'conflict string response'
