@@ -240,7 +240,7 @@ var initThinMan = function(){
       init: function(target,alt,progress_color){
         if(target.length > 0){
           this.progress_target = target;
-        } else if(typeof(alt) != 'undefined') {
+        } else if(typeof(alt) != 'undefined' && alt.is(':visible')) {
           this.progress_target = alt;
         } else {
           this.progress_target = $('body');
