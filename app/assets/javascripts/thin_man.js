@@ -88,7 +88,7 @@ var initThinMan = function(){
         } else if(typeof data === 'object') {
           if(typeof data.html != 'undefined'){
             this.insertHtml(data.html)
-          } else {
+          } else if(this.target && typeof(this.target.empty) == 'function') {
             this.target.empty()
           }
           if(typeof data.class_triggers != 'undefined'){

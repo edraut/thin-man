@@ -10,7 +10,7 @@ describe("thin_man", function(){
       jasmine.clock().install();
     });
 
-    describe(".ajaxSucess", function(){
+    describe(".ajaxSuccess", function(){
       var $link, $target, thin;
 
       beforeEach(function(){
@@ -37,6 +37,12 @@ describe("thin_man", function(){
         $target.html('Remove me.')
         thin.ajaxSuccess({flash_message: 'Successfully moved the widget.'}, 'success', TestResponses.success)
         expect($target.html()).toEqual('')
+      })
+
+      it("handles success with no target", function(){
+        $no_target_link = affix('a[data-ajax-link="true"][data-ajax-target=""]');
+        thin = new thin_man.AjaxLinkSubmission($no_target_link);
+        thin.ajaxSuccess({flash_message: 'Success'},'success', TestResponses.success)
       })
     });
 
