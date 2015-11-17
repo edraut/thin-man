@@ -250,7 +250,7 @@ var initThinMan = function(){
         }
         this.progress_container = $('#ajax_progress_container').clone();
         uuid = new UUID;
-        this.progress_container.prop('id', uuid.value);
+        this.progress_container.prop('id', 'thin_man_ajax_progress_' + uuid.value);
         this.progress_target.append(this.progress_container);
         this.progress_container.css({
           display: 'block', visibility: 'visible', position: 'absolute', top: '50%', left: '50%',
