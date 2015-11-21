@@ -28,7 +28,7 @@ module ThinMan
               html_options.merge(ajax_options))
     end
 
-    def ajax_delete(name, options, html_options, target, sub_class: nil, replace_response: false, no_confirm: false)
+    def ajax_delete(name, options, html_options, target, sub_class: nil, replace_response: false, no_confirm: false, custom_progress: nil)
       ajax_options = {
         'data-ajax-delete' => true,
         'data-ajax-target' => target
@@ -36,12 +36,13 @@ module ThinMan
       ajax_options.merge!('data-sub-type' => sub_class) if sub_class.present?
       ajax_options.merge!('data-replace-response' => true) if replace_response
       ajax_options.merge!('data-no-confirm' => true) if no_confirm
+      ajax_options.merge!('data-custom-progress' => custom_progress) if custom_progress.present?
       link_to(name,
               options,
               html_options.merge(ajax_options))
     end
 
-    def ajax_form_hash(target, sub_class: nil, insert_method: nil, error_target: nil, empty_on_success: nil, container: nil)
+    def ajax_form_hash(target, sub_class: nil, insert_method: nil, error_target: nil, empty_on_success: nil, reset_on_success: nil, container: nil, custom_progress: nil)
       ajax_options = {
         'data-ajax-form' => true,
         'data-ajax-target' => target
@@ -51,14 +52,17 @@ module ThinMan
       ajax_options.merge!('data-container' => container) if container.present?
       ajax_options.merge!('data-error-target' => error_target) if error_target.present?
       ajax_options.merge!('data-empty-on-success' => empty_on_success) if empty_on_success.present?
+      ajax_options.merge!('data-reset-on-success' => reset_on_success) if reset_on_success.present?
+      ajax_options.merge!('data-custom-progress' => custom_progress) if custom_progress.present?
       ajax_options
     end
 
-    def ajax_form_attrs(target, sub_class: nil, insert_method: nil, error_target: nil, empty_on_success: nil)
+    def ajax_form_attrs(target, sub_class: nil, insert_method: nil, error_target: nil, empty_on_success: nil, reset_on_success: nil)
       data_attrs = "data-ajax-form=true data-ajax-target=#{target}"
       data_attrs += " data-insert-method=#{insert_method}" if insert_method
       data_attrs += " data-sub-type=#{sub_class}" if sub_class
       data_attrs += " data-empty-on-success=#{empty_on_success}" if empty_on_success
+      data_attrs += " data-reset-on-success=#{reset_on_success}" if reset_on_success
       data_attrs += " data-error-target=#{error_target}" if error_target
       data_attrs
     end

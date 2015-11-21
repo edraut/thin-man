@@ -354,6 +354,16 @@ var initThinMan = function(){
         return new FormData(this.jq_obj[0]);
       }
     },
+    ajaxSuccess: function(data,textStatus,jqXHR){
+      this._super(data,textStatus,jqXHR)
+      if(this.resetOnSuccess()){
+        this.jq_obj[0].reset();
+        $(this.jq_obj).find('input[type=text],textarea,select').filter(':visible:first').focus();
+      }
+    },
+    resetOnSuccess: function(){
+      return this.jq_obj.data('reset-on-success')
+    },
     getProcessData: function() {
       if(this.getAjaxType().toLowerCase() == 'get'){
         return true;
