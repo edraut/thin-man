@@ -130,6 +130,10 @@ var initThinMan = function(){
             $(this.emptyOnSuccess()).empty();
           }
         }
+        if ($.contains(document, this.jq_obj[0])) {
+          this.jq_obj.find('.error').removeClass('error')
+          this.jq_obj.find('.help-inline').remove()
+        }
       },
       ajaxComplete: function(jqXHR) {
         this.showTrigger();
