@@ -76,8 +76,8 @@ module ThinMan
       data_attrs
     end
 
-    def dom_target(resource)
-      '#' + dom_id(resource)
+    def dom_target(resource, label = nil)
+      '#' + dom_id(resource, label)
     end
   end
 end
