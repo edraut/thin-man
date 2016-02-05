@@ -47,7 +47,13 @@ var initThinMan = function(){
       getTarget: function(){
         var target_selector = this.jq_obj.data('ajax-target');
         if(target_selector){
-          this.target = $(target_selector);
+          if($(target_selector).length > 0){
+            this.target = $(target_selector);
+          }else{
+            console.log('Warning! Selector ' + target_selector + ' not found on page')
+          }
+        }else{
+          console.log('Warning! No target selector given')
         }
       },
       getErrorTarget: function(){

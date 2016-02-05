@@ -182,5 +182,30 @@ describe("thin_man", function(){
       });
     });
 
+    describe("Log", function(){
+      beforeEach(function(){
+        spyOn(console, 'log');
+      });
+
+      it("Don't show a warning with a valid target", function(){
+        $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"]');
+        $target = affix('#test_dom_id');
+        thin = new thin_man.AjaxLinkSubmission($link);
+        expect(console.log).not.toHaveBeenCalled();
+      });
+
+      it("Show a warning when target not found", function(){
+        $link = affix('a[data-ajax-link="true"][data-ajax-target="#not_valid_target"]');
+        thin = new thin_man.AjaxLinkSubmission($link);
+        expect(console.log).toHaveBeenCalledWith('Warning! Selector #not_valid_target not found on page');
+      });
+
+      it("Show a warning when target not provided", function(){
+        $link = affix('a[data-ajax-link="true"]');
+        thin = new thin_man.AjaxLinkSubmission($link);
+        expect(console.log).toHaveBeenCalledWith('Warning! No target selector given');
+      });
+    });
+
   });
 });
