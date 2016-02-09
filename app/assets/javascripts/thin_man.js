@@ -50,10 +50,10 @@ var initThinMan = function(){
           if($(target_selector).length > 0){
             this.target = $(target_selector);
           }else{
-            console.log('Warning! Selector ' + target_selector + ' not found on page')
+            console.log('Warning! Thin Man selector ' + target_selector + ' not found')
           }
         }else{
-          console.log('Warning! No target selector given')
+          console.log('Warning! Thin Man selector not given')
         }
       },
       getErrorTarget: function(){

@@ -197,13 +197,13 @@ describe("thin_man", function(){
       it("Show a warning when target not found", function(){
         $link = affix('a[data-ajax-link="true"][data-ajax-target="#not_valid_target"]');
         thin = new thin_man.AjaxLinkSubmission($link);
-        expect(console.log).toHaveBeenCalledWith('Warning! Selector #not_valid_target not found on page');
+        expect(console.log).toHaveBeenCalledWith('Warning! Thin Man selector #not_valid_target not found');
       });
 
       it("Show a warning when target not provided", function(){
         $link = affix('a[data-ajax-link="true"]');
         thin = new thin_man.AjaxLinkSubmission($link);
-        expect(console.log).toHaveBeenCalledWith('Warning! No target selector given');
+        expect(console.log).toHaveBeenCalledWith('Warning! Thin Man selector not given');
       });
     });
 
