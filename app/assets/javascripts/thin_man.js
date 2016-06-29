@@ -13,6 +13,10 @@ var initThinMan = function(){
         this.jq_obj = jq_obj;
         this.params = params;
         if(!this.params){ this.params = {}}
+        // Bail out if this is a no-mouse-click ajax element and we were mouse clicked
+        if(this.wasMouseClicked() && this.noMouseClick()){
+          return false;
+        }
         this.getTrigger();
         this.getTarget();
         this.getErrorTarget();
@@ -221,6 +225,12 @@ var initThinMan = function(){
           return 'success'
         }
         return 'error'
+      },
+      wasMouseClicked: function(){
+        return this.params.e && this.params.e.type && this.params.e.type == 'click'
+      },
+      noMouseClick: function(){
+        this.jq_obj.data('no-mouse-click')
       }
     }),
     AjaxBrowserPushConnector: Class.extend({
@@ -529,24 +539,24 @@ var initThinMan = function(){
   window.any_time_manager.load();
 
   $(document).ready(function(){
-    $(document).on('click','[data-ajax-link],[data-ajax-link-now]',function(e){
+    $(document).on('click apiclick','[data-ajax-link],[data-ajax-link-now]',function(e){
       e.preventDefault();
       var this_class = eval('thin_man.' + thin_man.getSubClass($(this).data('sub-type'),'AjaxLinkSubmission'));
-      var submission = new this_class($(this));
+      var submission = new this_class($(this),{e: e});
       return false;
     });
 
-    $(document).on('submit','[data-ajax-form]',function(e){
+    $(document).on('submit apisubmit','[data-ajax-form]',function(e){
       e.preventDefault();
       var this_class = eval('thin_man.' + thin_man.getSubClass($(this).data('sub-type'),'AjaxFormSubmission'));
-      var submission = new this_class($(this));
+      var submission = new this_class($(this),{e: e});
       return false;
     });
 
-    $(document).on('click','[data-ajax-delete]',function(e){
+    $(document).on('click apiclick','[data-ajax-delete]',function(e){
       e.preventDefault();
       var this_class = eval('thin_man.' + thin_man.getSubClass($(this).data('sub-type'),'DeleteLink'));
-      var deletion = new this_class($(this));
+      var deletion = new this_class($(this),{e: e});
     });
     $(document).on('click', '[data-change-url]',function(e){
       e.preventDefault();
