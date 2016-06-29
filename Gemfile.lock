@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    thin_man (0.12.2)
+    thin_man (0.13.0)
       rails (>= 4.1, < 4.3)
 
 GEM
