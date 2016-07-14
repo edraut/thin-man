@@ -97,7 +97,11 @@ var initThinMan = function(){
           this.insertHtml(data);
         } else if(typeof data === 'object') {
           if(typeof data.html != 'undefined'){
-            this.insertHtml(data.html)
+            if(typeof data.hooch_modal != 'undefined'){
+              new hooch.Modal(data.html)
+            }else{
+              this.insertHtml(data.html)
+            }
           } else if(this.target && typeof(this.target.empty) == 'function') {
             this.target.empty()
           }
