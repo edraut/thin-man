@@ -544,7 +544,7 @@ var initThinMan = function(){
     }
   });
 
-  window.any_time_manager.registerListWithClasses({'sortable' : 'AjaxSorter', 'ajax-link-now' : 'AjaxLinkSubmission'},'thin_man');
+  window.any_time_manager.registerListWithClasses({'sortable' : 'AjaxSorter', 'ajax-link-now' : 'AjaxLinkSubmission', 'ajax-form-now' : 'AjaxFormSubmission'},'thin_man');
   window.any_time_manager.registerList(['ajax-link-now'])
   window.any_time_manager.load();
 

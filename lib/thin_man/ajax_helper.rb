@@ -60,6 +60,21 @@ module ThinMan
       ajax_options
     end
 
+    def ajax_form_now(target, sub_class: nil, insert_method: nil, error_target: nil, empty_on_success: nil, reset_on_success: nil, container: nil, custom_progress: nil)
+      ajax_options = {
+        'data-ajax-form-now' => true,
+        'data-ajax-target' => target
+      }
+      ajax_options.merge!('data-insert-method' => insert_method) if insert_method.present?
+      ajax_options.merge!('data-sub-type' => sub_class) if sub_class.present?
+      ajax_options.merge!('data-container' => container) if container.present?
+      ajax_options.merge!('data-error-target' => error_target) if error_target.present?
+      ajax_options.merge!('data-empty-on-success' => empty_on_success) if empty_on_success.present?
+      ajax_options.merge!('data-reset-on-success' => reset_on_success) if reset_on_success.present?
+      ajax_options.merge!('data-custom-progress' => custom_progress) if custom_progress.present?
+      ajax_options
+    end
+
     def ajax_form_attrs(target, sub_class: nil, insert_method: nil, error_target: nil, empty_on_success: nil, reset_on_success: nil, no_mouse_click: nil)
       data_attrs = "data-ajax-form=true data-ajax-target=#{target}"
       data_attrs += " data-insert-method=#{insert_method}" if insert_method
@@ -68,6 +83,16 @@ module ThinMan
       data_attrs += " data-reset-on-success=#{reset_on_success}" if reset_on_success
       data_attrs += " data-error-target=#{error_target}" if error_target
       data_attrs += " data-no-mouse-click=#{no_mouse_click}" if no_mouse_click
+      data_attrs
+    end
+
+    def ajax_form_now_attrs(target, sub_class: nil, insert_method: nil, error_target: nil, empty_on_success: nil, reset_on_success: nil)
+      data_attrs = "data-ajax-form-now=true data-ajax-target=#{target}"
+      data_attrs += " data-insert-method=#{insert_method}" if insert_method
+      data_attrs += " data-sub-type=#{sub_class}" if sub_class
+      data_attrs += " data-empty-on-success=#{empty_on_success}" if empty_on_success
+      data_attrs += " data-reset-on-success=#{reset_on_success}" if reset_on_success
+      data_attrs += " data-error-target=#{error_target}" if error_target
       data_attrs
     end
 
