@@ -12,7 +12,7 @@
     "karma-spec-reporter": "^0.0.20",
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-cli": "^0.0.4",
-    "phantomjs": "^1.9.18",
+    "phantomjs": "^2.1.1",
     "requirejs": "^2.1.20"
   },
   "devDependencies": {},
