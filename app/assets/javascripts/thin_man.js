@@ -23,7 +23,7 @@ var initThinMan = function(){
         this.progress_color = jq_obj.data('progress-color');
         this.progress_target = $(jq_obj.data('progress-target'));
         this.custom_progress = typeof(jq_obj.data('custom-progress')) != 'undefined';
-        if(!this.progress_target){
+        if(this.progress_target.length == 0){
           this.progress_target = this.trigger
         }
         this.insert_method = this.getInsertMethod();
@@ -262,7 +262,7 @@ var initThinMan = function(){
     }),
     AjaxProgress: Class.extend({
       init: function(target,alt,progress_color){
-        if(target.length > 0){
+        if(target.length > 0 && target.is(':visible')){
           this.progress_target = target;
         } else if(typeof(alt) != 'undefined' && alt.is(':visible')) {
           this.progress_target = alt;
@@ -276,13 +276,17 @@ var initThinMan = function(){
         uuid = new UUID;
         this.progress_container.prop('id', 'thin_man_ajax_progress_' + uuid.value);
         this.progress_target.append(this.progress_container);
-        this.progress_container.css({
-          display: 'block', visibility: 'visible', position: 'absolute', top: '50%', left: '50%',
-          'color': progress_color, 'z-index': 1000000,
-          '-ms-transform': 'translate(-50%, -50%)', /* IE 9 */
-          '-webkit-transform': 'translate(-50%, -50%)', /* Safari */
-          'transform': 'translate(-50%, -50%)'
-        })
+        var css = {display: 'block', visibility: 'visible','color': progress_color, 'z-index': 1000000}
+        if(this.progress_target.css('position') == 'absolute' || this.progress_target.css('position') == 'relative'){
+          $.extend(css,
+            {position: 'absolute', top: '50%', left: '50%',
+            '-ms-transform': 'translate(-50%, -50%)', /* IE 9 */
+            '-webkit-transform': 'translate(-50%, -50%)', /* Safari */
+            'transform': 'translate(-50%, -50%)'})
+        } else {
+          $.extend(css, {position: 'absolute', top: 0, left: 0})
+        }
+        this.progress_container.css(css)
       },
       stop: function(){
         this.progress_container.remove();
