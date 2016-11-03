@@ -25,6 +25,7 @@ var initThinMan = function(){
         this.custom_progress = typeof(jq_obj.data('custom-progress')) != 'undefined';
         if(this.progress_target.length == 0){
           this.progress_target = this.trigger
+          this.trigger_is_progress_target = true
         }
         this.insert_method = this.getInsertMethod();
         var ajax_submission = this;
@@ -153,7 +154,7 @@ var initThinMan = function(){
         this.showTrigger();
         if(this.progress_indicator){
           this.progress_indicator.stop();
-        } else {
+        } else if(!this.trigger_is_progress_target){
           this.progress_target.remove();
         }
         try{

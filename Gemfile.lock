@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    thin_man (0.15.1)
+    thin_man (0.15.3)
       rails (>= 4.1, < 6)
 
 GEM
@@ -115,4 +115,4 @@ DEPENDENCIES
   thin_man!
 
 BUNDLED WITH
-   1.12.5
+   1.13.6
