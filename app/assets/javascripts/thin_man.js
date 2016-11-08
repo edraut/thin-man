@@ -374,13 +374,26 @@ var initThinMan = function(){
       return this.jq_obj.attr('method') || 'POST'
     },
     getData: function(){
+      var $clicked = $(document.activeElement);
+
+      if ($clicked.length && $clicked.is('button[type="submit"], input[type="submit"], input[type="image"]') && $clicked.is('[name]')) {
+        var button_name = $clicked.attr('name')
+        var button_value = $clicked.attr('value')
+      }
       if(this.getAjaxType().toLowerCase() == 'get'){
         var data_array = this.jq_obj.serializeArray();
+        if(button_name && button_value){
+          data_array.push({name: button_name, value: button_value})
+        }
         return data_array;
       }else{
         // need to implement a data-attribute for multiple file fields so we can allow selecting mutliple files at once. example here:
         // http://stackoverflow.com/questions/12989442/uploading-multiple-files-using-formdata
-        return new FormData(this.jq_obj[0]);
+        var fd = new FormData(this.jq_obj[0]);
+        if(button_name && button_value){
+          fd.set(button_name, button_value)
+        }
+        return fd
       }
     },
     ajaxSuccess: function(data,textStatus,jqXHR){
