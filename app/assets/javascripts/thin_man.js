@@ -270,23 +270,19 @@ var initThinMan = function(){
         } else {
           this.progress_target = $('body');
         }
-        if(!progress_color){
-          progress_color = 'black';
+        if(typeof(progress_color) == 'undefined'){
+          var progress_color = 'black';
         }
         this.progress_container = $('#ajax_progress_container').clone();
         uuid = new UUID;
         this.progress_container.prop('id', 'thin_man_ajax_progress_' + uuid.value);
         this.progress_target.append(this.progress_container);
         var css = {display: 'block', visibility: 'visible','color': progress_color, 'z-index': 1000000}
-        if(this.progress_target.css('position') == 'absolute' || this.progress_target.css('position') == 'relative'){
-          $.extend(css,
-            {position: 'absolute', top: '50%', left: '50%',
-            '-ms-transform': 'translate(-50%, -50%)', /* IE 9 */
-            '-webkit-transform': 'translate(-50%, -50%)', /* Safari */
-            'transform': 'translate(-50%, -50%)'})
-        } else {
-          $.extend(css, {position: 'absolute', top: 0, left: 0})
-        }
+        $.extend(css,
+          {position: 'absolute', top: '50%', left: '50%',
+          '-ms-transform': 'translate(-50%, -50%)', /* IE 9 */
+          '-webkit-transform': 'translate(-50%, -50%)', /* Safari */
+          'transform': 'translate(-50%, -50%)'})
         this.progress_container.css(css)
       },
       stop: function(){
@@ -422,6 +418,9 @@ var initThinMan = function(){
     },
     getTrigger: function(){
       this.trigger = this.jq_obj.find('button, input[type="submit"]');
+      if(this.trigger.length != 1){
+        this.trigger = $(document.activeElement)
+      }
     },
     hideTrigger: function(){
       this.trigger.css('visibility','hidden');
@@ -563,7 +562,6 @@ var initThinMan = function(){
   });
 
   window.any_time_manager.registerListWithClasses({'sortable' : 'AjaxSorter', 'ajax-link-now' : 'AjaxLinkSubmission', 'ajax-form-now' : 'AjaxFormSubmission'},'thin_man');
-  window.any_time_manager.load();
 
   $(document).ready(function(){
     $(document).on('click apiclick','[data-ajax-link],[data-ajax-link-now]',function(e){
@@ -766,8 +764,7 @@ if(typeof window.any_time_manager === "undefined" && typeof window.loading_any_t
       });
     }
     window.any_time_manager.load();
-  });
-
+  })
   // End AnyTime library
 }
 
