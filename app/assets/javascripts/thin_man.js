@@ -263,7 +263,7 @@ var initThinMan = function(){
     }),
     AjaxProgress: Class.extend({
       init: function(target,alt,progress_color){
-        if(target.length > 0 && target.is(':visible')){
+        if(target.length > 0 && target.is(':visible') && target.css('display') != 'inline'){
           this.progress_target = target;
         } else if(typeof(alt) != 'undefined' && alt.is(':visible')) {
           this.progress_target = alt;

@@ -1,7 +1,17 @@
 require File.expand_path('../boot', __FILE__)
 
-require 'rails/all'
-
+require "rails"
+ 
+%w(
+  action_controller/railtie
+  action_view/railtie
+  active_job/railtie
+  rails/test_unit/railtie
+).each do |railtie|
+  begin
+    require "#{railtie}"
+  end
+end
 Bundler.require(*Rails.groups)
 require "thin_man"
 
