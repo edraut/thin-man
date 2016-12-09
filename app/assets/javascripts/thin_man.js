@@ -23,7 +23,7 @@ var initThinMan = function(){
         this.progress_color = jq_obj.data('progress-color');
         this.progress_target = $(jq_obj.data('progress-target'));
         this.custom_progress = typeof(jq_obj.data('custom-progress')) != 'undefined';
-        if(this.progress_target.length == 0){
+        if(this.progress_target.length == 0 && this.trigger.length > 0){
           this.progress_target = this.trigger
           this.trigger_is_progress_target = true
         }
@@ -419,7 +419,10 @@ var initThinMan = function(){
     getTrigger: function(){
       this.trigger = this.jq_obj.find('button, input[type="submit"]');
       if(this.trigger.length != 1){
-        this.trigger = $(document.activeElement)
+        var $active_element = $(document.activeElement)
+        if($active_element[0].nodeName.toLowerCase() != 'body'){
+          this.trigger = $active_element
+        }
       }
     },
     hideTrigger: function(){
