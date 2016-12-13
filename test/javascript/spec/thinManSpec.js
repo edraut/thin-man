@@ -117,7 +117,18 @@ describe("thin_man", function(){
 
   });
 
-
+  describe("DeleteLink", function(){
+    it("submits an ajax delete call with options", function(){
+      var $link = affix('a[data-ajax-delete="true"][data-ajax-target="#test_dom_id"][href="/url"]');
+      var delete_link = new thin_man.DeleteLink($link)
+      spyOn($, 'ajax');
+      $link.click();
+      expect($.ajax).toHaveBeenCalled();
+      expect(delete_link.getAjaxType()).toEqual('DELETE')
+      expect(delete_link.getAjaxUrl()).toEqual('/url')
+      expect(delete_link.trigger).toEqual($link)
+    })
+  });
   describe("AjaxFormSubmission", function(){
     it("submits an ajax call with options", function(){
       var $form = affix('form[data-ajax-form="true"][method="PATCH"][action="/url"]');

@@ -522,6 +522,9 @@ var initThinMan = function(){
         }
       }
     },
+    getTrigger: function(){
+      this.trigger = this.jq_obj;
+    },
     getAjaxType: function(){
       return 'DELETE';
     },
