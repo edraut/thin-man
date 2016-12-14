@@ -376,7 +376,7 @@ var initThinMan = function(){
         var button_name = $clicked.attr('name')
         var button_value = $clicked.attr('value')
       }
-      if(this.getAjaxType().toLowerCase() == 'get'){
+      if((this.getAjaxType().toLowerCase() == 'get') || (typeof FormData == 'undefined')){
         var data_array = this.jq_obj.serializeArray();
         if(button_name && button_value){
           data_array.push({name: button_name, value: button_value})
@@ -387,7 +387,11 @@ var initThinMan = function(){
         // http://stackoverflow.com/questions/12989442/uploading-multiple-files-using-formdata
         var fd = new FormData(this.jq_obj[0]);
         if(button_name && button_value){
-          fd.set(button_name, button_value)
+          if(typeof fd.set != 'undefined'){
+            fd.set(button_name, button_value)
+          } else if(typeof fd.append != 'undefined'){
+            fd.append(button_name, button_value)
+          }
         }
         return fd
       }
