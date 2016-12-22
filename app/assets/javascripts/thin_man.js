@@ -241,7 +241,7 @@ var initThinMan = function(){
         return this.params.e && this.params.e.type && this.params.e.type == 'click'
       },
       noMouseClick: function(){
-        this.jq_obj.data('no-mouse-click')
+        return this.jq_obj.data('no-mouse-click')
       }
     }),
     AjaxBrowserPushConnector: Class.extend({
