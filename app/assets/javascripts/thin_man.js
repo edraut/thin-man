@@ -86,12 +86,17 @@ var initThinMan = function(){
       insertHtml: function(data) {
         if(this.target){
           this.target[this.insert_method](data);
-          this.target.find('input,select,textarea').filter(':visible:enabled:first').each(function(){
-            if(!$(this).data('date-picker')){
-              $(this).focus();
-            }
-          });
+          if(this.refocus()){
+            this.target.find('input,select,textarea').filter(':visible:enabled:first').each(function(){
+              if(!$(this).data('date-picker')){
+                $(this).focus();
+              }
+            });
+          }
         }
+      },
+      refocus: function(){
+        return true;
       },
       ajaxSuccess: function(data,textStatus,jqXHR){
         if(typeof data === 'string'){
@@ -461,7 +466,14 @@ var initThinMan = function(){
     },
     showTrigger: function(){
       this.trigger.css('visibility','visible');
-    }
+    },
+    refocus: function(){
+      if(this.jq_obj.data('ajax-link-now')){
+        return false
+      }
+      return true
+    },
+
   }),
   thin_man.AjaxModalOpener = thin_man.AjaxLinkSubmission.extend({
     ajaxSuccess: function(data,textStatus,jqXHR) {
