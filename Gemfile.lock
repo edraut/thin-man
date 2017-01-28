@@ -110,6 +110,7 @@ PLATFORMS
 
 DEPENDENCIES
   minitest-rails (~> 2, < 3)
+  rake
   sqlite3 (~> 1)
   thin_man!
 
