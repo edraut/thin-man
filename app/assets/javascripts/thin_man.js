@@ -268,7 +268,7 @@ var initThinMan = function(){
     }),
     AjaxProgress: Class.extend({
       init: function(target,alt,progress_color){
-        if(target.length > 0 && target.is(':visible') && target.css('display') != 'inline'){
+        if(target.length > 0 && target.is(':visible') && target.css('display') != 'inline' && target.css('display') != 'inline-block'){
           this.progress_target = target;
         } else if(typeof(alt) != 'undefined' && alt.is(':visible')) {
           this.progress_target = alt;
@@ -381,11 +381,18 @@ var initThinMan = function(){
         var button_name = $clicked.attr('name')
         var button_value = $clicked.attr('value')
       }
+      var event_data = this.params
+      if(!event_data.hasOwnProperty('e')){
+        var thin_man_submitter = 'link_now'
+      }else{
+        var thin_man_submitter = this.params['e'].type
+      }
       if((this.getAjaxType().toLowerCase() == 'get') || (typeof FormData == 'undefined')){
         var data_array = this.jq_obj.serializeArray();
         if(button_name && button_value){
           data_array.push({name: button_name, value: button_value})
         }
+        data_array.push({name: 'thin_man_submitter', value: thin_man_submitter})
         return data_array;
       }else{
         // need to implement a data-attribute for multiple file fields so we can allow selecting mutliple files at once. example here:
@@ -397,6 +404,11 @@ var initThinMan = function(){
           } else if(typeof fd.append != 'undefined'){
             fd.append(button_name, button_value)
           }
+        }
+        if(typeof fd.set != 'undefined'){
+          fd.set('thin_man_submitter', thin_man_submitter)
+        } else if(typeof fd.append != 'undefined'){
+          fd.append('thin_man_submitter', thin_man_submitter)
         }
         return fd
       }
