@@ -6,6 +6,8 @@ database:
   override:
     - ls
 dependencies:
+  pre:
+    - bundle install
   override:
     - cd test/javascript && npm install
   cache_directories:
