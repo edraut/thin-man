@@ -151,11 +151,11 @@ describe("thin_man", function(){
 
       it("serialize data", function(){
         $form.affix('input[type="text"][name="name"][value="Jon Snow"]');
-        thin_man.AjaxFormSubmission($form);
+        var thin = new thin_man.AjaxFormSubmission($form);
         spyOn($, 'ajax');
         $form.submit();
         expect($.ajax).toHaveBeenCalled();
-        expect(getAjaxArg("data")).toEqual([{ name: 'name', value: 'Jon Snow' }]);
+        expect(thin.ajax_options.data).toEqual([{ name: 'name', value: 'Jon Snow' },{name: 'thin_man_submitter', value: 'link_now'}]);
       });
 
       it(".getProcessData", function(){
