@@ -12,3 +12,6 @@ dependencies:
     - cd test/javascript && npm install
   cache_directories:
     - "test/javascript/node_modules"
+machine:
+  ruby:
+    version: 2.3.1
