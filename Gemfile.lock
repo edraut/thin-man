@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    thin_man (0.15.12)
+    thin_man (0.16.0)
       rails (>= 4.1, < 6)
 
 GEM
@@ -42,9 +42,9 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    arel (6.0.3)
+    arel (6.0.4)
     builder (3.2.2)
-    concurrent-ruby (1.0.2)
+    concurrent-ruby (1.0.4)
     erubis (2.7.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)

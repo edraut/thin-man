@@ -1,5 +1,6 @@
 test:
   override:
+    - rake test
     - cd test/javascript && node_modules/karma-cli/bin/karma start
 database:
   override:
