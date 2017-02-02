@@ -23,6 +23,7 @@ var initThinMan = function(){
         this.progress_color = jq_obj.data('progress-color');
         this.progress_target = $(jq_obj.data('progress-target'));
         this.custom_progress = typeof(jq_obj.data('custom-progress')) != 'undefined';
+        this.scroll_to = jq_obj.data('scroll-to')
         if(this.progress_target.length == 0 && this.trigger.length > 0){
           this.progress_target = this.trigger
           this.trigger_is_progress_target = true
@@ -92,6 +93,23 @@ var initThinMan = function(){
                 $(this).focus();
               }
             });
+          }
+          if(this.scroll_to){
+            if(this.target.not(':visible')){
+              if(this.target.parents('[data-tab-id]').length > 0){
+                this.target.parents('[data-tab-id]').each(function(){
+                  var tab_key = $(this).data('tab-id')
+                  $('[data-tab-target-id="' + tab_key + '"]').trigger('click')
+                })
+              }
+            }
+            var extra_offset = 0
+            if($('[data-thin-man-offset]').length > 0){
+              extra_offset = $('[data-thin-man-offset]').outerHeight()
+            }
+            $('html, body').animate({
+                scrollTop: this.target.offset().top - extra_offset
+              }, 1000);
           }
         }
       },

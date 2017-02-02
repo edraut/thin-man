@@ -13,6 +13,7 @@ class ThinManTest < ActionView::TestCase
     @no_mouse_click = true
     @progress_target = '#progress_element'
     @progress_color = 'blue'
+    @scroll_to = true
 
     @replace_response = true
     @no_confirm = true
@@ -20,7 +21,11 @@ class ThinManTest < ActionView::TestCase
   end
 
   it "generates ajax link hash" do
-    test_link = ajax_link('test link', "http://test.com", @html_options, @target, insert_method: @insert_method, empty_on_success: @empty_on_success, http_method: @http_method, no_mouse_click: @no_mouse_click, progress_target: @progress_target, progress_color: @progress_color)
+    test_link = ajax_link('test link', "http://test.com", @html_options, @target, 
+        insert_method: @insert_method, empty_on_success: @empty_on_success,
+        http_method: @http_method, no_mouse_click: @no_mouse_click,
+        progress_target: @progress_target, progress_color: @progress_color,
+        scroll_to: @scroll_to)
     test_link.must_match "data-ajax-link="
     test_link.must_match(/class=.test_class./)
     test_link.must_match "data-ajax-target=\"#{@target}\""
@@ -30,6 +35,7 @@ class ThinManTest < ActionView::TestCase
     test_link.must_match "data-no-mouse-click=\"#{@no_mouse_click}\""
     test_link.must_match "data-progress-target=\"#{@progress_target}\""
     test_link.must_match "data-progress-color=\"#{@progress_color}\""
+    test_link.must_match "data-scroll-to=\"#{@scroll_to}\""
   end
 
   it "generates an instant link" do
