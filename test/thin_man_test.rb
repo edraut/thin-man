@@ -39,7 +39,11 @@ class ThinManTest < ActionView::TestCase
   end
 
   it "generates an instant link" do
-    test_link = ajax_link_now('test link', "http://test.com", @html_options, @target, insert_method: @insert_method, empty_on_success: @empty_on_success, http_method: @http_method, progress_target: @progress_target, progress_color: @progress_color)
+    test_link = ajax_link_now('test link', "http://test.com", @html_options, @target,
+        insert_method: @insert_method, empty_on_success: @empty_on_success,
+        http_method: @http_method, progress_target: @progress_target,
+        progress_color: @progress_color, sequence_number: @sequence_number,
+        sequence_group: @sequence_group)
     test_link.must_match "data-ajax-link-now="
     test_link.must_match(/class=.test_class./)
     test_link.must_match "data-ajax-target=\"#{@target}\""
@@ -48,6 +52,8 @@ class ThinManTest < ActionView::TestCase
     test_link.must_match "data-ajax-method=\"#{@http_method}\""
     test_link.must_match "data-progress-target=\"#{@progress_target}\""
     test_link.must_match "data-progress-color=\"#{@progress_color}\""
+    test_link.must_match "data-sequence-group=\"#{@sequence_group}\""
+    test_link.must_match "data-sequence-number=\"#{@sequence_number}\""
   end
 
   it "generates a delete link" do
