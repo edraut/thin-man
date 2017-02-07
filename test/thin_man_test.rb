@@ -14,6 +14,8 @@ class ThinManTest < ActionView::TestCase
     @progress_target = '#progress_element'
     @progress_color = 'blue'
     @scroll_to = true
+    @sequence_group = 'test_group'
+    @sequence_number = 0
 
     @replace_response = true
     @no_confirm = true
