@@ -8,6 +8,51 @@ var initThinMan = function(){
       }
       return this_class;
     },
+    getLinkGroup: function(name){
+      if(thin_man.hasOwnProperty('link_groups') && thin_man.link_groups.hasOwnProperty(name)){
+        return thin_man.link_groups[name]        
+      } else {
+        return thin_man.addLinkGroup(name)
+      }
+    },
+    addLinkGroup: function(name){
+      if(!thin_man.hasOwnProperty('link_groups')){
+        thin_man.link_groups = {}
+      }
+      if(!thin_man.link_groups.hasOwnProperty(name)){
+        var this_group = new thin_man.LinkGroup(name)
+        thin_man.link_groups[name] = this_group
+        return this_group
+      }
+    },
+    addLinkToGroup: function(link, sequence_number, group_name){
+      var group = thin_man.getLinkGroup(group_name)
+      group.addLink(link,sequence_number)
+    },
+    LinkGroup: Class.extend({
+      init: function(name){
+        this.name = name
+        this.links = {}
+        this.current_number = 0
+      },
+      addLink: function(link_submission, sequence_number){
+        this.links[sequence_number] = link_submission
+        link_submission.addWatcher(this)
+        if(sequence_number == this.current_number){
+          this.fire()
+        }
+      },
+      fire: function(){
+        if(this.links.hasOwnProperty(this.current_number)){
+          this.links[this.current_number].fire()
+          delete this.links[this.current_number]
+        }
+      },
+      linkCompleted: function(link_submission){
+        this.current_number += 1
+        this.fire()
+      }
+    }),
     AjaxSubmission: Class.extend({
       init: function(jq_obj,params){
         this.jq_obj = jq_obj;
@@ -24,6 +69,7 @@ var initThinMan = function(){
         this.progress_target = $(jq_obj.data('progress-target'));
         this.custom_progress = typeof(jq_obj.data('custom-progress')) != 'undefined';
         this.scroll_to = jq_obj.data('scroll-to')
+        this.watchers = []
         if(this.progress_target.length == 0 && this.trigger.length > 0){
           this.progress_target = this.trigger
           this.trigger_is_progress_target = true
@@ -48,7 +94,29 @@ var initThinMan = function(){
           this.ajax_options.xhr = this.customXHR
           this.ajax_options.thin_man_obj = this;
         }
+        this.handleGroup()
+        if(this.readyToFire()){
+          this.fire()
+        }
+      },
+      fire: function(){
         $.ajax(this.ajax_options);
+      },
+      readyToFire: function(){
+        if(!this.sequence_group){ return true }
+      },
+      handleGroup: function(){
+        this.sequence_group = this.jq_obj.data('sequence-group');
+        this.sequence_number = this.jq_obj.data('sequence-number');
+        if(typeof(this.sequence_number) == 'number' && !this.sequence_group){
+          console.log('Warning! Thin Man Link has sequence number but no sequence group.')
+        }
+        if(this.sequence_group && typeof(this.sequence_number) != 'number'){
+          console.log('Warning! Thin Man Link has sequence group ' + this.sequence_group + ' but no sequence number.')
+        }
+        if(this.sequence_group){
+          thin_man.addLinkToGroup(this, this.sequence_number, this.sequence_group)
+        }
       },
       getTarget: function(){
         var target_selector = this.jq_obj.data('ajax-target');
@@ -173,8 +241,20 @@ var initThinMan = function(){
           this.jq_obj.find('.help-inline').remove()
         }
       },
+      addWatcher: function(watcher){
+        if(!this.hasOwnProperty('watchers')){
+          this.watchers = []
+        }
+        this.watchers.push(watcher)
+      },
+      notifyWatchers: function(){
+        $.each(this.watchers, function(){
+          this.linkCompleted(this)
+        })
+      },
       ajaxComplete: function(jqXHR) {
         this.showTrigger();
+        this.notifyWatchers();
         if(this.progress_indicator){
           this.progress_indicator.stop();
         } else if(!this.trigger_is_progress_target){

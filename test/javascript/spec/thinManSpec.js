@@ -113,10 +113,26 @@ describe("thin_man", function(){
       expect(getAjaxArg("url")).toMatch("/url");
       expect(getAjaxArg("type")).toMatch("PATCH");
       expect(getAjaxArg("datatype")).toMatch("json");
+      expect(thin_man.hasOwnProperty('link_groups')).toEqual(false)
     });
-
+    it("fires grouped links in sequence", function(){
+      var $link_zero = affix('a[data-ajax-link-now="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-sequence-group="test_group"][data-sequence-number="0"]');
+      var $link_one = affix('a[data-ajax-link-now="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-sequence-group="test_group"][data-sequence-number="1"]');
+      var $link_two = affix('a[data-ajax-link-now="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-sequence-group="test_group"][data-sequence-number="2"]');
+      zero = new thin_man.AjaxLinkSubmission($link_zero)
+      one = new thin_man.AjaxLinkSubmission($link_one)
+      two = new thin_man.AjaxLinkSubmission($link_two)
+      expect(thin_man.hasOwnProperty('link_groups')).toEqual(true)
+      spyOn(one,'fire')
+      spyOn(two,'fire')
+      zero.ajaxComplete()
+      expect(one.fire).toHaveBeenCalled();
+      expect(two.fire).not.toHaveBeenCalled();
+      one.ajaxComplete()
+      expect(one.fire.calls.count()).toEqual(1);
+      expect(two.fire).toHaveBeenCalled();
+    })
   });
-
   describe("DeleteLink", function(){
     it("submits an ajax delete call with options", function(){
       var $link = affix('a[data-ajax-delete="true"][data-ajax-target="#test_dom_id"][href="/url"]');

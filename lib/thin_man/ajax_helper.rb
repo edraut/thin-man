@@ -21,7 +21,10 @@ module ThinMan
               html_options.merge(ajax_options))
     end
 
-    def ajax_link_now(name, options, html_options, target, sub_class: nil, insert_method: nil, empty_on_success: nil, http_method: nil, no_mouse_click: nil, progress_target: nil, progress_color: nil)
+    def ajax_link_now(name, options, html_options, target,
+      sub_class: nil, insert_method: nil, empty_on_success: nil,
+      http_method: nil, no_mouse_click: nil, progress_target: nil,
+      progress_color: nil, sequence_group: nil, sequence_number: nil)
       ajax_options = {
         'data-ajax-link-now' => true,
         'data-ajax-target' => target
@@ -33,6 +36,8 @@ module ThinMan
       ajax_options.merge!('data-no-mouse-click' => no_mouse_click) if no_mouse_click.present?
       ajax_options.merge!('data-progress-target' => progress_target) if progress_target.present?
       ajax_options.merge!('data-progress-color' => progress_color) if progress_color.present?
+      ajax_options.merge!('data-sequence-group' => sequence_group) if sequence_group.present?
+      ajax_options.merge!('data-sequence-number' => sequence_number) if sequence_number.present?
       link_to(name,
               options,
               html_options.merge(ajax_options))
