@@ -258,6 +258,8 @@ var initThinMan = function(){
         })
       },
       ajaxComplete: function(jqXHR) {
+        debug_logger.log('thin_man.AjaxSubmission.ajaxComplete')
+        debug_logger.log(jqXHR)
         this.showTrigger();
         this.notifyWatchers();
         if(this.progress_indicator){
@@ -517,6 +519,7 @@ var initThinMan = function(){
       }
     },
     ajaxSuccess: function(data,textStatus,jqXHR){
+      debug_logger.log('thin_man.AjaxFormSubmission.ajaxSuccess')
       this._super(data,textStatus,jqXHR)
       if(this.resetOnSuccess()){
         this.jq_obj[0].reset();
