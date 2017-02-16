@@ -300,15 +300,19 @@ var initThinMan = function(){
           this.progress_indicator = new thin_man.AjaxProgress(this.progress_target,this.target,this.progress_color);
         }
       },
-      ajaxError: function(jqXHR) {
-        debug_logger.log('thin_man.AjaxSubmission.ajaxError')
+      ajaxError: function( jqXHR ) {
+        debug_logger.log('thin_man.AjaxSubmission.ajaxError jqXHR:')
+        debug_logger.log(jqXHR)
         if(jqXHR.status == 409){
           try{
             var data = JSON.parse(jqXHR.responseText);
             debug_logger.log("thin_man.AjaxSubmission.ajaxError responseText is valid JSON, parsing to an object:")
           }catch(error){
             debug_logger.log("thin_man.AjaxSubmission.ajaxError responseText is not JSON, assuming a string:")
+            debug_logger.log(jqXHR.responseText)
             var data = jqXHR.responseText;
+            debug_logger.log("thin_man.AjaxSubmission.ajaxError data to insert:")
+            debug_logger.log(data)
           }
           debug_logger.log("thin_man.AjaxSubmission.ajaxError error target:")
           debug_logger.log(this.error_target)
