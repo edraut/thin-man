@@ -153,6 +153,9 @@ var initThinMan = function(){
         return true;
       },
       insertHtml: function(data) {
+        debug_logger.log("thin_man.AjaxSubmission.insertHtml")
+        debug_logger.log(this.target)
+        debug_logger.log(this.insert_method)
         if(this.target){
           this.target[this.insert_method](data);
           if(this.refocus()){
@@ -185,6 +188,8 @@ var initThinMan = function(){
         return true;
       },
       ajaxSuccess: function(data,textStatus,jqXHR){
+        debug_logger.log("thin_man.AjaxSubmission.ajaxSuccess")
+        debug_logger.log(data)
         if(typeof data === 'string'){
           this.insertHtml(data);
         } else if(typeof data === 'object') {
