@@ -18,9 +18,8 @@ module.exports = function(config) {
       'test-main.js',
       {pattern: 'jquery.js'},
       {pattern: 'jasmine-fixture.js'},
-      {pattern: '../../app/assets/javascripts/simple_inheritance.js'},
-      {pattern: '../../app/assets/javascripts/debug_logger.js'},
       {pattern: '../../app/assets/javascripts/thin_man.js'},
+      {pattern: '../../app/assets/javascripts/debug_logger.js'},
       {pattern: 'spec/helpers/*.js'},
       {pattern: 'spec/**/*Spec.js', included: false}
     ],
