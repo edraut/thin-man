@@ -32,10 +32,17 @@ var initThinMan = function(){
     LinkGroup: Class.extend({
       init: function(name){
         this.name = name
+        this.resetLinks()
+      },
+      resetLinks: function(){
         this.links = {}
         this.current_number = 0
       },
       addLink: function(link_submission, sequence_number){
+        if(this.links.hasOwnProperty(sequence_number)){
+          //If there is already a link with this number, we're starting over with a new list
+          this.resetLinks()
+        }
         this.links[sequence_number] = link_submission
         link_submission.addWatcher(this)
         if(sequence_number == this.current_number){
@@ -45,7 +52,6 @@ var initThinMan = function(){
       fire: function(){
         if(this.links.hasOwnProperty(this.current_number)){
           this.links[this.current_number].fire()
-          delete this.links[this.current_number]
         }
       },
       linkCompleted: function(link_submission){
