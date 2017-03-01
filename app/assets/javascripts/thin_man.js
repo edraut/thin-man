@@ -1,3 +1,5 @@
+//= require simple_inheritance
+//= require debug_logger
 var initThinMan = function(){
   thin_man = {
     getSubClass: function(sub_class_name,parent_class){
