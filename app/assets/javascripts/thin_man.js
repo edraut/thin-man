@@ -334,8 +334,6 @@ var initThinMan = function(){
             if(typeof data.html != 'undefined'){
               debug_logger.log("thin_man.AjaxSubmission.ajaxError data.html exists, inserting into target.")
               this.error_target.html(data.html);
-            } else {
-              this.error_target.empty();
             }
           }
         }else if(jqXHR.status == 500){

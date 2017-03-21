@@ -94,12 +94,6 @@ describe("thin_man", function(){
         expect($('#test_dom_id').html()).toMatch('Required field');
       });
 
-      it("empties the target if there is no html in the json", function(){
-        $target.affix('#remove_me')
-        thin.ajaxError(TestResponses.conflictNoHtml)
-        expect($('#test_dom_id').children().length).toEqual(0)
-      })
-
     });
   });
 
