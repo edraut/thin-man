@@ -424,7 +424,7 @@ var initThinMan = function(){
       init: function(type,message,elem,duration){
         this.flash_container = $('[data-thin-man-flash-template]').clone();
         this.flash_container.removeAttr('data-thin-man-flash-template');
-        this.flash_container.attr('data-thin-man-flash-container');
+        this.flash_container.attr('data-thin-man-flash-container',true);
         $('body').append(this.flash_container);
         this.flash_container.css({position:'absolute',visibility: 'hidden'});
         this.alert_type = type;
