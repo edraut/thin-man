@@ -278,7 +278,7 @@ var initThinMan = function(){
         } else if(!this.trigger_is_progress_target){
           this.progress_target.remove();
         }
-        if(this.$mask_target){
+        if(typeof this.mask != 'undefined'){
           this.mask.remove();
         }
         try{
