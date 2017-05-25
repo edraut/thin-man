@@ -63,18 +63,20 @@ var initThinMan = function(){
     }),
     AjaxSubmission: Class.extend({
       init: function(jq_obj,params){
-        this.jq_obj = jq_obj;
-        this.params = params;
+        this.jq_obj = jq_obj
+        this.params = params
         if(!this.params){ this.params = {}}
         // Bail out if this is a no-mouse-click ajax element and we were mouse clicked
         if(this.wasMouseClicked() && this.noMouseClick()){
-          return false;
+          return false
         }
-        this.getTrigger();
-        this.getTarget();
-        this.getErrorTarget();
-        this.progress_color = jq_obj.data('progress-color');
-        this.progress_target = $(jq_obj.data('progress-target'));
+        this.getTrigger()
+        this.getTarget()
+        this.getErrorTarget()
+        this.progress_color = jq_obj.data('progress-color')
+        this.progress_target = $(jq_obj.data('progress-target'))
+        this.$mask_target = $(jq_obj.data('mask-target'))
+        this.$mask_message = jq_obj.data('mask-message')
         this.custom_progress = typeof(jq_obj.data('custom-progress')) != 'undefined';
         this.scroll_to = jq_obj.data('scroll-to')
         this.watchers = []
@@ -82,8 +84,8 @@ var initThinMan = function(){
           this.progress_target = this.trigger
           this.trigger_is_progress_target = true
         }
-        this.insert_method = this.getInsertMethod();
-        var ajax_submission = this;
+        this.insert_method = this.getInsertMethod()
+        var ajax_submission = this
         this.ajax_options = {
           url: ajax_submission.getAjaxUrl(),
           type: ajax_submission.getAjaxType(),
@@ -276,6 +278,9 @@ var initThinMan = function(){
         } else if(!this.trigger_is_progress_target){
           this.progress_target.remove();
         }
+        if(this.$mask_target){
+          this.mask.remove();
+        }
         try{
           var response_data = JSON.parse(jqXHR.responseText)
         } catch(err) {
@@ -306,6 +311,9 @@ var initThinMan = function(){
         this.toggleLoading();
         if(!this.custom_progress){
           this.progress_indicator = new thin_man.AjaxProgress(this.progress_target,this.target,this.progress_color);
+        }
+        if(this.$mask_target){
+          this.mask = new thin_man.AjaxMask(this.$mask_target,this.$mask_message)
         }
       },
       ajaxError: function( jqXHR ) {
@@ -405,7 +413,7 @@ var initThinMan = function(){
           var progress_color = 'black';
         }
         this.progress_container = $('#ajax_progress_container').clone();
-        uuid = new UUID;
+        var uuid = new UUID;
         this.progress_container.prop('id', 'thin_man_ajax_progress_' + uuid.value);
         this.progress_target.append(this.progress_container);
         var css = {display: 'block', visibility: 'visible','color': progress_color, 'z-index': 1000000}
@@ -418,6 +426,33 @@ var initThinMan = function(){
       },
       stop: function(){
         this.progress_container.remove();
+      }
+    }),
+    AjaxMask: Class.extend({
+      init: function($mask_target,mask_message){
+        var uuid = new UUID;
+        this.$mask_target = $mask_target
+        this.$mask = $('#thin_man_mask').clone()
+        this.$mask.prop('id','thin_man_mask' + uuid.value)
+        if(typeof mask_message != 'undefined'){
+          var $message = this.$mask.find('[data-thin-man-mask-message]')
+          $message.html(mask_message)
+        }
+        var height = this.$mask_target.outerHeight()
+        var width = this.$mask_target.outerWidth()
+        var radius = this.$mask_target.css('border-radius')
+        this.$mask.css({'height': height, 'width': width, 'left': 0, 'top':0, 'border-radius':radius})
+        this.$mask.css({'position': 'absolute', 'z-index': 10000})
+
+        this.$mask_target.append(this.$mask)
+        this.$mask.on('click', function(e){
+          e.preventDefault();
+          return false;
+        })
+        this.$mask.show()
+      },
+      remove: function(){
+        this.$mask.remove()
       }
     }),
     AjaxFlash: Class.extend({
