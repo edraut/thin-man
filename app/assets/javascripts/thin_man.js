@@ -206,7 +206,7 @@ var initThinMan = function(){
         } else if(typeof data === 'object') {
           if(typeof data.html != 'undefined'){
             if(typeof data.hooch_modal != 'undefined'){
-              new hooch.Modal(data.html)
+              new hooch.Modal($(data.html))
             }else{
               this.insertHtml(data.html)
             }
