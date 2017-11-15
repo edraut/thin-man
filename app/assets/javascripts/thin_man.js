@@ -705,7 +705,11 @@ var initThinMan = function(){
     ajaxSuccess: function(data,textStatus,jqXHR){
       this._super(data,textStatus,jqXHR);
       if(this.jq_obj.data('replace-response')){
-        this.insertHtml(data);
+        if(typeof(data) == 'string' ){
+          this.insertHtml(data);
+        }else if(typeof(data) == 'object'){ 
+          if(data.html) this.insertHtml(data.html) 
+        }
       } else {
         if(this.target){
           this.target.remove();
