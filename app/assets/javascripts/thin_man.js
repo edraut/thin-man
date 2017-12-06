@@ -406,6 +406,8 @@ var initThinMan = function(){
           this.progress_target = target;
         } else if(typeof(alt) != 'undefined' && alt.is(':visible')) {
           this.progress_target = alt;
+        } else if(target.not(':visible')){
+          this.progress_target = $('')
         } else {
           this.progress_target = $('body');
         }
