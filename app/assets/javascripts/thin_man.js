@@ -163,7 +163,7 @@ var initThinMan = function(){
         return true;
       },
       insertHtml: function(data) {
-        .log("thin_man.AjaxSubmission.insertHtml target:", 1, 'thin-man')
+        debug_logger.log("thin_man.AjaxSubmission.insertHtml target:", 1, 'thin-man')
         debug_logger.log(this.target, 1, 'thin-man' )
         debug_logger.log("thin_man.AjaxSubmission.insertHtml insert_method:", 1, 'thin-man')
         debug_logger.log(this.insert_method, 1, 'thin-man')
