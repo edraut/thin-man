@@ -7,12 +7,16 @@ var DebugLogger = Class.extend({
     if($debug_settings.data('logging_on')){
       console.log('Debug logging turned on.')
       this.logging_on = true;
+      this.logger_level = $debug_settings.data('logger_level') || 1;
     } else {
       this.logging_on = false;
     }
   },
   log: function(msg){
-    if(this.logging_on){
+    if (level ===undefined){
+      level = 0;
+    }
+    if(this.logging_on && this.logger_level >= level){
       console.log(msg)
     }
   }

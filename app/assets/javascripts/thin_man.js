@@ -163,10 +163,10 @@ var initThinMan = function(){
         return true;
       },
       insertHtml: function(data) {
-        debug_logger.log("thin_man.AjaxSubmission.insertHtml target:")
-        debug_logger.log(this.target)
-        debug_logger.log("thin_man.AjaxSubmission.insertHtml insert_method:")
-        debug_logger.log(this.insert_method)
+        debug_logger.log("thin_man.AjaxSubmission.insertHtml target:", 1)
+        debug_logger.log(this.target, 1)
+        debug_logger.log("thin_man.AjaxSubmission.insertHtml insert_method:", 2)
+        debug_logger.log(this.insert_method, 2)
         if(this.target){
           this.target[this.insert_method](data);
           if(this.refocus()){
@@ -199,8 +199,8 @@ var initThinMan = function(){
         return true;
       },
       ajaxSuccess: function(data,textStatus,jqXHR){
-        debug_logger.log("thin_man.AjaxSubmission.ajaxSuccess data:")
-        debug_logger.log(data)
+        debug_logger.log("thin_man.AjaxSubmission.ajaxSuccess data:", 1)
+        debug_logger.log(data, 2)
         if(typeof data === 'string'){
           this.insertHtml(data);
         } else if(typeof data === 'object') {
@@ -269,8 +269,8 @@ var initThinMan = function(){
         })
       },
       ajaxComplete: function(jqXHR) {
-        debug_logger.log('thin_man.AjaxSubmission.ajaxComplete jqXHR:')
-        debug_logger.log(jqXHR)
+        debug_logger.log('thin_man.AjaxSubmission.ajaxComplete jqXHR:',1)
+        debug_logger.log(jqXHR,2)
         this.showTrigger();
         this.notifyWatchers();
         if(this.progress_indicator){
@@ -317,30 +317,30 @@ var initThinMan = function(){
         }
       },
       ajaxError: function( jqXHR ) {
-        debug_logger.log('thin_man.AjaxSubmission.ajaxError jqXHR:')
-        debug_logger.log(jqXHR)
+        debug_logger.log('thin_man.AjaxSubmission.ajaxError jqXHR:', 1)
+        debug_logger.log(jqXHR, 2)
         if(jqXHR.status == 409){
           try{
             var data = JSON.parse(jqXHR.responseText);
-            debug_logger.log("thin_man.AjaxSubmission.ajaxError responseText is valid JSON, parsing to an object:")
+            debug_logger.log("thin_man.AjaxSubmission.ajaxError responseText is valid JSON, parsing to an object:", 1)
           }catch(error){
-            debug_logger.log("thin_man.AjaxSubmission.ajaxError responseText is not JSON, assuming a string:")
-            debug_logger.log(jqXHR.responseText)
+            debug_logger.log("thin_man.AjaxSubmission.ajaxError responseText is not JSON, assuming a string:",1)
+            debug_logger.log(jqXHR.responseText,2)
             var data = jqXHR.responseText;
-            debug_logger.log("thin_man.AjaxSubmission.ajaxError data to insert:")
-            debug_logger.log(data)
+            debug_logger.log("thin_man.AjaxSubmission.ajaxError data to insert:",1)
+            debug_logger.log(data, 2)
           }
-          debug_logger.log("thin_man.AjaxSubmission.ajaxError error target:")
-          debug_logger.log(this.error_target)
-          debug_logger.log("thin_man.AjaxSubmission.ajaxError data:")
-          debug_logger.log(data)
+          debug_logger.log("thin_man.AjaxSubmission.ajaxError error target:", 1)
+          debug_logger.log(this.error_target, 1)
+          debug_logger.log("thin_man.AjaxSubmission.ajaxError data:", 2)
+          debug_logger.log(data, 2)
           if(typeof data === 'string'){
-            debug_logger.log("thin_man.AjaxSubmission.ajaxError data is a string, inserting into target.")
+            debug_logger.log("thin_man.AjaxSubmission.ajaxError data is a string, inserting into target.", 1)
             this.error_target.html(data);
           } else if(typeof data === 'object') {
-            debug_logger.log("thin_man.AjaxSubmission.ajaxError data is an object.")
+            debug_logger.log("thin_man.AjaxSubmission.ajaxError data is an object.", 1)
             if(typeof data.html != 'undefined'){
-              debug_logger.log("thin_man.AjaxSubmission.ajaxError data.html exists, inserting into target.")
+              debug_logger.log("thin_man.AjaxSubmission.ajaxError data.html exists, inserting into target.", 1)
               this.error_target.html(data.html);
             }
           }
@@ -577,7 +577,7 @@ var initThinMan = function(){
       }
     },
     ajaxSuccess: function(data,textStatus,jqXHR){
-      debug_logger.log('thin_man.AjaxFormSubmission.ajaxSuccess')
+      debug_logger.log('thin_man.AjaxFormSubmission.ajaxSuccess', 1)
       this._super(data,textStatus,jqXHR)
       if(this.resetOnSuccess()){
         this.jq_obj[0].reset();
