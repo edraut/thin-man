@@ -577,7 +577,7 @@ var initThinMan = function(){
       }
     },
     ajaxSuccess: function(data,textStatus,jqXHR){
-      debug_logger.log('thin_man.AjaxFormSubmission.ajaxSuccess', 1)
+      debug_logger.log('thin_man.AjaxFormSubmission.ajaxSuccess', 1, 'thin-man')
       this._super(data,textStatus,jqXHR)
       if(this.resetOnSuccess()){
         this.jq_obj[0].reset();
