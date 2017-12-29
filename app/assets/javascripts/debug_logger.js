@@ -8,15 +8,21 @@ var DebugLogger = Class.extend({
       console.log('Debug logging turned on.')
       this.logging_on = true;
       this.logger_level = $debug_settings.data('logger_level') || 1;
+      this.allows = $debug_settings.data('logger_include');
     } else {
       this.logging_on = false;
     }
   },
-  log: function(msg){
-    if (level ===undefined){
+  log: function(msg, level, source){
+    if(level === undefined){
       level = 0;
     }
-    if(this.logging_on && this.logger_level >= level){
+    if(source === undefined || this.allows === undefined){
+      source_allowed = true;
+    }else{
+      source_allowed = this.allows[source];
+    }
+    if(this.logging_on && this.logger_level >= level && source_allowed){
       console.log(msg)
     }
   }
