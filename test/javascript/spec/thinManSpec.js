@@ -105,10 +105,20 @@ describe("thin_man", function(){
       $link.click();
       expect($.ajax).toHaveBeenCalled();
       expect(getAjaxArg("url")).toMatch("/url");
-      expect(getAjaxArg("type")).toMatch("PATCH");
+      expect(getAjaxArg("type")).toMatch("PATCH"); 
       expect(getAjaxArg("datatype")).toMatch("json");
       expect(thin_man.hasOwnProperty('link_groups')).toEqual(false)
     });
+    
+    it("submits an ajax call with search params and path", function(){
+      var $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"][href="/url"][data-return-type="json"][data-search-params="search_params"][data-search-path="/search_path"]');
+      thin_man.AjaxLinkSubmission($link)
+      spyOn($, 'ajax');
+      $link.click();
+      expect($.ajax).toHaveBeenCalled();
+      expect(getAjaxArg("url")).toEqual('/search_path?search_params');
+    });
+    
     it("fires grouped links in sequence", function(){
       var $link_zero = affix('a[data-ajax-link-now="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-sequence-group="test_group"][data-sequence-number="0"]');
       var $link_one = affix('a[data-ajax-link-now="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-sequence-group="test_group"][data-sequence-number="1"]');
