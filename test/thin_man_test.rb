@@ -20,6 +20,9 @@ class ThinManTest < ActionView::TestCase
     @replace_response = true
     @no_confirm = true
     @custom_progress = '#custom_progress'
+
+    @search_path = "/search_path"
+    @search_params = "search_params"
   end
 
   it "generates ajax link hash" do
@@ -45,7 +48,7 @@ class ThinManTest < ActionView::TestCase
         insert_method: @insert_method, empty_on_success: @empty_on_success,
         http_method: @http_method, progress_target: @progress_target,
         progress_color: @progress_color, sequence_number: @sequence_number,
-        sequence_group: @sequence_group)
+        sequence_group: @sequence_group, search_params: @search_params, search_path: @search_path)
     test_link.must_match "data-ajax-link-now="
     test_link.must_match(/class=.test_class./)
     test_link.must_match "data-ajax-target=\"#{@target}\""
@@ -56,6 +59,8 @@ class ThinManTest < ActionView::TestCase
     test_link.must_match "data-progress-color=\"#{@progress_color}\""
     test_link.must_match "data-sequence-group=\"#{@sequence_group}\""
     test_link.must_match "data-sequence-number=\"#{@sequence_number}\""
+    test_link.must_match "data-search-path=\"#{@search_path}\""
+    test_link.must_match "data-search-params=\"#{@search_params}\""
   end
 
   it "generates a delete link" do
