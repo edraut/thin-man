@@ -63,6 +63,7 @@ var initThinMan = function(){
     }),
     AjaxSubmission: Class.extend({
       init: function(jq_obj,params){
+        debugger
         this.jq_obj = jq_obj
         this.params = params
         if(!this.params){ this.params = {}}

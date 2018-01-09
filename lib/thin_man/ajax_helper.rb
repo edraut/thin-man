@@ -29,7 +29,8 @@ module ThinMan
       sub_class: nil, insert_method: nil, empty_on_success: nil, remove_on_success: nil,
       http_method: nil, no_mouse_click: nil, progress_target: nil,
       progress_color: nil, mask_target: nil, mask_message: nil,
-      sequence_group: nil, sequence_number: nil)
+      sequence_group: nil, sequence_number: nil,
+      search_path: nil, search_params: nil)
       ajax_options = {
         'data-ajax-link-now' => true,
         'data-ajax-target' => target
@@ -46,6 +47,8 @@ module ThinMan
       ajax_options.merge!('data-mask-message' => mask_message) if mask_message.present?
       ajax_options.merge!('data-sequence-group' => sequence_group) if sequence_group.present?
       ajax_options.merge!('data-sequence-number' => sequence_number) if sequence_number.present?
+      ajax_options.merge!('data-search-path' => search_path) if search_path.present?
+      ajax_options.merge!('data-search-params' => search_params) if search_params.present?
       link_to(name,
               options,
               html_options.merge(ajax_options))
