@@ -80,6 +80,8 @@ var initThinMan = function(){
         this.custom_progress = typeof(jq_obj.data('custom-progress')) != 'undefined';
         this.scroll_to = jq_obj.data('scroll-to')
         this.watchers = []
+        this.search_params = jq_obj.data('search-params')
+        this.search_path = jq_obj.data('search-path')
         if(this.progress_target.length == 0 && this.trigger.length > 0){
           this.progress_target = this.trigger
           this.trigger_is_progress_target = true
@@ -619,7 +621,15 @@ var initThinMan = function(){
   }),
   thin_man.AjaxLinkSubmission = thin_man.AjaxSubmission.extend({
     getAjaxUrl: function(){
-      return this.jq_obj.attr('href');
+      if(this.search_path){
+        if(this.search_params){
+          return this.search_path + '?' + this.search_params
+        }else{
+          return this.search_path
+        }
+      }else{
+        return this.jq_obj.attr('href');
+      }
     },
     getData: function(){
       var this_data = {authenticity_token: $('[name="csrf-token"]').attr('content')};
