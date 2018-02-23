@@ -49,9 +49,16 @@ module ThinMan
       ajax_options.merge!('data-sequence-number' => sequence_number) if sequence_number.present?
       ajax_options.merge!('data-search-path' => search_path) if search_path.present?
       ajax_options.merge!('data-search-params' => search_params) if search_params.present?
-      link_to(name,
-              options,
-              html_options.merge(ajax_options))
+
+      a_tag = link_to(name,
+                options,
+                html_options.merge(ajax_options))
+      if(search_path.present?)
+        href_attr = a_tag.scan(/href="[^"]*/).first
+        href_end_index = a_tag.index(href_attr) + href_attr.length
+        a_tag.insert(href_end_index,"#!#{target}")
+      end
+      a_tag
     end
 
     def ajax_delete(name, options, html_options, target, sub_class: nil, replace_response: false, no_confirm: false, custom_progress: nil, no_mouse_click: nil)
