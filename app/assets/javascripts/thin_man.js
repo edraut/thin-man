@@ -449,7 +449,7 @@ var initThinMan = function(){
         this.$mask.css({'position': 'absolute', 'z-index': 10000})
 
         this.$mask_target.append(this.$mask)
-        this.$mask.on('click', function(e){
+        this.$mask.on('click mousedown mousemove', function(e){
           e.preventDefault();
           return false;
         })
