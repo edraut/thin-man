@@ -179,7 +179,7 @@ var initThinMan = function(){
             });
           }
           if(this.scroll_to){
-            if(this.target.not(':visible')){
+            if(this.target.is(':hidden')){
               if(this.target.parents('[data-tab-id]').length > 0){
                 this.target.parents('[data-tab-id]').each(function(){
                   var tab_key = $(this).data('tab-id')
@@ -408,7 +408,7 @@ var initThinMan = function(){
           this.progress_target = target;
         } else if(typeof(alt) != 'undefined' && alt.is(':visible')) {
           this.progress_target = alt;
-        } else if(target.not(':visible')){
+        } else if(target.length > 0 && target.is(':hidden')){
           this.progress_target = $('')
         } else {
           this.progress_target = $('body');
