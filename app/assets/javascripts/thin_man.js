@@ -632,7 +632,7 @@ var initThinMan = function(){
       }
     },
     getData: function(){
-      var this_data = {authenticity_token: $('[name="csrf-token"]').attr('content')};
+      var this_data = {authenticity_token: $('[name="csrf-token"]').attr('content'), browser_tab_id: $("meta[name='browser_tab_id']").attr("content")};
       if(this.jq_obj.data('form-data')){
         $.extend(this_data,this.jq_obj.data('form-data'))
       }
