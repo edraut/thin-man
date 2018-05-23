@@ -347,14 +347,33 @@ var initThinMan = function() {
                         }
                     }
                 } else if (jqXHR.status == 500) {
-                    // where are you
-                    // where were you going 
-                    // grab user meta tags
-                    // what time is it
-                    // mention it was an ajax and 500 error
-                    // this.ajax_options has url, type, what data was being sent
-                    alert('There was an error communicating with the server.')
+                  if (
+                    window.confirm(
+                      'There was an error communicating with the server. Please click "ok" to submit a bug report. Cancel will return the current page'
+                    )
+                  ) { window.open(this.buildHelpLink(), '_blank')};
                 }
+            },
+            buildHelpLink: function(){
+              params = {
+                http_request_details: {
+                  requested_path: this.ajax_options.url,
+                  referred_from: window.location.href,
+                  request_method: this.ajax_options.type,
+                  data: this.ajax_options.data
+                },
+                type: "ajax-500",
+                submission: {
+                  occured_at: new Date(),
+                  url: window.location.href
+                },
+                user: {
+                  name: $("meta[name='userName']").attr("content"),
+                  email: $("meta[name='userEmail']").attr("content"),
+                  time_zone: $("meta[name='userTimeZone']").attr("content"),
+                }
+              }
+              return "http://localhost:3001/submissions/from_ih_internal?" + $.param(params)
             },
             getTrigger: function() {},
             hideTrigger: function() {},
