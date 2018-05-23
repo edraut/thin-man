@@ -355,6 +355,7 @@ var initThinMan = function() {
                 }
             },
             buildHelpLink: function(){
+              base_url = $("meta[name='helpLink']").attr("content")
               params = {
                 http_request_details: {
                   requested_path: this.ajax_options.url,
@@ -373,7 +374,7 @@ var initThinMan = function() {
                   time_zone: $("meta[name='userTimeZone']").attr("content"),
                 }
               }
-              return "https://help.invitedhome.com/submissions/from_ih_internal?" + $.param(params)
+              return ( base_url + "?" + $.param(params))
             },
             getTrigger: function() {},
             hideTrigger: function() {},
