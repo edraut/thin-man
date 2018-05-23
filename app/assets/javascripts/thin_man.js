@@ -373,7 +373,7 @@ var initThinMan = function() {
                   time_zone: $("meta[name='userTimeZone']").attr("content"),
                 }
               }
-              return "http://localhost:3001/submissions/from_ih_internal?" + $.param(params)
+              return "https://help.invitedhome.com/submissions/from_ih_internal?" + $.param(params)
             },
             getTrigger: function() {},
             hideTrigger: function() {},
