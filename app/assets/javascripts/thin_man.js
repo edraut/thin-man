@@ -347,8 +347,34 @@ var initThinMan = function(){
             }
           }
         }else if(jqXHR.status == 500){
-          alert('There was an error communicating with the server.')
+          if (
+            window.confirm(
+              'There was an error communicating with the server. Please click "ok" to submit a bug report. Cancel will return the current page'
+            )
+          ) { window.open(this.buildHelpLink(), '_blank')};
         }
+      },
+      buildHelpLink: function(){
+        base_url = $("meta[name='helpLink']").attr("content")
+        params = {
+          http_request_details: {
+            requested_path: this.ajax_options.url,
+            referred_from: window.location.href,
+            request_method: this.ajax_options.type,
+            data: this.ajax_options.data
+          },
+          type: "ajax-500",
+          submission: {
+            occured_at: new Date(),
+            url: window.location.href
+          },
+          user: {
+            name: $("meta[name='userName']").attr("content"),
+            email: $("meta[name='userEmail']").attr("content"),
+            time_zone: $("meta[name='userTimeZone']").attr("content"),
+          }
+        }
+        return ( base_url + "?" + $.param(params))
       },
       getTrigger: function(){},
       hideTrigger: function(){},
