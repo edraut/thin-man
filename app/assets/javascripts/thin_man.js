@@ -347,12 +347,16 @@ var initThinMan = function(){
             }
           }
         }else if(jqXHR.status == 500){
-          if (
-            window.confirm(
-              'There was an error communicating with the server. Please click "ok" to submit a bug report. Cancel will return the current page'
-            )
-          ) { window.open(this.buildHelpLink(), '_blank')};
+          if(this.sendHelpLink()){
+            if (window.confirm('There was an error communicating with the server. Please click "ok" to submit a bug report. Cancel will return the current page')){ window.open(this.buildHelpLink(), '_blank')};
+          }else{
+            window.alert('There was an error communicating with the server.')
+          }
         }
+      },
+      sendHelpLink: function(){
+        var sendHelpLink = $("meta[name='sendHelpLink']").attr("content")
+        return (undefined !== sendHelpLink && "true" === sendHelpLink)
       },
       buildHelpLink: function(){
         base_url = $("meta[name='helpLink']").attr("content")
@@ -368,13 +372,17 @@ var initThinMan = function(){
             occured_at: new Date(),
             url: window.location.href
           },
-          user: {
-            name: $("meta[name='userName']").attr("content"),
-            email: $("meta[name='userEmail']").attr("content"),
-            time_zone: $("meta[name='userTimeZone']").attr("content"),
-          }
+          user: this.getCurrentUser()
         }
         return ( base_url + "?" + $.param(params))
+      },
+      getCurrentUser: function(){
+        user = {
+        name: $("meta[name='userName']").attr("content"),
+        email: $("meta[name='userEmail']").attr("content"),
+        time_zone: $("meta[name='userTimeZone']").attr("content")
+        }
+        return user
       },
       getTrigger: function(){},
       hideTrigger: function(){},
