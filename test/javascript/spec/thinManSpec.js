@@ -93,7 +93,6 @@ describe("thin_man", function(){
         thin.ajaxError(TestResponses.conflict);
         expect($('#test_dom_id').html()).toMatch('Required field');
       });
-
     });
   });
 
@@ -187,6 +186,50 @@ describe("thin_man", function(){
         var thin = new thin_man.AjaxFormSubmission($form)
         expect(thin.sendContentType()).toBe(true);
       });
+    });
+
+    describe('help link functions', function(){
+      beforeEach(function(){
+        $form = affix('form');
+        var $meta2 = affix('meta[name="userName"]');
+        $meta2.attr('content', 'Name');
+        var $meta3 = affix('meta[name="userEmail"]');
+        $meta3.attr('content', 'Email');
+        var $meta4 = affix('meta[name="userTimeZone"]');
+        $meta4.attr('content', 'Mountain');
+      });
+
+      it('decides to send help link', function(){
+        var $meta1 = affix('meta[name="sendHelpLink"]');
+        $meta1.attr('content', 'true');
+        var thin = new thin_man.AjaxFormSubmission($form);
+        expect(thin.sendHelpLink()).toEqual(true);
+        
+        $meta1.attr('content', 'false');
+        expect(thin.sendHelpLink()).toEqual(false);
+      });
+      
+      it('fetches current user data', function(){
+        var thin = new thin_man.AjaxFormSubmission($form);
+        expect(thin.getCurrentUser()).toEqual({ name: 'Name', email: 'Email', time_zone: 'Mountain' })
+      });
+
+      it('builds help link', function(){
+        var thin = new thin_man.AjaxLinkSubmission($form);
+        thin.ajax_options = {
+          url: 'test.com',
+          type: 'GET',
+          data: {test: 'testing'}
+        };
+        thin.ajaxComplete(TestResponses.error);
+        link = thin.buildHelpLink();
+        expect(link).toMatch('test.com');
+        expect(link).toMatch('GET');
+        expect(link).toMatch('testing');
+        expect(link).toMatch('Name');
+        expect(link).toMatch('Email');
+        expect(link).toMatch('Mountain');
+      })
     });
 
     describe("POST/PATCH/DELETE request", function(){
