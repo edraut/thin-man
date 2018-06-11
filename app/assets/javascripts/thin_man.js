@@ -348,7 +348,7 @@ var initThinMan = function() {
                     }
                 } else if (jqXHR.status == 500) {
                     if (this.sendHelpLink()) {
-                        if (window.confirm('There was an error communicating with the server. Please click "ok" to submit a bug report. Cancel will return the current page')) { window.open(this.buildHelpLink(), '_blank') };
+                        if (window.confirm('There was an error communicating with the server. Please click "ok" to submit a bug report. If a new tab does not open, please disable pop up blocking and try again. Clicking "Cancel" will return you to the current page.')) { window.open(this.buildHelpLink(), '_blank') };
                     } else {
                         window.alert('There was an error communicating with the server.')
                     }
