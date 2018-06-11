@@ -773,7 +773,7 @@ var initThinMan = function() {
                 return this.jq_obj.attr('href');
             },
             getData: function() {
-                return { authenticity_token: $('[name="csrf-token"]').attr('content') };
+                return { authenticity_token: $('[name="csrf-token"]').attr('content'), browser_tab_id: $("meta[name='browser_tab_id']").attr("content") };
             },
             getProcessData: function() {
                 return true;
