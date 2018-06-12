@@ -165,6 +165,8 @@ describe("thin_man", function(){
       var $form;
 
       beforeEach(function() {
+        var $browserTabId = affix('meta[name="browser_tab_id"]')
+        $browserTabId.attr('content', 'fake-id-1234');
         $form = affix('form[data-ajax-form="true"][action="/url"][method="GET"]');
       });
 
@@ -174,7 +176,7 @@ describe("thin_man", function(){
         spyOn($, 'ajax');
         $form.submit();
         expect($.ajax).toHaveBeenCalled();
-        expect(thin.ajax_options.data).toEqual([{ name: 'name', value: 'Jon Snow' },{name: 'thin_man_submitter', value: 'link_now'}]);
+        expect(thin.ajax_options.data).toEqual([ { name: 'name', value: 'Jon Snow' }, { name: 'thin_man_submitter', value: 'link_now' }, { name: 'browser_tab_id', value: 'fake-id-1234' } ]);
       });
 
       it(".getProcessData", function(){
