@@ -580,6 +580,7 @@ var initThinMan = function() {
             },
             getData: function() {
                 var $clicked = $(document.activeElement);
+                var browserTabId = $("meta[name='browser_tab_id']").attr("content");
 
                 if ($clicked.length && $clicked.is('button[type="submit"], input[type="submit"], input[type="image"]') && $clicked.is('[name]')) {
                     var button_name = $clicked.attr('name')
@@ -596,7 +597,10 @@ var initThinMan = function() {
                     if (button_name && button_value) {
                         data_array.push({ name: button_name, value: button_value })
                     }
-                    data_array.push({ name: 'thin_man_submitter', value: thin_man_submitter })
+                    data_array.push(
+                    { name: 'thin_man_submitter', value: thin_man_submitter }, 
+                    { name: 'browser_tab_id', value: browserTabId }
+                  )
                     return data_array;
                 } else {
                     // need to implement a data-attribute for multiple file fields so we can allow selecting mutliple files at once. example here:
@@ -611,8 +615,10 @@ var initThinMan = function() {
                     }
                     if (typeof fd.set != 'undefined') {
                         fd.set('thin_man_submitter', thin_man_submitter)
+                        fd.set('browser_tab_id', browserTabId)
                     } else if (typeof fd.append != 'undefined') {
                         fd.append('thin_man_submitter', thin_man_submitter)
+                        fd.append('browser_tab_id', browserTabId)
                     }
                     return fd
                 }
@@ -773,7 +779,7 @@ var initThinMan = function() {
                 return this.jq_obj.attr('href');
             },
             getData: function() {
-                return { authenticity_token: $('[name="csrf-token"]').attr('content') };
+                return { authenticity_token: $('[name="csrf-token"]').attr('content'), browser_tab_id: $("meta[name='browser_tab_id']").attr("content") };
             },
             getProcessData: function() {
                 return true;
