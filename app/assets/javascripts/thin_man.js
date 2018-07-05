@@ -348,7 +348,7 @@ var initThinMan = function() {
                     }
                 } else if (jqXHR.status == 500) {
                     if (this.sendHelpLink()) {
-                        if (window.confirm('There was an error communicating with the server. Please click "ok" to submit a bug report. If a new tab does not open, please disable pop up blocking and try again. Clicking "Cancel" will return you to the current page.')) { window.open(this.buildHelpLink(), '_blank') };
+                        if (window.confirm('There was an error communicating with the server. Please click "ok" to submit a bug report. If a new tab does not open, please disable pop up blocking and try again. Clicking "Cancel" will return you to the current page.')) { this.updateAndSubmitForm() };
                     } else {
                         window.alert('There was an error communicating with the server.')
                     }
@@ -358,24 +358,25 @@ var initThinMan = function() {
                 var sendHelpLink = $("meta[name='sendHelpLink']").attr("content")
                 return (undefined !== sendHelpLink && "true" === sendHelpLink)
             },
-            buildHelpLink: function() {
-                base_url = $("meta[name='helpLink']").attr("content")
-                params = {
-                    http_request_details: {
-                        requested_path: this.ajax_options.url,
-                        referred_from: window.location.href,
-                        request_method: this.ajax_options.type,
-                        data: this.ajax_options.data
-                    },
-                    type: "ajax-500",
-                    submission: {
-                        occured_at: new Date(),
-                        url: window.location.href
-                    },
-                    user: this.getCurrentUser()
-                }
-                return (base_url + "?" + $.param(params))
+            updateAndSubmitForm: function() {
+                var $form = $('#ajax-500-help')
+                var user = this.getCurrentUser()
+                var token = $("meta[name='helpToken']").attr("content")
+
+                $form.children('input[name="http_request_details[requested_path]"]').val(this.ajax_options.url)
+                $form.children('input[name="http_request_details[referred_from]"]').val(window.location.href)
+                $form.children('input[name="http_request_details[request_method]"]').val(this.ajax_options.type)
+                $form.children('input[name="http_request_details[data]"]').val(this.ajax_options.data)
+                $form.children('input[name="submission[occured_at]"]').val(new Date())
+                $form.children('input[name="submission[url]"]').val(window.location.href)
+                $form.children('input[name="submission[url]"]').val(window.location.href)
+                $form.children('input[name="user[name]"]').val(user.name)
+                $form.children('input[name="user[email]"]').val(user.email)
+                $form.children('input[name="user[time_zone]"]').val(user.time_zone)
+                $form.children('input[name="token"]').val(token)
+                $form.submit()
             },
+
             getCurrentUser: function() {
                 user = {
                     name: $("meta[name='userName']").attr("content"),
@@ -597,10 +598,7 @@ var initThinMan = function() {
                     if (button_name && button_value) {
                         data_array.push({ name: button_name, value: button_value })
                     }
-                    data_array.push(
-                    { name: 'thin_man_submitter', value: thin_man_submitter }, 
-                    { name: 'browser_tab_id', value: browserTabId }
-                  )
+                    data_array.push({ name: 'thin_man_submitter', value: thin_man_submitter }, { name: 'browser_tab_id', value: browserTabId })
                     return data_array;
                 } else {
                     // need to implement a data-attribute for multiple file fields so we can allow selecting mutliple files at once. example here:
