@@ -598,7 +598,10 @@ var initThinMan = function() {
                     if (button_name && button_value) {
                         data_array.push({ name: button_name, value: button_value })
                     }
-                    data_array.push({ name: 'thin_man_submitter', value: thin_man_submitter }, { name: 'browser_tab_id', value: browserTabId })
+                    data_array.push(
+                      { name: 'thin_man_submitter', value: thin_man_submitter }, 
+                      { name: 'browser_tab_id', value: browserTabId }
+                    )
                     return data_array;
                 } else {
                     // need to implement a data-attribute for multiple file fields so we can allow selecting mutliple files at once. example here:
