@@ -1,287 +1,270 @@
-describe("thin_man", function(){
+describe("thin_man", function() {
 
-  function getAjaxArg(arg_name){
-    return $.ajax.calls.argsFor(0)[0][arg_name];
-  }
+    function getAjaxArg(arg_name) {
+        return $.ajax.calls.argsFor(0)[0][arg_name];
+    }
 
-  describe("Base class", function(){
-    beforeAll(function(){
-      jasmine.Ajax.install();
-      jasmine.clock().install();
-    });
-
-    describe(".ajaxSuccess", function(){
-      var $link, $target, thin;
-
-      beforeEach(function(){
-        $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"]');
-        $target = affix('#test_dom_id');
-        thin = new thin_man.AjaxLinkSubmission($link);
-      });
-
-      it("Add result to the target", function(){
-        thin.ajaxSuccess({ html: "Hello" }, 'success', TestResponses.success)
-        expect($target.html()).toEqual("Hello")
-      });
-
-      it("focus on first element", function(){
-        var form = '<form><input type="text"><textarea>dummy</textarea></form>'
-        thin.ajaxSuccess(form, 'success', TestResponses.success)
-        expect($target.html()).toEqual(form);
-        expect($("[type='text']").length).toEqual(1);
-        //Check if it's focused
-        expect($("[type='text']").get(0)).toBe(document.activeElement);
-      });
-
-      it("empties the target if there is no html in the json", function(){
-        $target.html('Remove me.')
-        thin.ajaxSuccess({flash_message: 'Successfully moved the widget.'}, 'success', TestResponses.success)
-        expect($target.html()).toEqual('')
-      })
-
-      it("handles success with no target", function(){
-        $no_target_link = affix('a[data-ajax-link="true"][data-ajax-target=""]');
-        thin = new thin_man.AjaxLinkSubmission($no_target_link);
-        thin.ajaxSuccess({flash_message: 'Success'},'success', TestResponses.success)
-      })
-    });
-
-    describe(".ajaxComplete", function(){
-      var $link, thin;
-
-      beforeEach(function(){
-        $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"] #test_dom_id');
-        affix('[data-thin-man-flash-template] [data-thin-man-flash-content]');
-        thin = new thin_man.AjaxLinkSubmission($link);
-      });
-
-      describe("Display flash message", function(){
-        it("successfully response", function(){
-          thin.ajaxComplete(TestResponses.success);
-          expect(thin.flash.flash_content.text()).toMatch('successfully response');
+    describe("Base class", function() {
+        beforeAll(function() {
+            jasmine.Ajax.install();
+            jasmine.clock().install();
         });
 
-        it("error response", function(){
-          thin.ajaxComplete(TestResponses.error);
-          expect(thin.flash.flash_content.text()).toMatch('error response');
+        describe(".ajaxSuccess", function() {
+            var $link, $target, thin;
+
+            beforeEach(function() {
+                $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"]');
+                $target = affix('#test_dom_id');
+                thin = new thin_man.AjaxLinkSubmission($link);
+            });
+
+            it("Add result to the target", function() {
+                thin.ajaxSuccess({ html: "Hello" }, 'success', TestResponses.success)
+                expect($target.html()).toEqual("Hello")
+            });
+
+            it("focus on first element", function() {
+                var form = '<form><input type="text"><textarea>dummy</textarea></form>'
+                thin.ajaxSuccess(form, 'success', TestResponses.success)
+                expect($target.html()).toEqual(form);
+                expect($("[type='text']").length).toEqual(1);
+                //Check if it's focused
+                expect($("[type='text']").get(0)).toBe(document.activeElement);
+            });
+
+            it("empties the target if there is no html in the json", function() {
+                $target.html('Remove me.')
+                thin.ajaxSuccess({ flash_message: 'Successfully moved the widget.' }, 'success', TestResponses.success)
+                expect($target.html()).toEqual('')
+            })
+
+            it("handles success with no target", function() {
+                $no_target_link = affix('a[data-ajax-link="true"][data-ajax-target=""]');
+                thin = new thin_man.AjaxLinkSubmission($no_target_link);
+                thin.ajaxSuccess({ flash_message: 'Success' }, 'success', TestResponses.success)
+            })
         });
-      });
 
-      it("fade out if flash_persist is false", function(){
-        spyOn($.fn, 'fadeOut');
-        thin.ajaxComplete(TestResponses.success);
-        jasmine.clock().tick(2000);
-        expect($.fn.fadeOut).toHaveBeenCalled();
-      });
+        describe(".ajaxComplete", function() {
+            var $link, thin;
+
+            beforeEach(function() {
+                $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"] #test_dom_id');
+                affix('[data-thin-man-flash-template] [data-thin-man-flash-content]');
+                thin = new thin_man.AjaxLinkSubmission($link);
+            });
+
+            describe("Display flash message", function() {
+                it("successfully response", function() {
+                    thin.ajaxComplete(TestResponses.success);
+                    expect(thin.flash.flash_content.text()).toMatch('successfully response');
+                });
+
+                it("error response", function() {
+                    thin.ajaxComplete(TestResponses.error);
+                    expect(thin.flash.flash_content.text()).toMatch('error response');
+                });
+            });
+
+            it("fade out if flash_persist is false", function() {
+                spyOn($.fn, 'fadeOut');
+                thin.ajaxComplete(TestResponses.success);
+                jasmine.clock().tick(2000);
+                expect($.fn.fadeOut).toHaveBeenCalled();
+            });
+        });
+
+        describe(".ajaxError", function() {
+            var $link, thin;
+
+            beforeEach(function() {
+                $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"]');
+                $target = affix('#test_dom_id');
+                thin = new thin_man.AjaxLinkSubmission($link);
+            });
+
+            it('as a string', function() {
+                thin.ajaxError(TestResponses.conflictString);
+                expect($('#test_dom_id').html()).toMatch('conflict string response');
+            });
+
+            it('as an object', function() {
+                thin.ajaxError(TestResponses.conflict);
+                expect($('#test_dom_id').html()).toMatch('Required field');
+            });
+        });
     });
 
-    describe(".ajaxError", function(){
-      var $link, thin;
+    describe("AjaxLinkSubmission", function() {
+        it("submits an ajax call with options", function() {
+            var $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-return-type="json"]');
+            thin_man.AjaxLinkSubmission($link)
+            spyOn($, 'ajax');
+            $link.click();
+            expect($.ajax).toHaveBeenCalled();
+            expect(getAjaxArg("url")).toMatch("/url");
+            expect(getAjaxArg("type")).toMatch("PATCH");
+            expect(getAjaxArg("datatype")).toMatch("json");
+            expect(thin_man.hasOwnProperty('link_groups')).toEqual(false)
+        });
 
-      beforeEach(function(){
-        $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"]');
-        $target = affix('#test_dom_id');
-        thin = new thin_man.AjaxLinkSubmission($link);
-      });
+        it("submits an ajax call with search params and path", function() {
+            var $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"][href="/url"][data-return-type="json"][data-search-params="search_params"][data-search-path="/search_path"]');
+            thin_man.AjaxLinkSubmission($link)
+            spyOn($, 'ajax');
+            $link.click();
+            expect($.ajax).toHaveBeenCalled();
+            expect(getAjaxArg("url")).toEqual('/search_path?search_params');
+        });
 
-      it('as a string', function(){
-        thin.ajaxError(TestResponses.conflictString);
-        expect($('#test_dom_id').html()).toMatch('conflict string response');
-      });
-
-      it('as an object', function(){
-        thin.ajaxError(TestResponses.conflict);
-        expect($('#test_dom_id').html()).toMatch('Required field');
-      });
+        it("fires grouped links in sequence", function() {
+            var $link_zero = affix('a[data-ajax-link-now="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-sequence-group="test_group"][data-sequence-number="0"]');
+            var $link_one = affix('a[data-ajax-link-now="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-sequence-group="test_group"][data-sequence-number="1"]');
+            var $link_two = affix('a[data-ajax-link-now="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-sequence-group="test_group"][data-sequence-number="2"]');
+            zero = new thin_man.AjaxLinkSubmission($link_zero)
+            one = new thin_man.AjaxLinkSubmission($link_one)
+            two = new thin_man.AjaxLinkSubmission($link_two)
+            expect(thin_man.hasOwnProperty('link_groups')).toEqual(true)
+            spyOn(one, 'fire')
+            spyOn(two, 'fire')
+            zero.ajaxComplete()
+            expect(one.fire).toHaveBeenCalled();
+            expect(two.fire).not.toHaveBeenCalled();
+            one.ajaxComplete()
+            expect(one.fire.calls.count()).toEqual(1);
+            expect(two.fire).toHaveBeenCalled();
+        })
     });
-  });
-
-  describe("AjaxLinkSubmission", function(){
-    it("submits an ajax call with options", function(){
-      var $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-return-type="json"]');
-      thin_man.AjaxLinkSubmission($link)
-      spyOn($, 'ajax');
-      $link.click();
-      expect($.ajax).toHaveBeenCalled();
-      expect(getAjaxArg("url")).toMatch("/url");
-      expect(getAjaxArg("type")).toMatch("PATCH"); 
-      expect(getAjaxArg("datatype")).toMatch("json");
-      expect(thin_man.hasOwnProperty('link_groups')).toEqual(false)
+    describe("DeleteLink", function() {
+        it("submits an ajax delete call with options", function() {
+            var $link = affix('a[data-ajax-delete="true"][data-ajax-target="#test_dom_id"][href="/url"]');
+            var delete_link = new thin_man.DeleteLink($link)
+            spyOn($, 'ajax');
+            $link.click();
+            expect($.ajax).toHaveBeenCalled();
+            expect(delete_link.getAjaxType()).toEqual('DELETE')
+            expect(delete_link.getAjaxUrl()).toEqual('/url')
+            expect(delete_link.trigger).toEqual($link)
+        })
     });
-    
-    it("submits an ajax call with search params and path", function(){
-      var $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"][href="/url"][data-return-type="json"][data-search-params="search_params"][data-search-path="/search_path"]');
-      thin_man.AjaxLinkSubmission($link)
-      spyOn($, 'ajax');
-      $link.click();
-      expect($.ajax).toHaveBeenCalled();
-      expect(getAjaxArg("url")).toEqual('/search_path?search_params');
+    describe("AjaxFormSubmission", function() {
+        it("submits an ajax call with options", function() {
+            var $form = affix('form[data-ajax-form="true"][method="PATCH"][action="/url"]');
+            $form.affix('input[type="text"][name="name"][value="Jon Snow"]')
+            thin_man.AjaxFormSubmission($form)
+            spyOn($, 'ajax');
+            $form.submit();
+            expect($.ajax).toHaveBeenCalled();
+            expect(getAjaxArg("url")).toMatch("/url");
+            expect(getAjaxArg("type")).toMatch("PATCH");
+            expect(getAjaxArg("datatype")).toMatch("html");
+        });
+
+        describe("GET request", function() {
+            var $form;
+
+            beforeEach(function() {
+                var $browserTabId = affix('meta[name="browser_tab_id"]')
+                $browserTabId.attr('content', 'fake-id-1234');
+                $form = affix('form[data-ajax-form="true"][action="/url"][method="GET"]');
+            });
+
+            it("serialize data", function() {
+                $form.affix('input[type="text"][name="name"][value="Jon Snow"]');
+                var thin = new thin_man.AjaxFormSubmission($form);
+                spyOn($, 'ajax');
+                $form.submit();
+                expect($.ajax).toHaveBeenCalled();
+                expect(thin.ajax_options.data).toEqual([{ name: 'name', value: 'Jon Snow' }, { name: 'thin_man_submitter', value: 'link_now' }, { name: 'browser_tab_id', value: 'fake-id-1234' }]);
+            });
+
+            it(".getProcessData", function() {
+                var thin = new thin_man.AjaxFormSubmission($form)
+                expect(thin.getProcessData()).toBe(true);
+            });
+
+            it(".sendContentType", function() {
+                var thin = new thin_man.AjaxFormSubmission($form)
+                expect(thin.sendContentType()).toBe(true);
+            });
+        });
+
+        describe('help link functions', function() {
+            beforeEach(function() {
+                $form = affix('form');
+                var $meta2 = affix('meta[name="userName"]');
+                $meta2.attr('content', 'Name');
+                var $meta3 = affix('meta[name="userEmail"]');
+                $meta3.attr('content', 'Email');
+                var $meta4 = affix('meta[name="userTimeZone"]');
+                $meta4.attr('content', 'Mountain');
+            });
+
+            it('decides to send help link', function() {
+                var $meta1 = affix('meta[name="sendHelpLink"]');
+                $meta1.attr('content', 'true');
+                var thin = new thin_man.AjaxFormSubmission($form);
+                expect(thin.sendHelpLink()).toEqual(true);
+
+                $meta1.attr('content', 'false');
+                expect(thin.sendHelpLink()).toEqual(false);
+            });
+
+            it('fetches current user data', function() {
+                var thin = new thin_man.AjaxFormSubmission($form);
+                expect(thin.getCurrentUser()).toEqual({ name: 'Name', email: 'Email', time_zone: 'Mountain' })
+            });
+        });
+
+        describe("POST/PATCH/DELETE request", function() {
+            var $form;
+            beforeEach(function() {
+                $form = affix('form[data-ajax-form="true"][action="/url"]');
+            });
+
+            it("Set data in a FormData object", function() {
+                thin_man.AjaxFormSubmission($form)
+                spyOn($, 'ajax');
+                $form.submit();
+                expect(getAjaxArg("data")).toEqual(jasmine.any(FormData));
+            });
+
+            it(".getProcessData", function() {
+                var thin = new thin_man.AjaxFormSubmission($form)
+                expect(thin.getProcessData()).toBe(false);
+            });
+
+            it(".sendContentType", function() {
+                var thin = new thin_man.AjaxFormSubmission($form)
+                expect(thin.sendContentType()).toBe(false);
+            });
+        });
+
+        describe("Log", function() {
+            beforeEach(function() {
+                spyOn(console, 'log');
+            });
+
+            it("Don't show a warning with a valid target", function() {
+                $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"]');
+                $target = affix('#test_dom_id');
+                thin = new thin_man.AjaxLinkSubmission($link);
+                expect(console.log).not.toHaveBeenCalled();
+            });
+
+            it("Show a warning when target not found", function() {
+                $link = affix('a[data-ajax-link="true"][data-ajax-target="#not_valid_target"]');
+                thin = new thin_man.AjaxLinkSubmission($link);
+                expect(console.log).toHaveBeenCalledWith('Warning! Thin Man selector #not_valid_target not found');
+            });
+
+            it("Show a warning when target not provided", function() {
+                $link = affix('a[data-ajax-link="true"]');
+                thin = new thin_man.AjaxLinkSubmission($link);
+                expect(console.log).toHaveBeenCalledWith('Warning! Thin Man selector not given');
+            });
+        });
+
     });
-    
-    it("fires grouped links in sequence", function(){
-      var $link_zero = affix('a[data-ajax-link-now="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-sequence-group="test_group"][data-sequence-number="0"]');
-      var $link_one = affix('a[data-ajax-link-now="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-sequence-group="test_group"][data-sequence-number="1"]');
-      var $link_two = affix('a[data-ajax-link-now="true"][data-ajax-target="#test_dom_id"][href="/url"][data-ajax-method="PATCH"][data-sequence-group="test_group"][data-sequence-number="2"]');
-      zero = new thin_man.AjaxLinkSubmission($link_zero)
-      one = new thin_man.AjaxLinkSubmission($link_one)
-      two = new thin_man.AjaxLinkSubmission($link_two)
-      expect(thin_man.hasOwnProperty('link_groups')).toEqual(true)
-      spyOn(one,'fire')
-      spyOn(two,'fire')
-      zero.ajaxComplete()
-      expect(one.fire).toHaveBeenCalled();
-      expect(two.fire).not.toHaveBeenCalled();
-      one.ajaxComplete()
-      expect(one.fire.calls.count()).toEqual(1);
-      expect(two.fire).toHaveBeenCalled();
-    })
-  });
-  describe("DeleteLink", function(){
-    it("submits an ajax delete call with options", function(){
-      var $link = affix('a[data-ajax-delete="true"][data-ajax-target="#test_dom_id"][href="/url"]');
-      var delete_link = new thin_man.DeleteLink($link)
-      spyOn($, 'ajax');
-      $link.click();
-      expect($.ajax).toHaveBeenCalled();
-      expect(delete_link.getAjaxType()).toEqual('DELETE')
-      expect(delete_link.getAjaxUrl()).toEqual('/url')
-      expect(delete_link.trigger).toEqual($link)
-    })
-  });
-  describe("AjaxFormSubmission", function(){
-    it("submits an ajax call with options", function(){
-      var $form = affix('form[data-ajax-form="true"][method="PATCH"][action="/url"]');
-      $form.affix('input[type="text"][name="name"][value="Jon Snow"]')
-      thin_man.AjaxFormSubmission($form)
-      spyOn($, 'ajax');
-      $form.submit();
-      expect($.ajax).toHaveBeenCalled();
-      expect(getAjaxArg("url")).toMatch("/url");
-      expect(getAjaxArg("type")).toMatch("PATCH");
-      expect(getAjaxArg("datatype")).toMatch("html");
-    });
-
-    describe("GET request", function(){
-      var $form;
-
-      beforeEach(function() {
-        var $browserTabId = affix('meta[name="browser_tab_id"]')
-        $browserTabId.attr('content', 'fake-id-1234');
-        $form = affix('form[data-ajax-form="true"][action="/url"][method="GET"]');
-      });
-
-      it("serialize data", function(){
-        $form.affix('input[type="text"][name="name"][value="Jon Snow"]');
-        var thin = new thin_man.AjaxFormSubmission($form);
-        spyOn($, 'ajax');
-        $form.submit();
-        expect($.ajax).toHaveBeenCalled();
-        expect(thin.ajax_options.data).toEqual([ { name: 'name', value: 'Jon Snow' }, { name: 'thin_man_submitter', value: 'link_now' }, { name: 'browser_tab_id', value: 'fake-id-1234' } ]);
-      });
-
-      it(".getProcessData", function(){
-        var thin = new thin_man.AjaxFormSubmission($form)
-        expect(thin.getProcessData()).toBe(true);
-      });
-
-      it(".sendContentType", function(){
-        var thin = new thin_man.AjaxFormSubmission($form)
-        expect(thin.sendContentType()).toBe(true);
-      });
-    });
-
-    describe('help link functions', function(){
-      beforeEach(function(){
-        $form = affix('form');
-        var $meta2 = affix('meta[name="userName"]');
-        $meta2.attr('content', 'Name');
-        var $meta3 = affix('meta[name="userEmail"]');
-        $meta3.attr('content', 'Email');
-        var $meta4 = affix('meta[name="userTimeZone"]');
-        $meta4.attr('content', 'Mountain');
-      });
-
-      it('decides to send help link', function(){
-        var $meta1 = affix('meta[name="sendHelpLink"]');
-        $meta1.attr('content', 'true');
-        var thin = new thin_man.AjaxFormSubmission($form);
-        expect(thin.sendHelpLink()).toEqual(true);
-        
-        $meta1.attr('content', 'false');
-        expect(thin.sendHelpLink()).toEqual(false);
-      });
-      
-      it('fetches current user data', function(){
-        var thin = new thin_man.AjaxFormSubmission($form);
-        expect(thin.getCurrentUser()).toEqual({ name: 'Name', email: 'Email', time_zone: 'Mountain' })
-      });
-
-      it('builds help link', function(){
-        var thin = new thin_man.AjaxLinkSubmission($form);
-        thin.ajax_options = {
-          url: 'test.com',
-          type: 'GET',
-          data: {test: 'testing'}
-        };
-        thin.ajaxComplete(TestResponses.error);
-        link = thin.buildHelpLink();
-        expect(link).toMatch('test.com');
-        expect(link).toMatch('GET');
-        expect(link).toMatch('testing');
-        expect(link).toMatch('Name');
-        expect(link).toMatch('Email');
-        expect(link).toMatch('Mountain');
-      })
-    });
-
-    describe("POST/PATCH/DELETE request", function(){
-      var $form;
-      beforeEach(function(){
-        $form = affix('form[data-ajax-form="true"][action="/url"]');
-      });
-
-      it("Set data in a FormData object", function(){
-        thin_man.AjaxFormSubmission($form)
-        spyOn($, 'ajax');
-        $form.submit();
-        expect(getAjaxArg("data")).toEqual(jasmine.any(FormData));
-      });
-
-      it(".getProcessData", function(){
-        var thin = new thin_man.AjaxFormSubmission($form)
-        expect(thin.getProcessData()).toBe(false);
-      });
-
-      it(".sendContentType", function(){
-        var thin = new thin_man.AjaxFormSubmission($form)
-        expect(thin.sendContentType()).toBe(false);
-      });
-    });
-
-    describe("Log", function(){
-      beforeEach(function(){
-        spyOn(console, 'log');
-      });
-
-      it("Don't show a warning with a valid target", function(){
-        $link = affix('a[data-ajax-link="true"][data-ajax-target="#test_dom_id"]');
-        $target = affix('#test_dom_id');
-        thin = new thin_man.AjaxLinkSubmission($link);
-        expect(console.log).not.toHaveBeenCalled();
-      });
-
-      it("Show a warning when target not found", function(){
-        $link = affix('a[data-ajax-link="true"][data-ajax-target="#not_valid_target"]');
-        thin = new thin_man.AjaxLinkSubmission($link);
-        expect(console.log).toHaveBeenCalledWith('Warning! Thin Man selector #not_valid_target not found');
-      });
-
-      it("Show a warning when target not provided", function(){
-        $link = affix('a[data-ajax-link="true"]');
-        thin = new thin_man.AjaxLinkSubmission($link);
-        expect(console.log).toHaveBeenCalledWith('Warning! Thin Man selector not given');
-      });
-    });
-
-  });
 });
