@@ -215,23 +215,6 @@ describe("thin_man", function(){
         var thin = new thin_man.AjaxFormSubmission($form);
         expect(thin.getCurrentUser()).toEqual({ name: 'Name', email: 'Email', time_zone: 'Mountain' })
       });
-
-      it('builds help link', function(){
-        var thin = new thin_man.AjaxLinkSubmission($form);
-        thin.ajax_options = {
-          url: 'test.com',
-          type: 'GET',
-          data: {test: 'testing'}
-        };
-        thin.ajaxComplete(TestResponses.error);
-        link = thin.buildHelpLink();
-        expect(link).toMatch('test.com');
-        expect(link).toMatch('GET');
-        expect(link).toMatch('testing');
-        expect(link).toMatch('Name');
-        expect(link).toMatch('Email');
-        expect(link).toMatch('Mountain');
-      })
     });
 
     describe("POST/PATCH/DELETE request", function(){
