@@ -212,8 +212,6 @@ var initThinMan = function() {
                         } else {
                             this.insertHtml(data.html)
                         }
-                    } else if (this.target && typeof(this.target.empty) == 'function') {
-                        this.target.empty()
                     }
                     if (typeof data.class_triggers != 'undefined') {
                         $.each(data.class_triggers, function(class_name, params) {

@@ -1,3 +1,3 @@
 module ThinMan
-  VERSION = "0.19.14"
+  VERSION = "0.19.15"
 end
