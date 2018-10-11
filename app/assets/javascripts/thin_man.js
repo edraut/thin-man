@@ -319,7 +319,7 @@ var initThinMan = function() {
             ajaxError: function(jqXHR) {
                 debug_logger.log('thin_man.AjaxSubmission.ajaxError jqXHR:', 1, 'thin-man')
                 debug_logger.log(jqXHR, 1, 'thin-man')
-                if (jqXHR.status == 409) {
+                if ([409,422,424,428].indexOf(jqXHR.status) >= 0) {
                     try {
                         var data = JSON.parse(jqXHR.responseText);
                         debug_logger.log("thin_man.AjaxSubmission.ajaxError responseText is valid JSON, parsing to an object:", 1, 'thin-man')
