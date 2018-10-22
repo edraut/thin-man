@@ -256,6 +256,20 @@ var initThinMan = function() {
                     this.jq_obj.find('.error').removeClass('error')
                     this.jq_obj.find('.help-inline').remove()
                 }
+                if(this.shouldReplaceHistory()){
+                  var new_url = [location.protocol, '//', location.host, '/', this.replacement_path].join('')
+                  history['pushState']({}, null, new_url);
+                }
+            },
+            shouldReplaceHistory: function(){
+              this.replacement_path = this.jq_obj.data('replacement-path')
+              if(this.replacement_path){
+                if('/' === this.replacement_path[0]){
+                  this.replacement_path = this.replacement_path.slice(1)
+                }
+                return true
+              }
+              return false
             },
             addWatcher: function(watcher) {
                 if (!this.hasOwnProperty('watchers')) {
