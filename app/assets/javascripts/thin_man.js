@@ -485,90 +485,98 @@ var initThinMan = function() {
             }
         }),
         AjaxMask: Class.extend({
-            init: function($mask_target, mask_message) {
-                var uuid = new UUID;
-                this.$mask_target = $mask_target
-                this.$mask = $('#thin_man_mask').clone()
-                this.$mask.prop('id', 'thin_man_mask' + uuid.value)
-                if (typeof mask_message != 'undefined') {
-                    var $message = this.$mask.find('[data-thin-man-mask-message]')
-                    $message.html(mask_message)
-                }
-                var height = this.$mask_target.outerHeight()
-                var width = this.$mask_target.outerWidth()
-                var radius = this.$mask_target.css('border-radius')
-                this.$mask.css({ 'height': height, 'width': width, 'left': 0, 'top': 0, 'border-radius': radius })
-                this.$mask.css({ 'position': 'absolute', 'z-index': 10000 })
-
-                this.$mask_target.append(this.$mask)
-                this.$mask.on('click mousedown mousemove', function(e) {
-                    e.preventDefault();
-                    return false;
-                })
-                this.$mask.show()
-            },
-            remove: function() {
-                this.$mask.remove()
+          init: function($mask_target, mask_message) {
+            var uuid = new UUID;
+            this.$mask_target = $mask_target
+            this.$mask = $('#thin_man_mask').clone()
+            this.$mask.prop('id', 'thin_man_mask' + uuid.value)
+            if (typeof mask_message != 'undefined') {
+                var $message = this.$mask.find('[data-thin-man-mask-message]')
+                $message.html(mask_message)
             }
+            var height = this.$mask_target.outerHeight()
+            var width = this.$mask_target.outerWidth()
+            var radius = this.$mask_target.css('border-radius')
+            this.$mask.css({ 'height': height, 'width': width, 'left': 0, 'top': 0, 'border-radius': radius })
+            this.$mask.css({ 'position': 'absolute', 'z-index': 10000 })
+
+            this.$mask_target.append(this.$mask)
+            this.$mask.on('click mousedown mousemove', function(e) {
+                e.preventDefault();
+                return false;
+            })
+            this.$mask.show()
+          },
+          remove: function() {
+            this.$mask.remove()
+          }
         }),
         AjaxFlash: Class.extend({
-            init: function(type, message, elem, duration) {
-                this.flash_container = $('[data-thin-man-flash-template]').clone();
-                this.flash_container.removeAttr('data-thin-man-flash-template');
-                this.flash_container.attr('data-thin-man-flash-container', true);
-                $('body').append(this.flash_container);
-                this.flash_container.css({ position: 'absolute', visibility: 'hidden' });
-                this.alert_type = type;
-                this.elem = elem;
-                var alert_class = 'alert-' + type;
-                this.flash_container.addClass(alert_class);
-                this.flash_content = this.flash_container.find('[data-thin-man-flash-content]');
-                this.flash_content.html(message);
-                this.flash_container.show();
-                this.setFadeBehavior(duration);
-                this.reposition(elem);
-            },
-            setFadeBehavior: function(duration) {
-                if (duration) {
-                    if ('persist' == duration) {
-                        this.fade = false
-                    } else {
-                        this.fade = true
-                    }
-                } else { //default behavior if persist duration is not sent back with message
-                    if ('error' == this.alert_type || 'warning' == this.alert_type || 'info' == this.alert_type) {
-                        this.fade = false;
-                    } else {
-                        this.fade = true;
-                    }
-                }
-            },
-            reposition: function(elem) {
-                var this_window = {
-                    top: $(window).scrollTop(),
-                    left: $(window).scrollLeft(),
-                    height: $(window).outerHeight(),
-                    width: $(window).outerWidth()
-                };
-                var this_flash = {
-                    height: this.flash_container.outerHeight(),
-                    width: this.flash_container.outerWidth()
-                }
-                this_window.vert_middle = (this_window.top + (this_window.height / 2));
-                this_window.horiz_middle = (this_window.left + (this_window.width / 2));
-                this_flash.half_height = (this_flash.height / 2);
-                this_flash.half_width = (this_flash.width / 2);
-                var new_top = this_window.vert_middle - this_flash.half_height;
-                var new_left = this_window.horiz_middle - this_flash.half_width;
-                this.flash_container.css({ left: new_left, top: new_top, visibility: 'visible' });
-                var ajax_flash = this;
-                if (this.fade) {
-                    setTimeout(function() { ajax_flash.fadeOut() }, 1618);
-                }
-            },
-            fadeOut: function() {
-                this.flash_container.fadeOut('slow');
+          init: function(type, message, elem, duration) {
+            this.flash_container = $('[data-thin-man-flash-template]').clone();
+            this.flash_container.removeAttr('data-thin-man-flash-template');
+            this.flash_container.attr('data-thin-man-flash-container', true);
+            $('body').append(this.flash_container);
+            this.flash_container.css({ position: 'absolute', visibility: 'hidden' });
+            this.alert_type = type;
+            this.elem = elem;
+            var alert_class = 'alert-' + type;
+            this.flash_container.addClass(alert_class);
+            this.flash_content = this.flash_container.find('[data-thin-man-flash-content]');
+            this.flash_content.html(message);
+            this.flash_container.show();
+            this.setFadeBehavior(duration);
+            this.reposition(elem);
+            this.bindDismisser();
+          },
+          setFadeBehavior: function(duration) {
+            if (duration) {
+              if ('persist' == duration) {
+                this.fade = false
+              } else {
+                this.fade = true
+              }
+            } else { //default behavior if persist duration is not sent back with message
+              if ('error' == this.alert_type || 'warning' == this.alert_type || 'info' == this.alert_type) {
+                this.fade = false;
+              } else {
+                this.fade = true;
+              }
             }
+          },
+          reposition: function(elem) {
+            var this_window = {
+              top: $(window).scrollTop(),
+              left: $(window).scrollLeft(),
+              height: $(window).outerHeight(),
+              width: $(window).outerWidth()
+            };
+            var this_flash = {
+              height: this.flash_container.outerHeight(),
+              width: this.flash_container.outerWidth()
+            }
+            this_window.vert_middle = (this_window.top + (this_window.height / 2));
+            this_window.horiz_middle = (this_window.left + (this_window.width / 2));
+            this_flash.half_height = (this_flash.height / 2);
+            this_flash.half_width = (this_flash.width / 2);
+            var new_top = this_window.vert_middle - this_flash.half_height;
+            var new_left = this_window.horiz_middle - this_flash.half_width;
+            this.flash_container.css({ left: new_left, top: new_top, visibility: 'visible' });
+            var ajax_flash = this;
+            if (this.fade) {
+              setTimeout(function() { ajax_flash.fadeOut() }, 1618);
+            }
+          },
+          fadeOut: function() {
+            this.flash_container.fadeOut('slow');
+          },
+          bindDismisser: function() {
+            this.$dismisser = this.flash_container.find('[data-dismiss]')
+            var ajax_flash = this
+            this.$dismisser.on('click', function(){
+              ajax_flash.flash_container.remove()
+            })
+          }
         }),
         AjaxSorter: Class.extend({
             init: function($sort_container) {
