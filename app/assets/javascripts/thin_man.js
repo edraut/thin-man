@@ -131,12 +131,12 @@ var initThinMan = function() {
         }
       },
       getTarget: function() {
-        var target_selector = this.jq_obj.data('ajax-target');
-        if (target_selector) {
-          if ($(target_selector).length > 0) {
-            this.target = $(target_selector);
+        this.target_selector = this.jq_obj.data('ajax-target');
+        if (this.target_selector) {
+          if ($(this.target_selector).length > 0) {
+            this.target = $(this.target_selector);
           } else {
-            console.log('Warning! Thin Man selector ' + target_selector + ' not found')
+            console.log('Warning! Thin Man selector ' + this.target_selector + ' not found')
           }
         } else {
           console.log('Warning! Thin Man selector not given')
@@ -283,14 +283,16 @@ var initThinMan = function() {
           this.replacement_path = this.replacement_path.slice(1)
         }
         var new_url = [location.protocol, '//', location.host, '/', this.replacement_path].join('')
-        history['replaceState']({}, null, new_url);
+        var new_path = '/' + this.replacement_path
+        history['replaceState']({path: new_path, target: this.target_selector, thin_man: true}, null, new_url);
       },
-      handlePushState: function(){
+      handlePushState: function(){//TODO must implement onPopState handler which is commented out below
         if('/' === this.push_path[0]){
           this.push_path = this.push_path.slice(1)
         }
         var new_url = [location.protocol, '//', location.host, '/', this.push_path].join('')
-        history['pushState']({path: ('/' + this.push_path), target: this.target}, null, new_url);
+        var new_path = '/' + this.push_path
+        history['pushState']({path: new_path, target: this.target_selector, thin_man: true}, null, new_url);
 
       },
       addWatcher: function(watcher) {
@@ -888,16 +890,23 @@ var initThinMan = function() {
       new thin_man.AjaxSorter($(this));
     });
 
-    $(window).bind("popstate", function(e){
-      $('[data-thin-man-back-link]').remove()
-      var previous_state = e.originalEvent.state
-      var $back_link = $('<div>').
-        css({display: 'none'}).
-        attr('data-ajax-target',previous_state.target).
-        attr('href',previous_state.path).
-        attr('data-thin-man-back-link',true)
-      new AjaxLinkSubmission($back_link)
-    })
+    // TODO, make this work to reload content when history changes to previous content loaded by thin_man
+    // and recorded in browser history with pustState
+    // $(window).bind("popstate", function(e){
+      // $('[data-thin-man-back-link]').remove()
+      // var previous_state = e.originalEvent.state
+      // if(previous_state.thin_man && previous_state.path && previous_state.target){
+      //   if($(previous_state.target).length > 0){
+      //     var $this_target = $(previous_state.target)
+      //   }
+      //   var $reload_link = $('<div>').
+      //     css({display: 'none'}).
+      //     attr('data-ajax-target',$this_target).
+      //     attr('href',previous_state.path).
+      //     attr('data-thin-man-back-link',true)
+      //   new thin_man.AjaxLinkSubmission($reload_link)
+      // }
+    // })
 
   });
 
