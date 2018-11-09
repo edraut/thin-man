@@ -208,7 +208,7 @@ var initThinMan = function() {
         } else if (typeof data === 'object') {
           if (typeof data.html != 'undefined') {
             if (typeof data.hooch_modal != 'undefined') {
-              new hooch.Modal($(data.html))
+              new hooch.Modal($(data.html),data.dismissable)
             } else {
               this.insertHtml(data.html)
             }
@@ -379,7 +379,11 @@ var initThinMan = function() {
             debug_logger.log("thin_man.AjaxSubmission.ajaxError data is an object.", 1, 'thin-man')
             if (typeof data.html != 'undefined') {
               debug_logger.log("thin_man.AjaxSubmission.ajaxError data.html exists, inserting into target.", 1, 'thin-man')
-              this.error_target.html(data.html);
+              if (typeof data.hooch_modal != 'undefined') {
+                new hooch.Modal($(data.html),data.dismissable)
+              } else {
+                this.error_target.html(data.html);
+              } 
             }
           }
         } else if (jqXHR.status == 500) {
