@@ -191,6 +191,13 @@ var initThinMan = function() {
             if ($('[data-thin-man-offset]').length > 0) {
               extra_offset = $('[data-thin-man-offset]').outerHeight()
             }
+            if(this.jq_obj.data('scroll-center')){
+              var window_height = window.innerHeight
+              var target_height = this.target.outerHeight()
+              if(window_height > target_height){
+                extra_offset = (window_height - target_height)/2
+              }
+            }
             $('html, body').animate({
               scrollTop: this.target.offset().top - extra_offset
             }, 1000);

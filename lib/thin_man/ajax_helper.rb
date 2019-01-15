@@ -4,7 +4,7 @@ module ThinMan
       sub_class: nil, insert_method: nil, empty_on_success: nil, remove_on_success: nil,
       http_method: nil, no_mouse_click: nil, progress_target: nil,
       mask_target: nil, mask_message: nil, replacement_path: nil, push_path: nil,
-      progress_color: nil, scroll_to: nil)
+      progress_color: nil, scroll_to: nil, scroll_center: nil)
       ajax_options = {
         'data-ajax-link' => true,
         'data-ajax-target' => target
@@ -20,6 +20,7 @@ module ThinMan
       ajax_options.merge!('data-mask-target' => mask_target) if mask_target.present?
       ajax_options.merge!('data-mask-message' => mask_message) if mask_message.present?
       ajax_options.merge!('data-scroll-to' => scroll_to) if scroll_to.present?
+      ajax_options.merge!('data-scroll-center' => true) if scroll_center.present?
       ajax_options.merge!('data-replacement-path' => replacement_path) if replacement_path.present?
       ajax_options.merge!('data-push-path' => push_path) if push_path.present?
       link_to(name,
@@ -32,7 +33,7 @@ module ThinMan
       http_method: nil, no_mouse_click: nil, progress_target: nil,
       progress_color: nil, mask_target: nil, mask_message: nil,
       sequence_group: nil, sequence_number: nil, replacement_path: nil, push_path: nil,
-      search_path: nil, search_params: nil, scroll_to: nil)
+      search_path: nil, search_params: nil, scroll_to: nil, scroll_center: nil)
       ajax_options = {
         'data-ajax-link-now' => true,
         'data-ajax-target' => target
@@ -52,6 +53,7 @@ module ThinMan
       ajax_options.merge!('data-search-path' => search_path) if search_path.present?
       ajax_options.merge!('data-search-params' => search_params) if search_params.present?
       ajax_options.merge!('data-scroll-to' => scroll_to) if scroll_to.present?
+      ajax_options.merge!('data-scroll-center' => true) if scroll_center.present?
       ajax_options.merge!('data-replacement-path' => replacement_path) if replacement_path.present?
       ajax_options.merge!('data-push-path' => push_path) if push_path.present?
 
@@ -84,7 +86,7 @@ module ThinMan
     def ajax_form_hash(target, sub_class: nil, insert_method: nil,
       error_target: nil, empty_on_success: nil, reset_on_success: nil, remove_on_success: nil,
       container: nil, custom_progress: nil, no_mouse_click: nil,
-      mask_target: nil, mask_message: nil, scroll_to: nil, replacement_path: nil, push_path: nil,
+      mask_target: nil, mask_message: nil, scroll_to: nil, scroll_center: nil, replacement_path: nil, push_path: nil,
       progress_target: nil, progress_color: nil)
       ajax_options = {
         'data-ajax-form' => true,
@@ -104,6 +106,7 @@ module ThinMan
       ajax_options.merge!('data-mask-target' => mask_target) if mask_target.present?
       ajax_options.merge!('data-mask-message' => mask_message) if mask_message.present?
       ajax_options.merge!('data-scroll-to' => scroll_to) if scroll_to.present?
+      ajax_options.merge!('data-scroll-center' => true) if scroll_center.present?
       ajax_options.merge!('data-replacement-path' => replacement_path) if replacement_path.present?
       ajax_options.merge!('data-push-path' => push_path) if push_path.present?
       ajax_options
@@ -139,7 +142,7 @@ module ThinMan
     def ajax_form_attrs(target, sub_class: nil,
       insert_method: nil, error_target: nil, remove_on_success: nil,
       empty_on_success: nil, reset_on_success: nil, no_mouse_click: nil,
-      progress_target: nil, progress_color: nil, scroll_to: nil, replacement_path: nil, push_path: nil,
+      progress_target: nil, progress_color: nil, scroll_to: nil, scroll_center: nil, replacement_path: nil, push_path: nil,
       mask_target: nil, mask_message: nil )
       data_attrs = "data-ajax-form=true data-ajax-target=#{target}"
       data_attrs += " data-insert-method=#{insert_method}" if insert_method
@@ -154,6 +157,7 @@ module ThinMan
       data_attrs += " data-mask-target=#{mask_target}" if mask_target
       data_attrs += " data-mask-message=#{mask_message}" if mask_message
       data_attrs += " data-scroll-to=#{scroll_to}" if scroll_to
+      data_attrs += " data-scroll-center=true" if scroll_center
       data_attrs += " data-replacement-path=#{replacement_path}" if replacement_path
       data_attrs += " data-push-path=#{push_path}" if push_path
       data_attrs
@@ -185,7 +189,7 @@ module ThinMan
       http_method: nil, no_mouse_click: nil, progress_target: nil,
       progress_color: nil, replacement_path: nil, push_path: nil,
       mask_target: nil, mask_message: nil,
-      scroll_to: nil)
+      scroll_to: nil, scroll_center: nil)
       data_attrs = "data-ajax-link=true data-ajax-target=#{target}"
       data_attrs += " data-insert-method=#{insert_method}" if insert_method
       data_attrs += " data-ajax-method=#{http_method}" if http_method
@@ -196,6 +200,7 @@ module ThinMan
       data_attrs += " data-progress-target=#{progress_target}" if progress_target
       data_attrs += " data-progress-color=#{progress_color}" if progress_color
       data_attrs += " data-scroll-to=#{scroll_to}" if scroll_to
+      data_attrs += " data-scroll-center=true" if scroll_center
       data_attrs += " data-mask-target=#{mask_target}" if mask_target
       data_attrs += " data-mask-message=#{mask_message}" if mask_message
       data_attrs += " data-replacement-path=#{replacement_path}" if replacement_path
@@ -208,7 +213,7 @@ module ThinMan
       http_method: nil, no_mouse_click: nil, progress_target: nil,
       progress_color: nil, replacement_path: nil, push_path: nil,
       mask_target: nil, mask_message: nil,
-      scroll_to: nil)
+      scroll_to: nil, scroll_center: nil)
       ajax_options = {
         'data-ajax-link' => true,
         'data-ajax-target' => target
@@ -223,6 +228,7 @@ module ThinMan
       ajax_options.merge!('data-mask-target' => mask_target) if mask_target.present?
       ajax_options.merge!('data-mask-message' => mask_message) if mask_message.present?
       ajax_options.merge!('data-scroll-to' => scroll_to) if scroll_to.present?
+      ajax_options.merge!('data-scroll-center' => true) if scroll_center.present?
       ajax_options.merge!('data-replacement-path' => replacement_path) if replacement_path.present?
       ajax_options.merge!('data-push-path' => push_path) if push_path.present?
       ajax_options
