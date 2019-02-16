@@ -75,7 +75,8 @@ var initThinMan = function() {
         this.getErrorTarget()
         this.progress_color = jq_obj.data('progress-color')
         this.progress_target = $(jq_obj.data('progress-target'))
-        this.$mask_target = $(jq_obj.data('mask-target'))
+        this.mask_target = jq_obj.data('mask-target')
+        if(this.mask_target){this.$mask_target = $(this.mask_target)}
         this.$mask_message = jq_obj.data('mask-message')
         this.custom_progress = typeof(jq_obj.data('custom-progress')) != 'undefined';
         this.scroll_to = jq_obj.data('scroll-to')
@@ -520,31 +521,55 @@ var initThinMan = function() {
       }
     }),
     AjaxMask: Class.extend({
-          init: function($mask_target, mask_message) {
-      var uuid = new UUID;
-      this.$mask_target = $mask_target
-      this.$mask = $('#thin_man_mask').clone()
-      this.$mask.prop('id', 'thin_man_mask' + uuid.value)
-      if (typeof mask_message != 'undefined') {
-        var $message = this.$mask.find('[data-thin-man-mask-message]')
-        $message.html(mask_message)
-      }
-      var height = this.$mask_target.outerHeight()
-      var width = this.$mask_target.outerWidth()
-      var radius = this.$mask_target.css('border-radius')
-      this.$mask.css({ 'height': height, 'width': width, 'left': 0, 'top': 0, 'border-radius': radius })
-      this.$mask.css({ 'position': 'absolute', 'z-index': 10000 })
+      init: function($mask_target, mask_message) {
+        var uuid = new UUID;
+        this.$mask_target = $mask_target
+        this.$mask = $('#thin_man_mask').clone()
+        this.$mask.prop('id', 'thin_man_mask' + uuid.value)
+        if (typeof mask_message != 'undefined') {
+          var $message = this.$mask.find('[data-thin-man-mask-message]')
+          $message.html(mask_message)
+        }
+        var height = this.$mask_target.outerHeight()
+        var width = this.$mask_target.outerWidth()
+        var radius = this.$mask_target.css('border-radius')
+        this.$mask.css({ 'height': height, 'width': width, 'left': 0, 'top': 0, 'border-radius': radius })
+        this.$mask.css({ 'position': 'absolute', 'z-index': 10000 })
 
-      this.$mask_target.append(this.$mask)
-      this.$mask.on('click mousedown mousemove', function(e) {
-        e.preventDefault();
-        return false;
-      })
-      this.$mask.show()
-          },
-          remove: function() {
-      this.$mask.remove()
+        this.$mask_target.append(this.$mask)
+
+        this.disableScroll()
+        this.arrangeContent()
+      },
+      arrangeContent: function(){
+        this.$mask.css({'max-height': window.innerHeight})
+        this.$mask.show()
+      },
+      disableScroll: function(){
+        if(!thin_man.scroll_disabled){
+          thin_man.scroll_disabled = true
+          if($(window).width() >= 640){
+            var mask = this
+            mask.old_height = $('body')[0].style.height
+            mask.old_overflow = $('body')[0].style.overflow
+            $('body').css({height: '100%',overflow: 'hidden'})
+          } else {
+            $('body').children().not('.ajax-mask-public').hide()
           }
+        }
+      },
+      enableScroll: function(){
+        if($(window).width() >= 640){
+          $('body').css({height: this.old_height, overflow: this.old_overflow})
+        } else {
+          $('body').children().not('#ajax-mask-public').show()
+        }
+        delete thin_man.scroll_disabled
+      },
+      remove: function() {
+        this.enableScroll()
+        this.$mask.remove()
+      }
     }),
     AjaxFlash: Class.extend({
           init: function(type, message, elem, duration) {
